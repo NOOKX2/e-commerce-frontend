@@ -1,4 +1,4 @@
-import { MOCK_PRODUCTS } from "@/lib/mock-data"; // <-- Import เข้ามา
+import { MOCK_PRODUCTS } from "@/lib/mock-data"; 
 import  ProductCard  from "@/components/ui/product-card";
 
 const featureProducts = MOCK_PRODUCTS.slice(0, 4)

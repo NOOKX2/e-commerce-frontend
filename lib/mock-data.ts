@@ -14,7 +14,7 @@ export const MOCK_PRODUCTS: Product[] = [
     name: "iPhone 17 Pro Max",
     category: "iPhone",
     price: 41900,
-    imageUrl: "/images/iphone-17-pro-max.webp", // รูปภาพต้องอยู่ใน public/images/products/
+    imageUrl: "/images/iphone-17-pro-max.webp", 
     slug: "iphone-17-pro-max",
     description: "The ultimate iPhone, with the powerful A17 Pro chip."
   },
