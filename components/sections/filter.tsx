@@ -5,8 +5,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 const categories = [
-    {id: "mobile_phone", name: "Mobile Phone"},
-    {id: "notebook", name: "Notebook"}
+    {id: "mobile_phone", name: "mobile_phone"},
+    {id: "notebook", name: "notebook"}
 ]
 
 export function Filter() {
