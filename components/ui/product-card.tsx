@@ -11,7 +11,7 @@ type ProductCardProps = {
 
 function ProductCard({imageUrl, name, price, slug}: ProductCardProps ) {
   return (
-   <Link href={`/products/${slug}`} className="group">
+   <Link href={`/products/${slug}`} className="group block">
     <div className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">
       <div className="relative aspect-square overflow-hidden">
         {imageUrl ? (
