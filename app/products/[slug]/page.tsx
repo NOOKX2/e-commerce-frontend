@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Product, ApiResponse } from '@/types/api'; // สมมติว่า SuccessResponse ถูกนิยามไว้
 import { Package } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ProductAction from '@/components/client/product-action';
+
 
 async function getProductBySlug(slug: string): Promise<Product | null> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/products/${slug}`;
@@ -38,7 +38,6 @@ async function getProductBySlug(slug: string): Promise<Product | null> {
 async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const resolveParams = await params
   const { slug } = resolveParams
-  console.log("slug ", slug)
   const product = await getProductBySlug(slug);
   if (!product) {
     notFound();

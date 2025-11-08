@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react';
-import QuantitySelector from '@/components/ui/quantity-selector';
-import { Button } from '@/components/ui/button'; // สมมติว่าใช้ Button จาก shadcn
-import { Product } from '@/types/api'; // Import Type ของ Product
+import { Button } from '@/components/ui/button'; 
+import { Product } from '@/types/api'; 
+import QuantitySelector from '../ui/quantity-selector';
+import toast from 'react-hot-toast'
+import { useCartStore } from '@/lib/cart-store';
 
 interface ProductActionProps {
     product: Product;
@@ -12,8 +14,11 @@ interface ProductActionProps {
 function ProductAction({ product }: ProductActionProps) {
     const [quantity, setQuantity] = useState(1)
 
+    const {addToCart} = useCartStore()
+
     const handleAddToCart = () => {
-        //logic add product to card
+        addToCart(product, quantity)
+        toast.success(`${quantity} x ${product.name} added to cart!`);
     }
     return (
         <div className='mt-8 flex flex-col gap-4'>

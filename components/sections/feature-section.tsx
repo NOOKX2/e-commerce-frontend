@@ -1,5 +1,4 @@
 import { Truck, Clock, Lock} from 'lucide-react';
-import Image from 'next/image';
 
 function FeatureSection() {
   return (

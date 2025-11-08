@@ -1,4 +1,3 @@
-import { MOCK_PRODUCTS } from "@/lib/mock-data";
 import ProductCard from "@/components/ui/product-card";
 import { Product } from "@/types/api";
 

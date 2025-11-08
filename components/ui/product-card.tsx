@@ -1,4 +1,4 @@
-import { ImageOff, Package } from "lucide-react";
+import { ImageOff} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link"; 
 
