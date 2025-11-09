@@ -9,10 +9,6 @@ import OrderSummary from "@/components/client/order-summary";
 function CartPage() {
     const { items} = useCartStore()
 
-    const subtotal = items.reduce((total, item) => {
-        return total + item.price * item.quantity
-    }, 0);
-    
     return (
         <div className="mx-auto py-12">
             {items.length === 0 ? (

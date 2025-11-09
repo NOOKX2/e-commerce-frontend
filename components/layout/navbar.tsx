@@ -1,10 +1,11 @@
 import Link from "next/link"
-import { Search, ShoppingCart, CircleUserRound } from 'lucide-react';
+import { Search,  CircleUserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
+import DynamicHeaderIcon from "../client/dynamic-header-icon";
 
 function Navbar() {
-  return (
+
+return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="mx-40 flex justify-between mt-5">
       
@@ -26,11 +27,7 @@ function Navbar() {
             <Search className="size-10" />
           </Button>
           <li>
-            <Link href='/cart'>
-              <Button variant='ghost' size='icon-lg'>
-                <ShoppingCart className="size-10" />
-              </Button>
-            </Link>
+            <DynamicHeaderIcon />
           </li>
           <li>
            <Link href='/profile'>

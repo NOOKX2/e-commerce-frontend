@@ -10,6 +10,7 @@ function OrderSummary({items}: OrderSummaryProps) {
     const subtotal = items.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
+    
     return (
         <div className="lg:w-1/3">
             <div className="sticky top-24 rounded-lg border p-6">

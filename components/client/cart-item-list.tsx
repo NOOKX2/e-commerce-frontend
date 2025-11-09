@@ -1,4 +1,4 @@
-import { useCartStore, CartItem } from "@/lib/cart-store"; // Import CartItem type
+import { useCartStore, CartItem } from "@/lib/cart-store"; 
 import Image from "next/image";
 import QuantitySelector from '../ui/quantity-selector';
 import { Button } from "@/components/ui/button";
