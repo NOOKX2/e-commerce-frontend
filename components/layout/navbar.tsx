@@ -1,14 +1,14 @@
 import Link from "next/link"
-import { Search,  CircleUserRound } from 'lucide-react';
+import { Search, CircleUserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import DynamicHeaderIcon from "../client/dynamic-header-icon";
 
 function Navbar() {
 
-return (
+  return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="mx-40 flex justify-between mt-5">
-      
+
         <h1 className="text-2xl font-bold">Ultimate E-Commerce</h1>
         <ul className="flex justify-center gap-5">
           <li>
@@ -21,7 +21,7 @@ return (
             <Link href='/contact' className="text-xl font-bold">Contact</Link>
           </li>
         </ul>
-    
+
         <ul className="flex justify-center gap-5">
           <Button variant="ghost" size='icon-lg' aria-label='Search'>
             <Search className="size-10" />
@@ -29,15 +29,8 @@ return (
           <li>
             <DynamicHeaderIcon />
           </li>
-          <li>
-           <Link href='/profile'>
-          <Button variant='ghost' size='icon-lg'>
-            <CircleUserRound className="size-10" />
-          </Button>
-        </Link>
-        </li>
-        </ul>
-       
+         </ul>
+
       </div>
     </header>
   )
