@@ -1,13 +1,12 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Product, ApiResponse } from '@/types/api'; // สมมติว่า SuccessResponse ถูกนิยามไว้
+import { Product, ApiResponse } from '@/types/api'; 
 import { Package } from 'lucide-react';
 import ProductAction from '@/components/client/product-action';
 
 
 async function getProductBySlug(slug: string): Promise<Product | null> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/products/${slug}`;
-  console.log(`Fetching product details from: ${apiUrl}`);
 
   try {
     const res = await fetch(apiUrl, {

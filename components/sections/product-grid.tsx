@@ -6,7 +6,6 @@ type ProductGridProps = {
 };
 
 export function ProductGrid({ products }: ProductGridProps) {
-    {console.log(products)}
     return (
         <section className="mr-30">
             <h1 className="text-4xl text-center font-bold">Ultimate E-Commerce Shop</h1>

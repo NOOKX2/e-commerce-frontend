@@ -11,5 +11,12 @@ export type Product = {
     price: number;
     imageUrl: string;
     slug: string; 
-    description?: string; 
+    description: string; 
+}
+
+export type User = {
+    id: number;
+    email: String;
+    name: string;
+    role: string
 }

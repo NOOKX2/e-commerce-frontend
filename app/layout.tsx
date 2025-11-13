@@ -3,19 +3,26 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/navbar";
 import { Toaster } from 'react-hot-toast';
-
+import { getCurrentUser } from '@/lib/auth';
+import AuthProvider from "../context/auth-context";
 
 type RootLayoutProps = {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const initialUser = await getCurrentUser()
+
   return (
     <html lang="en">
       <body>
+        <AuthProvider initialUser={initialUser}>
         <Navbar />
         <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-        {children}
+        <main className="min-h-screen">
+          {children}
+        </main>
+      </AuthProvider>
       </body>
     </html>
   )

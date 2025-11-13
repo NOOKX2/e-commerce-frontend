@@ -1,8 +1,8 @@
 "use server"
 
 import { z } from "zod";
-import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import { User } from "@/types/api";
 
 
 const loginSchema = z.object({
@@ -10,9 +10,9 @@ const loginSchema = z.object({
     password: z.string().min(5),
 });
 
-interface LoginState {
+export interface LoginState {
     error?: string;
-    token?: string;
+    user?: User | null;
 }
 
 export async function loginAction(prevState: LoginState|undefined, formData: FormData): Promise<LoginState> {
@@ -43,13 +43,23 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
             throw new Error(data.message || "Login failed");
         }
 
+        console.log("response in login action",response)
+
         const cookiesStore = await cookies();
 
         cookiesStore.set('session_token', data.token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            path: '/',
-        });
+             httpOnly: true,
+             secure: process.env.NODE_ENV === 'production',
+             path: '/',
+         });
+
+         console.log(cookiesStore)
+
+        
+        return {
+            user: data.response || data.user,
+        };
+
 
     } catch (error: any) {
         return {
@@ -57,5 +67,5 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
         };
     }
 
-    redirect("/");
+ 
 }

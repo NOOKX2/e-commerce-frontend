@@ -1,12 +1,13 @@
 "use client"
-import { useActionState } from 'react';
+
 import { useFormStatus } from 'react-dom';
 
-import { loginAction } from '@/app/actions/login-action';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import { useLoginForm } from '@/hooks/use-login-form'; 
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -19,7 +20,7 @@ function SubmitButton() {
 
 function LoginPage() {
 
-    const [state, formAction] = useActionState(loginAction, undefined)
+    const [state, formAction] = useLoginForm()
     return (
         <div className='mx-auto max-w-md py-12'>
             <h1 className='text-3xl font-bold mb-6'>Login Account</h1>

@@ -30,14 +30,12 @@ export async function registerAction(prevState: RegisterState|undefined, formDat
     const { name, email, password } = validateFields.data
     console.log(name, email, password)
     try {
-        console.log("Calling backend API at:", `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`);
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password }),
         })
-        console.log("3. Received response from backend. Status:", response.status, "OK:", response.ok);
+        console.log("3. Received response from backend. Status:", response.status, "OK:", response.body);
 
         const data = await response.json();
         console.log(data)
