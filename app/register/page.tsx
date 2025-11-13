@@ -1,13 +1,11 @@
 'use client'
 
 import { useFormStatus } from 'react-dom';
-import { useActionState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-
-import { registerAction } from '../actions/register-action';
+import { useRegisterForm } from '@/hooks/use-register-form';
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -19,7 +17,7 @@ function SubmitButton() {
 }
 
 function RegisterPage() {
-    const [state, formAction] = useActionState(registerAction, undefined)
+    const [state, formAction] = useRegisterForm()
     return (
         <div className='mx-auto max-w-md py-12'>
             <h1 className='text-3xl font-bold mb-6'>Register an Account</h1>

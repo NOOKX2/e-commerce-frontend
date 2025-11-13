@@ -1,6 +1,4 @@
 import Link from "next/link"
-import { Search, CircleUserRound } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ClientHeaderAction from "../client/client-header-action";
 
 function Navbar() {

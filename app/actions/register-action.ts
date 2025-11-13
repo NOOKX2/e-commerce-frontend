@@ -1,7 +1,8 @@
 'use server'
 
 import { z } from "zod";
-import { redirect } from 'next/navigation';
+import { User } from "@/types/api";
+import { cookies } from 'next/headers';
 
 
 const registerSchema = z.object({
@@ -10,17 +11,17 @@ const registerSchema = z.object({
     password: z.string().min(5, "Password must be at least 5 characters"),
 });
 
-interface RegisterState {
+export interface RegisterState {
     error?: string | {
         name?: string[];
         email?: string[];
         password?: string[];
     }
+    user?: User | null;
 }
 
-export async function registerAction(prevState: RegisterState|undefined, formData: FormData): Promise<RegisterState> {
+export async function registerAction(prevState: RegisterState | undefined, formData: FormData): Promise<RegisterState> {
     const validateFields = registerSchema.safeParse(Object.fromEntries(formData.entries()));
-    console.log(validateFields)
     if (!validateFields.success) {
         return {
             error: validateFields.error.flatten().fieldErrors,
@@ -35,16 +36,25 @@ export async function registerAction(prevState: RegisterState|undefined, formDat
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password }),
         })
-        console.log("3. Received response from backend. Status:", response.status, "OK:", response.body);
 
         const data = await response.json();
-        console.log(data)
         if (!response.ok) {
             throw new Error(data.message || "Registration failed");
         }
-    } catch(error: any) {
-        return {error: error.message};
+
+        const cookiesStore = await cookies();
+
+        cookiesStore.set('session_token', data.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+        });
+
+        return {
+            user: data.response || data.user
+        }
+    } catch (error: any) {
+        return { error: error.message };
     }
 
-    redirect("/")
 }

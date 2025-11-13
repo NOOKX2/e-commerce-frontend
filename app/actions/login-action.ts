@@ -43,7 +43,6 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
             throw new Error(data.message || "Login failed");
         }
 
-        console.log("response in login action",response)
 
         const cookiesStore = await cookies();
 
@@ -52,16 +51,12 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
              secure: process.env.NODE_ENV === 'production',
              path: '/',
          });
-
-         console.log(cookiesStore)
-
         
         return {
             user: data.response || data.user,
         };
 
-
-    } catch (error: any) {
+   } catch (error: any) {
         return {
             error: error.message,
         };

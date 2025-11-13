@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 import { User } from '@/types/api';
+import { serverLogoutAction } from '@/app/actions/logout-action';
 
 interface AuthContextType {
     user: User | null;
@@ -21,9 +22,10 @@ export default function AuthProvider({children, initialUser}: {children: ReactNo
       setUser(userData)
     }
 
-    const logout = () => {
+    const logout = async () => {
         setUser(null)
         Cookies.remove('session_token')
+        await serverLogoutAction()
     };
 
     const value = {user, isLoading, login, logout}

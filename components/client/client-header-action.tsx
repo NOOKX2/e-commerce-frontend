@@ -1,7 +1,6 @@
 'use client'
 
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import ProfileIcon from '@/components/client/profile-icon';
 import { Search } from 'lucide-react';
