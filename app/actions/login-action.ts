@@ -7,7 +7,7 @@ import { User } from "@/types/api";
 
 const loginSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(5),
+    password: z.string().min(5, "Password must be at least 5 characters"),
 });
 
 export interface LoginState {
@@ -24,7 +24,7 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
 
     if (!validateFields.success) {
         return {
-            error: "Invalid data format.",
+            error: validateFields.error.issues[0].message,
         }
     }
     
@@ -38,7 +38,7 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
         })
 
         const data = await response.json();
-
+        console.log("login response data ",data)
         if (!response.ok) {
             throw new Error(data.message || "Login failed");
         }

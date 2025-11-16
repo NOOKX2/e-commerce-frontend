@@ -38,6 +38,8 @@ export async function registerAction(prevState: RegisterState | undefined, formD
         })
 
         const data = await response.json();
+        console.log("response data in register action",data)
+          console.log("data message", data.message)
         if (!response.ok) {
             throw new Error(data.message || "Registration failed");
         }
@@ -54,6 +56,7 @@ export async function registerAction(prevState: RegisterState | undefined, formD
             user: data.response || data.user
         }
     } catch (error: any) {
+        console.log(error)
         return { error: error.message };
     }
 
