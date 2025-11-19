@@ -3,12 +3,12 @@
 import { useCartStore } from "@/lib/cart-store";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import CartItemList from "@/components/client/cart-item-list";
-import OrderSummary from "@/components/client/order-summary";
+import CartItemList from "@/components/client/CartItemList";
+import OrderSummary from "@/components/client/OrderSummary";
 
 function CartPage() {
     const { items} = useCartStore()
-
+    console.log(items)
     return (
         <div className="mx-auto py-12">
             {items.length === 0 ? (

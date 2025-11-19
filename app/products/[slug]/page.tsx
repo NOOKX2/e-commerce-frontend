@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Product, ApiResponse } from '@/types/api'; 
 import { Package } from 'lucide-react';
-import ProductAction from '@/components/client/product-action';
+import ProductAction from '@/components/client/ProductAction';
 
 
 async function getProductBySlug(slug: string): Promise<Product | null> {

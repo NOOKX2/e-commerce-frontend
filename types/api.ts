@@ -20,3 +20,13 @@ export type User = {
     name: string;
     role: string
 }
+
+export type CartItemProps = {
+  item: {
+    id: string;
+    name: string;
+    imageUrl: string;
+    price: number;
+    quantity: number;
+  };
+};
