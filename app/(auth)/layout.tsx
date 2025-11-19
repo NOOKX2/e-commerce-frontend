@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Lock } from "lucide-react"; 
 
-export default function CheckoutLayout({
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,5 +15,6 @@ export default function CheckoutLayout({
                 {children}
             </main>
         </div>
+        
     )
 }
