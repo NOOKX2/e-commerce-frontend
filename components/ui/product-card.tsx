@@ -13,7 +13,7 @@ function ProductCard({imageUrl, name, price, slug}: ProductCardProps ) {
   return (
    <Link href={`/products/${slug}`} className="group block">
     <div className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden min-h-50 min-w-30">
         {imageUrl ? (
              <Image 
         src={imageUrl}
@@ -29,7 +29,7 @@ function ProductCard({imageUrl, name, price, slug}: ProductCardProps ) {
      
       </div>
       <div className="p-4">
-        <h3 className="font-semibold text-lg truncate">{name}</h3>
+        <h3 className="font-semibold text-lg">{name}</h3>
         <p className="text-muted-foreground mt-1">{`฿${price.toLocaleString()}`}</p>
       </div>
     </div>

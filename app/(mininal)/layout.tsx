@@ -1,20 +1,18 @@
+import MinimalNavbar from "@/components/layout/minimal-navbar";
 import Link from "next/link";
 
 export default function MinimalLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-            <div className="mb-8">
-                <Link href="/" className="text-2xl font-bold text-black tracking-tight">Ultimate E-Commerce</Link>
-            </div>
+        <div className="min-h-screen flex flex-col items-center bg-gray-50">
+            <MinimalNavbar />
 
-            <main className="w-full max-w-md">
-                {children}
-            </main>
+            {children}
+
         </div>
-        
+
     )
 }

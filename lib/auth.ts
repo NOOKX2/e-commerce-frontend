@@ -8,7 +8,6 @@ interface UserResponse {
 
 export async function getCurrentUser(): Promise<User | null> {
     const cookiesStore = await cookies();
-    console.log("cookie store from auth",cookiesStore)
     const token = cookiesStore.get('session_token')?.value;
 
     if (!token) {

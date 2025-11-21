@@ -8,6 +8,8 @@ function ItemCheckout() {
     const { items } = useCartStore();
 
     return (
+      <div className="sticky top-8 bg-gray-50 p-6 rounded-lg border">
+        <h2 className="text-2xl font-bold mb-4">Your Order</h2>
         <div className='w-full space-y-3'>
           <ItemCheckoutHeader />
             <ul className='space-y-4'>
@@ -18,6 +20,7 @@ function ItemCheckout() {
                 ))}
             </ul>
 
+        </div>
         </div>
     )
 }

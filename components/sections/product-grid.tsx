@@ -7,11 +7,12 @@ type ProductGridProps = {
 
 export function ProductGrid({ products }: ProductGridProps) {
     return (
-        <section className="mr-30">
+        <section className="mr-32">
             <h1 className="text-4xl text-center font-bold">Ultimate E-Commerce Shop</h1>
             {products.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
                     {products.map((product) => (
+                       
                         <ProductCard
                             key={product.id}
                             imageUrl={product.imageUrl}
@@ -19,6 +20,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                             price={product.price}
                             slug={product.slug}
                         />
+                        
                     ))}
                 </div>
             ) : (
