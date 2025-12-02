@@ -3,6 +3,7 @@
 import { useCartStore } from '@/lib/cart-store'
 import ItemCheckoutHeader from './ItemCheckoutHeader';
 import ItemCheckoutCartItem from './ItemCheckoutCartItem';
+import OrderSummaryCheckout from './OrderSummaryCheckout';
 
 function ItemCheckout() {
     const { items } = useCartStore();
@@ -19,7 +20,7 @@ function ItemCheckout() {
 
                 ))}
             </ul>
-
+          <OrderSummaryCheckout items={items}/>
         </div>
         </div>
     )

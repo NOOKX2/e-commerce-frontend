@@ -6,7 +6,7 @@ interface OrderSummaryProps {
     items: CartItem[];
 }
 
-function OrderSummary({ items }: OrderSummaryProps) {
+function OrderSummaryCheckout({ items }: OrderSummaryProps) {
     const subtotal = items.reduce((total, item) => {
         return total + item.price * item.quantity;
     }, 0);
@@ -26,12 +26,9 @@ function OrderSummary({ items }: OrderSummaryProps) {
                 <span>Total</span>
                 <span>{`฿${subtotal.toLocaleString()}`}</span>
             </div>
-            <Button asChild className="w-full mt-6">
-                <Link href="/checkout">Proceed to Checkout</Link>
-            </Button>
         </div>
 
     )
 }
 
-export default OrderSummary
+export default OrderSummaryCheckout

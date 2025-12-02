@@ -12,7 +12,6 @@ function CartItemList({ items }: CartItemsListProps) {
   const { removeFromCart, updateQuantity } = useCartStore();
 
   return (
-    <div className="lg:w-2/3">
       <div className="space-y-4">
         {items.map((item) => (
           <div key={item.id} className="flex items-center gap-4 border-b pb-4">
@@ -23,7 +22,7 @@ function CartItemList({ items }: CartItemsListProps) {
               height={100}
               className="rounded-md object-cover"
             />
-            <div className="grow">
+            <div className="flex-1 min-w-[150px]">
               <h2 className="font-semibold">{item.name}</h2>
               <p className="text-sm text-muted-foreground">
                 {`฿${item.price.toLocaleString()}`}
@@ -45,7 +44,6 @@ function CartItemList({ items }: CartItemsListProps) {
           </div>
         )
         )}
-      </div>
     </div>
 
   )
