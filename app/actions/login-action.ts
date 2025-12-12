@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { cookies } from 'next/headers';
-import { User } from "@/types/api";
+import { User } from "@/types/user";
 
 
 const loginSchema = z.object({
@@ -19,8 +19,6 @@ export async function loginAction(prevState: LoginState|undefined, formData: For
     const validateFields = loginSchema.safeParse(
         Object.fromEntries(formData.entries())
     );
-
-    console.log("validate field",validateFields)
 
     if (!validateFields.success) {
         return {

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 import Cookies from 'js-cookie';
-import { User } from '@/types/api';
+import { User } from '@/types/user';
 import { serverLogoutAction } from '@/app/actions/logout-action';
 
 interface AuthContextType {

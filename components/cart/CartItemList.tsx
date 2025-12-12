@@ -10,11 +10,11 @@ interface CartItemsListProps {
 
 function CartItemList({ items }: CartItemsListProps) {
   const { removeFromCart, updateQuantity } = useCartStore();
-
+  console.log("items in cart list",items[0]);
   return (
       <div className="space-y-4">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center gap-4 border-b pb-4">
+          <div key={item.ID} className="flex items-center gap-4 border-b pb-4">
             <Image
               src={item.imageUrl}
               alt={item.name}
@@ -31,12 +31,12 @@ function CartItemList({ items }: CartItemsListProps) {
             <div className="flex items-center gap-4">
               <QuantitySelector
                 quantity={item.quantity}
-                setQuantity={(newQuantity) => updateQuantity(item.id, newQuantity)}
+                setQuantity={(newQuantity) => updateQuantity(item.ID, newQuantity)}
               />
               <Button
                 variant='ghost'
                 size='icon'
-                onClick={() => removeFromCart(item.id)}
+                onClick={() => removeFromCart(item.ID)}
               >
                 <Trash2 className="h-5 w-5 text-muted-foreground" />
               </Button>

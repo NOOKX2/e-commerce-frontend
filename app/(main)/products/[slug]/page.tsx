@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { Product, ApiResponse } from '@/types/api'; 
+import { ApiResponse } from '@/types/api'; 
+import { Product } from '@/types/product';
 import ProductImage from '@/components/products/ProductImage';
 import ProductDetail from '@/components/products/ProductDetail';
 

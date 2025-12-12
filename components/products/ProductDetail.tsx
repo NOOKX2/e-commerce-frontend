@@ -1,5 +1,5 @@
-import { Product } from "@/types/api"
-import ProductAction from "../client/ProductAction"
+import { Product } from "@/types/product"
+import ProductAction from "./ProductAction"
 
 type ProductDetailProps = {
     product: Product

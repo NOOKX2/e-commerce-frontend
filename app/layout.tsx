@@ -11,7 +11,7 @@ type RootLayoutProps = {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const initialUser = await getCurrentUser()
-
+  console.log("initial user",initialUser);
   return (
     <html lang="en">
       <body className="w-full min-h-screen">

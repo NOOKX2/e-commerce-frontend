@@ -7,7 +7,7 @@ import OrderSummaryCheckout from './OrderSummaryCheckout';
 
 function ItemCheckout() {
     const { items } = useCartStore();
-
+    console.log(items);
     return (
       <div className="sticky top-8 bg-gray-50 p-6 rounded-lg border">
         <h2 className="text-2xl font-bold mb-4">Your Order</h2>
@@ -16,7 +16,7 @@ function ItemCheckout() {
             <ul className='space-y-4'>
                 {items.map(item => (
 
-                  <ItemCheckoutCartItem key={item.id} item={item}/>
+                  <ItemCheckoutCartItem key={item.ID} item={item}/>
 
                 ))}
             </ul>

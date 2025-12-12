@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 
 const categories = [
     { id: "mobile_phone", name: "Mobile Phone" },
-    { id: "notebook", name: "Notebook" }
+    { id: "notebook", name: "Notebook" },
+    { id: "tablet", name: "tablet"},
 ]
 
 export function Filter() {

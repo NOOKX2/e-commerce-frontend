@@ -1,5 +1,5 @@
 import Link from "next/link"
-import ClientHeaderAction from "../client/ClientHeaderAction";
+import ClientHeaderAction from "./ClientHeaderAction";
 
 function Navbar() {
 

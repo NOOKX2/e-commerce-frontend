@@ -1,7 +1,7 @@
 'use server'
 
 import { z } from "zod";
-import { User } from "@/types/api";
+import { User } from "@/types/user";
 import { cookies } from 'next/headers';
 
 

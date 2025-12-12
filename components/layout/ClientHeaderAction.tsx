@@ -2,11 +2,11 @@
 
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
-import ProfileIcon from '@/components/client/ProfileIcon';
+import ProfileIcon from '@/components/shared/ProfileIcon';
 import { Search } from 'lucide-react';
 
 const DynamicCartIcon = dynamic(
-  () => import('./CartIcon'),
+  () => import('../cart/CartIcon'),
   { ssr: false, loading: () => <div className='h-6 w-6' /> }
 )
 

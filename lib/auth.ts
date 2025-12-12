@@ -1,4 +1,4 @@
-import { User } from '@/types/api';
+import { User } from '@/types/user';
 import { cookies } from 'next/headers';
 
 interface UserResponse {
@@ -8,32 +8,30 @@ interface UserResponse {
 
 export async function getCurrentUser(): Promise<User | null> {
     const cookiesStore = await cookies();
-    const token = cookiesStore.get('session_token')?.value;
-
-    if (!token) {
-        
-        return null;
-    }
+    
 
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/profile`, {
             method: 'GET',
             headers: {
-                'Cookie': `jwt=${token}`,
+                'Content-Type': 'application/json',
+                'Cookie': cookiesStore.toString(),
             },
             cache: 'no-store'
         });
 
-
+       
         if (!response.ok) {
+            const errorData = await response.json();
+            console.log("error", errorData)
             return null;
         }
 
         const UserResponse: UserResponse = await response.json()
-        
         return UserResponse.response;
     }
     catch (error) {
+        console.log('catch error')
         return null;
     }
 }

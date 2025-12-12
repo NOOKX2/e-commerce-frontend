@@ -1,7 +1,7 @@
-import ItemCheckout from "@/components/client/ItemCheckout";
-import CheckoutForm from "@/components/client/CheckoutForm";
+import ItemCheckout from "@/components/checkout/ItemCheckout";
+import CheckoutForm from "@/components/checkout/CheckoutForm";
 
-function page() {
+function CheckoutPage() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -17,4 +17,4 @@ function page() {
   )
 }
 
-export default page
+export default CheckoutPage

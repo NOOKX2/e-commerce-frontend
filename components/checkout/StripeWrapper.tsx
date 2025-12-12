@@ -2,13 +2,18 @@
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import StripeCheckoutForm from './StripeFormCheckout';
+import StripeCheckoutForm from './StripeCheckoutForm';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-function StripeWrapper() {
+
+interface StripeWrapperProps {
+    shippingAddress: string;
+}
+
+function StripeWrapper({shippingAddress}: StripeWrapperProps) {
     return (
         <Elements stripe={stripePromise}>
-            <StripeCheckoutForm />
+            <StripeCheckoutForm shippingAddress={shippingAddress}/>
         </Elements>
     )
 }

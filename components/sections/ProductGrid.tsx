@@ -1,5 +1,5 @@
 import ProductCard from "@/components/ui/product-card";
-import { Product } from "@/types/api";
+import { Product } from "@/types/product";
 
 type ProductGridProps = {
     products: Product[];
@@ -14,7 +14,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                     {products.map((product) => (
                        
                         <ProductCard
-                            key={product.id}
+                            key={product.ID}
                             imageUrl={product.imageUrl}
                             name={product.name}
                             price={product.price}

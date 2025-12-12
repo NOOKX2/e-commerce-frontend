@@ -3,8 +3,8 @@
 import { useCartStore } from "@/lib/cart-store";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import CartItemList from "@/components/client/CartItemList";
-import OrderSummary from "@/components/client/OrderSummary";
+import CartItemList from "@/components/cart/CartItemList";
+import OrderSummary from "@/components/checkout/OrderSummary";
 
 function CartPage() {
     const { items} = useCartStore()

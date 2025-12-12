@@ -1,5 +1,4 @@
-import MinimalNavbar from "@/components/layout/minimal-navbar";
-import Link from "next/link";
+import MinimalNavbar from "@/components/layout/MinimalNavbar";
 
 export default function MinimalLayout({
     children,

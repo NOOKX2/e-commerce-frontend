@@ -1,9 +1,9 @@
-import { CartItemProps } from "@/types/api"
+import { CartItemProps } from "@/types/cartItemProps"
 import Image from "next/image"
 
 function ItemCheckoutCartItem({ item }: CartItemProps) {
     return (
-        <li key={item.id} className='flex items-center justify-between gap-4 border rounded-lg px-4'>
+        <li key={item.ID} className='flex items-center justify-between gap-4 border rounded-lg px-4'>
 
           
                 <Image

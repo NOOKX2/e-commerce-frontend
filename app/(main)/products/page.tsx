@@ -1,6 +1,7 @@
-import { Filter } from "@/components/sections/filter";
-import { ProductGrid } from "@/components/sections/product-grid";
-import { ApiResponse, Product } from "@/types/api";
+import { Filter } from "@/components/sections/Filter";
+import { ProductGrid } from "@/components/sections/ProductGrid";
+import { ApiResponse } from "@/types/api";
+import { Product } from "@/types/product";
 
 
 async function getFilterProducts(searchParams: { [key: string]: string | string[] | undefined }): Promise<Product[]> {

@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Product } from '@/types/api';
+import { Product } from '@/types/product';
 
 export interface CartItem extends Product {
     quantity: number
@@ -9,8 +9,8 @@ export interface CartItem extends Product {
 interface CartState {
     items: CartItem[];
     addToCart: (product: Product, quantity: number) => void;
-    updateQuantity: (productId: string, newQuantity: number) => void;
-    removeFromCart: (productId: string) => void;
+    updateQuantity: (productId: number, newQuantity: number) => void;
+    removeFromCart: (productId: number) => void;
     clearCart: () => void;
 }
 
@@ -21,11 +21,11 @@ export const useCartStore = create<CartState>() (
 
             addToCart: (product, quantity) => {
                 const {items} = get();
-                const existingItem = items.find((item) => item.id === product.id);
+                const existingItem = items.find((item) => item.ID === product.ID);
 
                 if (existingItem) {
                     const updateItem = items.map((item) => 
-                        item.id === product.id
+                        item.ID === product.ID
                     ?{...item, quantity: item.quantity + quantity} 
                     :item
                 );
@@ -37,7 +37,7 @@ export const useCartStore = create<CartState>() (
             },
 
             removeFromCart: (productId) => {
-                 set({ items: get().items.filter((item) => item.id !== productId) });
+                 set({ items: get().items.filter((item) => item.ID !== productId) });
             },
 
             updateQuantity: (productId, newQuantity) => {
@@ -47,7 +47,7 @@ export const useCartStore = create<CartState>() (
                 } 
                 set({
                     items: get().items.map((item) => 
-                        item.id === productId ? {...item, quantity: newQuantity }: item
+                        item.ID === productId ? {...item, quantity: newQuantity }: item
                     ),
                 });
             },
