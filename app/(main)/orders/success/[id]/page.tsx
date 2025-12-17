@@ -54,14 +54,7 @@ export default async function OrderSuccessPage({params}: OrderSuccessPageProps) 
 
    const resolveParams = await params;
    const orderId = resolveParams.id;
-    switch (orderId) {
-      case undefined :
-        console.log("order id is undefined");
-        break;
-      default:
-        console.log("order id value", orderId)
-      
-    }
+ 
     const {status, order, error} = await getOrderData(orderId);
 
     if (status === 404 || !order) {
@@ -71,6 +64,6 @@ export default async function OrderSuccessPage({params}: OrderSuccessPageProps) 
     if (status !== 200) {
         return <OrderError message={error} />;
     }
-
+    console.log("order from success page", order);
     return <OrderSuccess order={order} />;
 }

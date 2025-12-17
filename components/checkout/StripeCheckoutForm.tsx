@@ -7,14 +7,14 @@ import { Label } from '../ui/label';
 import StripeInput from './StripeInput';
 import { useCartStore } from '@/lib/cart-store';
 import { useRouter } from 'next/navigation';
+import { ShippingAddressData } from '@/types/shippingAdressData';
 
 interface StripeCheckoutFormProps {
-    shippingAddress: string;
+    shippingAddress: ShippingAddressData;
 }
 
 export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutFormProps) {
     const {items, clearCart} = useCartStore();
-    console.log(items);
     const stripe = useStripe();
     const elements = useElements();
     const router = useRouter();
@@ -26,7 +26,7 @@ export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutForm
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!shippingAddress.trim()) {
+        if (!shippingAddress) {
             setError("Please provide a shipping address.");
             return;
         }
@@ -78,7 +78,6 @@ export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutForm
             });
        
             const orderData = await res.json();
-            console.log(orderData)
 
             if (!res.ok) {
                 console.log(orderData.error);
@@ -86,8 +85,6 @@ export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutForm
             }
 
              
-            //console.log("Order create successfully: ", orderData);
-
             clearCart();
             setIsPaymentSuccessful(true);
             router.push(`/orders/success/${orderData.order.ID}`);

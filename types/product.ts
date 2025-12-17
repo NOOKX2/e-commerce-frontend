@@ -1,8 +1,8 @@
-export type Product = {
+export interface Product  {
   ID: number;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   name: string;          
   description: string;
   price: number;

@@ -4,21 +4,25 @@ import FormField from "@/components/checkout/FormField"
 import StripeWrapper from "./StripeWrapper"
 import { useState } from "react";
 import { FormData } from "@/types/formData";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
+const CACHE_KEY = 'checkoutFormData';
+
+const checkoutFormData: FormData = {
+    email: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    addressLine1: "",
+    subDistrict: "",
+    district: "",
+    city: "",
+    province: "",
+    postalCode: "",
+}
 
 function CheckoutForm() {
-    const [formData, setFormData] = useState<FormData>({
-        email: "",
-        firstName: "",
-        lastName: "",
-        phoneNumber: "",
-        addressLine1: "",
-        subDistrict: "",
-        district: "",
-        city: "",
-        province: "",
-        postalCode: "",
-        
-    })
+    const [formData, setFormData] = useLocalStorage<FormData> (CACHE_KEY, checkoutFormData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -28,16 +32,19 @@ function CheckoutForm() {
         }));
     }
 
-    const fullShippingAddress = [
-        `${formData.firstName} ${formData.lastName}`,
-        formData.addressLine1,
-        formData.subDistrict,
-        formData.district,
-        formData.province,
-        formData.postalCode,
-        `Tel: ${formData.phoneNumber}`
-    ].filter(Boolean).join(', ');
+    const shippingDataObject = {
 
+        email: formData.email,
+        receiverName: `${formData.firstName} ${formData.lastName}`,
+        phoneNumber: formData.phoneNumber,
+        streetAddress: formData.addressLine1,
+        subDistrict: formData.subDistrict,
+        district: formData.district,
+        province: formData.province,
+        postalCode: formData.postalCode,
+
+
+    }
 
     return (
         <div className="space-y-8">
@@ -48,7 +55,7 @@ function CheckoutForm() {
                     label="Email"
                     type="email"
                     placeholder="example@email.com"
-                    value={formData.email} 
+                    value={formData.email}
                     onChange={handleInputChange}
                 />
             </section>
@@ -59,14 +66,14 @@ function CheckoutForm() {
                         name="firstName"
                         label="First Name"
                         placeholder="Your First Name"
-                        value={formData.firstName} 
+                        value={formData.firstName}
                         onChange={handleInputChange}
                     />
                     <FormField
                         name="lastName"
                         label="Last Name"
                         placeholder="Your Last Name"
-                        value={formData.lastName} 
+                        value={formData.lastName}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -76,7 +83,7 @@ function CheckoutForm() {
                         label="Phone Number"
                         type="tel"
                         placeholder="012-345-6789"
-                        value={formData.phoneNumber} 
+                        value={formData.phoneNumber}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -88,7 +95,7 @@ function CheckoutForm() {
                         value={formData.addressLine1}
                         onChange={handleInputChange}
                     />
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
                             name="subDistrict"
                             label="Sub-district / Khwaeng"
@@ -96,7 +103,7 @@ function CheckoutForm() {
                             value={formData.subDistrict}
                             onChange={handleInputChange}
                         />
-                         <FormField
+                        <FormField
                             name="district"
                             label="District / Khet"
                             placeholder="Klong Toei"
@@ -105,14 +112,14 @@ function CheckoutForm() {
                         />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <FormField
+                        <FormField
                             name="province"
                             label="Province"
                             placeholder="Bangkok"
                             value={formData.province}
                             onChange={handleInputChange}
                         />
-                         <FormField
+                        <FormField
                             name="postalCode"
                             label="Postal Code"
                             placeholder="10110"
@@ -124,7 +131,7 @@ function CheckoutForm() {
             </section>
             <section>
                 <h2 className="text-2xl font-bold mb-4">Payment</h2>
-                <StripeWrapper shippingAddress={fullShippingAddress}/>
+                <StripeWrapper shippingAddress={shippingDataObject} />
             </section>
         </div>
     )

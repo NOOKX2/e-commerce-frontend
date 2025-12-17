@@ -53,7 +53,7 @@ export default function OrderCard({ order }: { order: Order }) {
       {/* --- Footer --- */}
       <div className="px-6 py-3 bg-gray-50 text-right border-t border-gray-100">
         <Link 
-          href={`/order/success/${order.ID}`} 
+          href={`/orders/success/${order.ID}`} 
           className="text-blue-600 hover:text-blue-800 text-xs font-bold uppercase tracking-wide inline-flex items-center gap-1"
         >
           View Invoice <span>&rarr;</span>

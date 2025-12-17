@@ -37,7 +37,7 @@ export function Filter() {
         router.replace(newUrl, {scroll: false});
     }
     return (
-        <aside className="lg:h-full lg:max-h-screen lg:overflow-y-auto lg:py-6 flex flex-col gap-8">
+        <aside className="lg:sticky top-24 z-10 h-[calc(100vh-120px)] overflow-y-auto lg:h-full lg:max-h-screen lg:overflow-y-auto lg:py-6 flex flex-col gap-8">
             <div className="flex flex-col gap-8">
                 <h3 className="px-4 text-lg font-semibold tracking-tight">Category</h3>
                 <div className="flex flex-col gap-1 px-4">

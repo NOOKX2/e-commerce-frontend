@@ -16,7 +16,7 @@ export default function OrderList({ orders }: { orders: Order[] }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-1/2 ">
       {orders.map((order) => (
         <OrderCard key={order.ID} order={order} />
       ))}

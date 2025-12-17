@@ -49,7 +49,6 @@ async function OrderPage() {
       </div>
     );
   }
-
   return (
     <OrderList orders={orders}/>
   );

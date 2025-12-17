@@ -9,7 +9,6 @@ import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 
 function ProfileIcon() {
     const { user, isLoading, logout } = useAuth()
-    console.log("user from profile icon", user)
     return (
         <div>
             {isLoading ? (

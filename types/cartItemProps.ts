@@ -1,4 +1,4 @@
-export type CartItemProps = {
+export interface CartItemProps  {
   item: {
     ID: number;
     name: string;
