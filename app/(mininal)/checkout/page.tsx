@@ -1,7 +1,15 @@
 import ItemCheckout from "@/components/checkout/ItemCheckout";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-function CheckoutPage() {
+async function CheckoutPage() {
+  const cookiesStore = await cookies();
+  const token = cookiesStore.has('session_token');
+
+  if (!token) {
+    redirect('/login?callbackUrl=/checkout');
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto">

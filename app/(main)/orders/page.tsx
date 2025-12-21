@@ -38,7 +38,7 @@ async function getUserOrders() {
 async function OrderPage() {
   const { orders, error, status } = await getUserOrders();
   if (status === 401) {
-    redirect("/login");
+    redirect("/login?callbackUrl=/orders");
   }
 
   if (error || !orders) {
