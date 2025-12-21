@@ -12,10 +12,11 @@ interface CartState {
     updateQuantity: (productId: number, newQuantity: number) => void;
     removeFromCart: (productId: number) => void;
     clearCart: () => void;
+    setItems: (items: CartItem[]) => void;
 }
 
 export const useCartStore = create<CartState>() (
-    persist(
+    
         (set, get) => ({
             items: [],
 
@@ -55,11 +56,11 @@ export const useCartStore = create<CartState>() (
             clearCart: () => {
                 set({items: [] });
             },
+
+            setItems(items) {
+                set({ items });
+            },
         }),
-        {
-            name: 'cart-storage',
-            storage: createJSONStorage(() => localStorage),
-        } 
         
-    )
+    
 )
