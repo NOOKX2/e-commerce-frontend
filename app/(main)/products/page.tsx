@@ -14,8 +14,8 @@ export interface ProductResponse {
     meta: PaginationMeta;
 }
 
-async function getFilterProducts(searchParams: { [key: string]: string | string[] | undefined }): Promise<{products: Product[]; meta: PaginationMeta}> {
-    
+async function getFilterProducts(searchParams: { [key: string]: string | string[] | undefined }): Promise<{ products: Product[]; meta: PaginationMeta }> {
+
     const params = new URLSearchParams();
 
     for (const [key, value] of Object.entries(searchParams)) {
@@ -32,7 +32,7 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
     try {
         const res = await fetch(apiUrl, { next: { revalidate: 0 } });
         if (!res.ok) {
-           throw new Error('Failed to fetch');
+            throw new Error('Failed to fetch');
         }
         const response = await res.json();
         console.log("fetch product successfully");
@@ -49,30 +49,39 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
         console.error("Error fetching products", error);
         return {
             products: [],
-            meta: {total_pages: 0, current_page: 1}
+            meta: { total_pages: 0, current_page: 1 }
         };
     }
 }
 
-export default async function ProductPage({searchParams}: {searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) {
+export default async function ProductPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const resolvedSearchParams = await searchParams;
 
-    const {products, meta} = await getFilterProducts(resolvedSearchParams);
+    const { products, meta } = await getFilterProducts(resolvedSearchParams);
 
     return (
-        <div className="grid grid-cols-[250px_1fr] gap-8 my-10">
-            <aside>
+        <div className="grid grid-cols-[250px_1fr] items-start gap-8 my-10">
+            <aside className="sticky top-24 w-[250px]">
                 <Filter />
             </aside>
             <main className="flex flex-col gap-8">
-                <ProductGrid products={products} />
-                {meta.total_pages > 1 && (
-                    <div className="py-10 border-t">
-                        <Pagination meta={meta}/>
+                {products.length > 0 ? (
+
+                    <>
+                        <ProductGrid products={products} />
+                        {meta.total_pages > 1 && (
+                            <div className="py-10 border-t">
+                                <Pagination meta={meta} />
+                            </div>
+                        )}
+                    </>
+                ) : (
+
+                    <div className="flex flex-col sm:w-15 md:w-100  lg:w-250">
+                        <p className="text-center mr-50 ">No Product Found</p>
                     </div>
                 )}
             </main>
-            
         </div>
     );
 }

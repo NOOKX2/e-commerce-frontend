@@ -9,7 +9,7 @@ export function ProductGrid({ products }: ProductGridProps) {
     return (
         <section className="mr-32">
             <h1 className="text-4xl text-center font-bold">Ultimate E-Commerce Shop</h1>
-            {products.length > 0 ? (
+             
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
                     {products.map((product) => (
                        
@@ -23,12 +23,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                         
                     ))}
                 </div>
-            ) : (
-                <div className="flex items-center justify-center h-96">
-                    <p className="text-muted-foreground">No products found.</p>
-                </div>
-
-            )}
+       
 
         </section>
 
