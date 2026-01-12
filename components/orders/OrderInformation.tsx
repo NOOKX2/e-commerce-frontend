@@ -76,7 +76,7 @@ export default function OrderInformation({ order }: Props) {
       <OrderSummaryInOrderSuccess items={order.items} />
       
     </Card>
-    <div className="flex flex-col mt-4 gap-3">
+    <div className="flex flex-col mt-2 gap-2">
         <Button asChild>
           <Link href="/products">Continue Shopping</Link>
         </Button>

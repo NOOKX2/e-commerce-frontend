@@ -16,7 +16,6 @@ async function getUserOrders() {
       cache: "no-store", 
     });
     const data = await res.json();
-
     if (res.status === 401) {
       return { error: "Unauthorized", status: 401 };
     }

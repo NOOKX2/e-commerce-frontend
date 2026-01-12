@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className="w-full min-h-screen">
         <AuthProvider initialUser={initialUser}>
-        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
         <main className="min-h-screen">
           <CartSyncronizer />
           {children}
