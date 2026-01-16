@@ -16,7 +16,7 @@ function ItemCheckout() {
             <ul className='space-y-4'>
                 {items.map(item => (
 
-                  <ItemCheckoutCartItem key={item.ID} item={item}/>
+                  <ItemCheckoutCartItem key={item.product.ID} item={item.product}/>
 
                 ))}
             </ul>

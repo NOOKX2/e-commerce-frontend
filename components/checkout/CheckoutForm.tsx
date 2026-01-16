@@ -2,7 +2,6 @@
 
 import FormField from "@/components/checkout/FormField"
 import StripeWrapper from "./StripeWrapper"
-import { useState } from "react";
 import { FormData } from "@/types/formData";
 import useLocalStorage from "@/hooks/useLocalStorage";
 

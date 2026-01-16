@@ -7,9 +7,11 @@ type ProductCardProps = {
     name: string;
     price: number;
     slug: string;
+    quantity: number;
 }
 
-function ProductCard({imageUrl, name, price, slug}: ProductCardProps ) {
+function ProductCard({imageUrl, name, price, slug, quantity}: ProductCardProps ) {
+  const isOutOfStock = quantity <= 0;
   return (
    <Link href={`/products/${slug}`} className="group block">
     <div className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">

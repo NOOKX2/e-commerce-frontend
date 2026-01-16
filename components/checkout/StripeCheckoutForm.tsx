@@ -15,6 +15,7 @@ interface StripeCheckoutFormProps {
 
 export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutFormProps) {
     const {items, clearCart} = useCartStore();
+    console.log("item in checkout", items);
     const stripe = useStripe();
     const elements = useElements();
     const router = useRouter();
@@ -72,13 +73,13 @@ export default function StripeCheckoutForm({shippingAddress}: StripeCheckoutForm
                 cache: 'no-store',
                 body: JSON.stringify({
                     shippingAddress: shippingAddress,
-                    items: items.map(item => ({ productID: item.ID, quantity: item.quantity })),
+                    items: items.map(item => ({ productID: item.product.ID, quantity: item.quantity })),
                     paymentIntentId: paymentMethod.id,
                 }),
             });
        
             const orderData = await res.json();
-
+            console.log(orderData);
             if (!res.ok) {
                 console.log(orderData.error);
                 throw new Error(orderData.error || "Failed to create your order.")

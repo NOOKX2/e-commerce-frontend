@@ -10,4 +10,6 @@ export interface Product  {
   imageUrl: string;     
   sellerId: number;
   slug: string;
+  sku: string;
+  quantity: number;
 }

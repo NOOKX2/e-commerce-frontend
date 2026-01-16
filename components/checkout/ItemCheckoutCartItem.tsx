@@ -18,7 +18,7 @@ function ItemCheckoutCartItem({ item }: CartItemProps) {
               </div>
          
             <div className='flex items-center gap-8 md:gap-12 shrink-0'>
-                <p className='w-24 text-center text-gray-700'>{`${item.price} ฿`}</p>
+                <p className='w-24 text-center text-gray-700'>{`${item.price.toLocaleString()} ฿`}</p>
                 <p className='w-16 text-center font-semibold'>{item.quantity}</p>
             </div>
 

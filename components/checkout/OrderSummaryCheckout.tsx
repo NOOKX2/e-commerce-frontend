@@ -7,7 +7,7 @@ interface OrderSummaryProps {
 function OrderSummaryCheckout({ items }: OrderSummaryProps) {
     console.log("items in order summary props", items);
     const subtotal = items.reduce((total, item) => {
-        return total + item.price * item.quantity;
+        return total + item.product.price * item.quantity;
     }, 0);
 
     return (

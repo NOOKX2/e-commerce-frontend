@@ -14,29 +14,30 @@ function CartItemList({ items }: CartItemsListProps) {
   return (
       <div className="space-y-4">
         {items.map((item) => (
-          <div key={item.ID} className="flex items-center gap-4 border-b pb-4">
+          <div key={item.product.ID} className="flex items-center gap-4 border-b pb-4">
             <Image
-              src={item.imageUrl}
-              alt={item.name}
+              src={item.product.imageUrl}
+              alt={item.product.name}
               width={100}
               height={100}
               className="rounded-md object-cover"
             />
             <div className="flex-1 min-w-[150px]">
-              <h2 className="font-semibold">{item.name}</h2>
+              <h2 className="font-semibold">{item.product.name}</h2>
               <p className="text-sm text-muted-foreground">
-                {`฿${item.price.toLocaleString()}`}
+                {`฿${item.product.price.toLocaleString()}`}
               </p>
             </div>
             <div className="flex items-center gap-4">
               <QuantitySelector
                 quantity={item.quantity}
-                setQuantity={(newQuantity) => updateQuantity(item.ID, newQuantity)}
+                setQuantity={(newQuantity) => updateQuantity(item.product.ID, newQuantity)}
+                maxStock={item.product.quantity}
               />
               <Button
                 variant='ghost'
                 size='icon'
-                onClick={() => removeFromCart(item.ID)}
+                onClick={() => removeFromCart(item.product.ID)}
               >
                 <Trash2 className="h-5 w-5 text-muted-foreground" />
               </Button>
