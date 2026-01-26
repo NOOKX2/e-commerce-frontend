@@ -8,7 +8,6 @@ import OrderSummary from "@/components/checkout/OrderSummary";
 
 function CartPage() {
     const { items} = useCartStore()
-    console.log(items)
     return (
         <div className="mx-auto py-12">
             {items.length === 0 ? (

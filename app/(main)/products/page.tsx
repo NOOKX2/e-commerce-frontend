@@ -27,7 +27,6 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
     }
 
     const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/products?${params.toString()}`;
-    console.log("Fetching from: ", apiUrl);
 
     try {
         const res = await fetch(apiUrl, { next: { revalidate: 0 } });
@@ -35,8 +34,7 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
             throw new Error('Failed to fetch');
         }
         const response = await res.json();
-        console.log("fetch product successfully");
-        console.log(response);
+      
         return {
             products: response.data || [],
             meta: {

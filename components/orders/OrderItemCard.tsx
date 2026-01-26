@@ -2,7 +2,6 @@ import Image from "next/image";
 import { OrderItem } from "@/types/order";
 
 export default function OrderItemCard({ item }: { item: OrderItem }) {
-  console.log("item from orderItemCard", item);
   return (
     <div className="flex justify-between items-center py-3 border-b border-gray-100 last:border-0 mx-10">
       <div className="flex items-center gap-4">

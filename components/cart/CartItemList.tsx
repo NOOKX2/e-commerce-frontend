@@ -10,7 +10,6 @@ interface CartItemsListProps {
 
 function CartItemList({ items }: CartItemsListProps) {
   const { removeFromCart, updateQuantity } = useCartStore();
-  console.log("items in cart list",items[0]);
   return (
       <div className="space-y-4">
         {items.map((item) => (

@@ -23,7 +23,6 @@ async function getOrderData(orderId: string) {
       },
       cache: 'no-store', 
     });
-    console.log("res from success page ", res)
 
     if (res.status === 404) {
       return { status: 404, order: null };
@@ -64,6 +63,6 @@ export default async function OrderSuccessPage({params}: OrderSuccessPageProps) 
     if (status !== 200) {
         return <OrderError message={error} />;
     }
-    console.log("order from success page", order);
+    
     return <OrderSuccess order={order} />;
 }

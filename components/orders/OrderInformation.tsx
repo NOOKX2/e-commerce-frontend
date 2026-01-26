@@ -16,7 +16,6 @@ interface Props {
 
 
 export default function OrderInformation({ order }: Props) {
-  console.log("order in order information", order);
   const address = order.shippingAddress
   return (
     <section className='space-y-4'>

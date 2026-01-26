@@ -8,7 +8,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "mobile_phone",
     price: 41900,
     imageUrl: "/images/iphone-17-pro-max.webp", 
-    slug: "iphone-17-pro-max",
+    slug: "iphone-17-pro-max-256",
     description: "The ultimate iPhone, with the powerful A17 Pro chip."
   },
   {

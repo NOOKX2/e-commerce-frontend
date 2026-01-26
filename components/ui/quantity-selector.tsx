@@ -8,7 +8,6 @@ interface QuantitySelectorProps {
 }
 
 function QuantitySelector({ quantity, setQuantity, maxStock }: QuantitySelectorProps) {
-  console.log(`maxStock = ${maxStock}`)
   const [error, setError] = useState("");
   const handleDecrement = () => {
     if (quantity > 1) {
