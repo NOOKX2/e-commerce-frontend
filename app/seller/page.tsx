@@ -1,3 +1,5 @@
+import SellerOrderTable from "@/components/seller/SellerOrderTable";
+import SellerStats from "@/components/seller/SellerStat";
 import { DollarSign, ShoppingBag, Users, TrendingUp } from "lucide-react";
 
 const stats = [
@@ -47,32 +49,7 @@ export default function SellerDashboard() {
                 <p className="mt-2 text-gray-600">Overview of your store's performance.</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat) => (
-                    <div key={stat.label} className="bg-white overflow-hidden shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200 border border-gray-100">
-                        <div className="p-5">
-                            <div className="flex items-center">
-                                <div className={`shrink-0 rounded-lg p-3 ${stat.color} bg-opacity-10`}>
-                                    <stat.icon className={`h-6 w-6 text-${stat.color.replace('bg-', '')}`} aria-hidden="true" />
-                                </div>
-                                <div className="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt className="text-sm font-medium text-gray-500 truncate">{stat.label}</dt>
-                                        <dd>
-                                            <div className="text-xl font-bold text-gray-900">{stat.value}</div>
-                                        </dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-gray-50 px-5 py-3">
-                            <div className="text-xs font-medium text-green-600 truncate">
-                                {stat.change}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <SellerStats stats={stats}/>
 
             <div className="bg-white shadow-sm rounded-xl border border-gray-100">
                 <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
@@ -80,37 +57,7 @@ export default function SellerDashboard() {
                     <button className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</button>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {recentOrders.map((order) => (
-                                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">{order.id}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.product}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.date}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.amount}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${order.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                                                order.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
-                                                    'bg-yellow-100 text-yellow-800'}`}>
-                                            {order.status}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <SellerOrderTable recentOrders={recentOrders}/>
                 </div>
             </div>
         </div>

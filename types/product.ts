@@ -13,3 +13,10 @@ export interface Product  {
   sku: string;
   quantity: number;
 }
+
+export interface SellerProduct extends Product {
+  costPrice?: number;      
+  status: "active" | "draft" | "hidden" | "out_of_stock";
+  totalSales: number; 
+  rating: number;    
+}
