@@ -34,12 +34,12 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
             throw new Error('Failed to fetch');
         }
         const response = await res.json();
-      
+        console.log(`product data ${response.data}`);
         return {
             products: response.data || [],
             meta: {
                 total_pages: response.meta?.total_pages || 0,
-                current_page: Number(params.get('page')) || 1, // ดึงจาก params ถ้า API ไม่ส่งมา
+                current_page: Number(params.get('page')) || 1, 
                 total_items: response.meta?.total_items
             }
         };

@@ -14,7 +14,9 @@ function ProductImage({ product }: ProductImageProps) {
                     <Image
                         src={product.imageUrl}
                         alt={product.name}
-                        fill
+            
+                        width={400}
+                        height={400}
                         className='object-cover'
                     />
                 ) : (

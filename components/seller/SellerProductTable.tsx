@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { SellerProduct } from '@/types/product'
 import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
-
+import Image from 'next/image'
 interface SellerProductTableProps {
     products: SellerProduct[]
 }
@@ -26,7 +26,7 @@ function SellerProductTable({products}: SellerProductTableProps) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center">
                                     <div className="h-10 w-10 shrink-0">
-                                        <img className="h-10 w-10 rounded-lg object-cover border border-gray-200" src={product.imageUrl} alt={product.name} />
+                                        <Image className="h-10 w-10 rounded-lg object-cover border border-gray-200" src={product.imageUrl || "/fallback-image.png"} alt={product.name} width={40} height={40}/>
                                     </div>
                                     <div className="ml-4">
                                         <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -35,10 +35,10 @@ function SellerProductTable({products}: SellerProductTableProps) {
                                 </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{product.category}</div>
+                                <div className="text-sm text-gray-900">{product.category?.name || "General"}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">${product.price.toFixed(2)}</div>
+                                <div className="text-sm font-medium text-gray-900">${product.price.toLocaleString()}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className={cn(

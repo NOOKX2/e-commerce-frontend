@@ -6,7 +6,7 @@ export interface Product  {
   name: string;          
   description: string;
   price: number;
-  category: string;
+  category: Category;
   imageUrl: string;     
   sellerId: number;
   slug: string;
@@ -19,4 +19,11 @@ export interface SellerProduct extends Product {
   status: "active" | "draft" | "hidden" | "out_of_stock";
   totalSales: number; 
   rating: number;    
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  createdAt?: string;
 }

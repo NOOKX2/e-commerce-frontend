@@ -38,12 +38,12 @@ export default function Pagination({ meta }: { meta: any }) {
 
     return (
         <div className="flex items-center justify-center space-x-2 mt-8">
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1} className='px-4 py-2 border rounded-md disabled:opacity-30 bg-gray-100'>
+          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1} className='px-4 py-2 border rounded-md disabled:opacity-30 '>
                 Prev
           </button>
           {renderPageNumbers()}
 
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPage} className='px-4 py-2 border rounded-md disabled:opacity-30 bg-gray-'>Next</button>
+          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPage} className='px-4 py-2 border rounded-md disabled:opacity-30 '>Next</button>
         </div>
     );
 }
