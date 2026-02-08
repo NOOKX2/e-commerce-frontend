@@ -1,29 +1,53 @@
 "use client"
 
-import { useActionState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { loginAction } from '@/app/actions/login-action';
-import type { LoginState } from '@/app/actions/login-action';
 
-const wrapperAction = (prevState: LoginState | undefined, formData: FormData) => {
-    return loginAction(prevState, formData);
-};
 
 export function useLoginForm() {
     const router = useRouter();
-    const auth = useAuth();
+    const {login} = useAuth();
     const searchParams = useSearchParams();
     const callBackUrl = searchParams.get("callbackUrl") || "/";
 
-    const [state, action] = useActionState(wrapperAction, undefined);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (state?.user) {
-            auth.login(state.user);
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        const formData = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Email or password incorrect");
+            }
+
+            if (data.token) {
+                document.cookie = `session_token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
+            }
+
+            login(data.response || data.user);
+
             router.push(callBackUrl);
+
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
-    }, [state, auth, router])
-    
-    return [state, action] as const;
+    }
+    return {handleLogin, loading, error};
 }

@@ -1,27 +1,66 @@
 "use client"
 
-import { useActionState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState} from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { registerAction } from '@/app/actions/register-action';
-import type { RegisterState } from '@/app/actions/register-action'; 
+import { z } from 'zod';
 
-const wrapperAction = (prevState: RegisterState  | undefined, formData: FormData) => {
-    return registerAction(prevState, formData);
-};
+const registerSchema = z.object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export function useRegisterForm() {
     const router = useRouter();
-    const auth = useAuth();
+    const { login } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const searchParams = useSearchParams();
+    const callBackUrl = searchParams.get("callbackUrl") || "/";
 
-    const [state, action] = useActionState(wrapperAction, undefined);
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
 
-    useEffect(() => {
-        if (state?.user) {
-            auth.login(state.user);
-            router.push("/");
+        const formData = new FormData(e.currentTarget);
+        const payload = Object.fromEntries(formData.entries());
+
+        const validation = registerSchema.safeParse(payload);
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            setLoading(false);
+            return;
         }
-    }, [state, auth, router])
 
-    return [state, action] as const
+        try{
+            const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Registration failed");
+            }
+
+            if (data.token) {
+                
+                document.cookie = `session_token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
+            }
+
+            login(data.response || data.user);
+
+            router.push(callBackUrl);
+        } catch(error: any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return {handleRegister, loading, error}
 }
