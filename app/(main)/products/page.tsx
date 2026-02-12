@@ -59,7 +59,7 @@ export default async function ProductPage({ searchParams }: { searchParams: Prom
 
     return (
         <div className="grid grid-cols-[250px_1fr] items-start gap-8 my-10">
-            <aside className="sticky top-24 w-[250px]">
+            <aside className="sticky top-24 w-62.5">
                 <Filter />
             </aside>
             <main className="flex flex-col gap-8">

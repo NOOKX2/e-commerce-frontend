@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package.json .
 
-RUN bun install --frozen-lockfile
+RUN bun install 
 
 
 COPY . .

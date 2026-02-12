@@ -12,6 +12,7 @@ export interface Product  {
   slug: string;
   sku: string;
   quantity: number;
+  salePrice: number;
 }
 
 export interface SellerProduct extends Product {

@@ -28,11 +28,11 @@ async function getSellerProducts(searchParams: { page?: string; limit?: string; 
             },
             cache: 'no-store' 
         });
-
+        console.log(res);
         if (!res.ok) throw new Error('Failed to fetch seller products');
         
         const response = await res.json();
-        console.log("seller product page",response.products);
+
         return {
             products: response.products || [],
             meta: response.meta || { total_pages: 0, current_page: 1 }
@@ -51,6 +51,7 @@ export default async function SellerProductsPage({searchParams}: {searchParams: 
         search: typeof resolvedParams.search === 'string' ? resolvedParams.search : '', 
     };
     const { products, meta } = await getSellerProducts(fetchParams);
+    
     return (
         <div className="p-6 max-w-7xl mx-auto space-y-6">
             <div className="flex flex-col gap-2">

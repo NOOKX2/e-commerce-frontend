@@ -2,11 +2,12 @@ import { cn } from '@/lib/utils'
 import { SellerProduct } from '@/types/product'
 import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 interface SellerProductTableProps {
     products: SellerProduct[]
 }
 
-function SellerProductTable({products}: SellerProductTableProps) {
+function SellerProductTable({ products }: SellerProductTableProps) {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -24,15 +25,17 @@ function SellerProductTable({products}: SellerProductTableProps) {
                     {products.map((product) => (
                         <tr key={product.ID} className="hover:bg-gray-50 transition-colors group">
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                    <div className="h-10 w-10 shrink-0">
-                                        <Image className="h-10 w-10 rounded-lg object-cover border border-gray-200" src={product.imageUrl || "/fallback-image.png"} alt={product.name} width={40} height={40}/>
+                                <Link href={`/seller/products/${product.slug}`} >
+                                    <div className="flex items-center">
+                                        <div className="h-10 w-10 shrink-0">
+                                            <Image className="h-10 w-10 rounded-lg object-cover border border-gray-200" src={product.imageUrl || "/fallback-image.png"} alt={product.name} width={40} height={40} />
+                                        </div>
+                                        <div className="ml-4">
+                                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                                            <div className="text-sm text-gray-500">{product.sku}</div>
+                                        </div>
                                     </div>
-                                    <div className="ml-4">
-                                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                                        <div className="text-sm text-gray-500">{product.sku}</div>
-                                    </div>
-                                </div>
+                                </Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">{product.category?.name || "General"}</div>
@@ -60,9 +63,11 @@ function SellerProductTable({products}: SellerProductTableProps) {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                                        <Edit className="h-4 w-4" />
-                                    </button>
+                                    <Link href={`/seller/products/${product.slug}/edit`}>
+                                        <button className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                            <Edit className="h-4 w-4" />
+                                        </button>
+                                    </Link>
                                     <button className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                         <Trash2 className="h-4 w-4" />
                                     </button>
