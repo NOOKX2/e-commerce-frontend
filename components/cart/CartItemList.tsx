@@ -21,7 +21,7 @@ function CartItemList({ items }: CartItemsListProps) {
               height={100}
               className="rounded-md object-cover"
             />
-            <div className="flex-1 min-w-[150px]">
+            <div className="flex-1 min-w-37.5">
               <h2 className="font-semibold">{item.product.name}</h2>
               <p className="text-sm text-muted-foreground">
                 {`฿${item.product.price.toLocaleString()}`}
