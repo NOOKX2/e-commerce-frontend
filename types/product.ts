@@ -7,7 +7,8 @@ export interface Product  {
   description: string;
   price: number;
   category: Category;
-  imageUrl: string;     
+  imageUrl: string; 
+  imageHash: string;    
   sellerId: number;
   slug: string;
   sku: string;
@@ -17,7 +18,7 @@ export interface Product  {
 
 export interface SellerProduct extends Product {
   costPrice?: number;      
-  status: "active" | "draft" | "hidden" | "out_of_stock";
+  status: "active" | "draft" | "inactive" | "archived";
   totalSales: number; 
   rating: number;    
 }

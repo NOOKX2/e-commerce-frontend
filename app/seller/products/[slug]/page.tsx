@@ -1,9 +1,9 @@
 import { 
-    Edit3, Trash2, Package, BarChart3, ArrowLeft, Tag, Layers, Building2, Calendar 
+    Edit3, Package, ArrowLeft, Tag, Layers
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ApiResponse } from "@/types/api";
 import { Product } from "@/types/product";
 import Image from "next/image";

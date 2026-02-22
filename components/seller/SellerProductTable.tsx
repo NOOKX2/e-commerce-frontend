@@ -53,12 +53,14 @@ function SellerProductTable({ products }: SellerProductTableProps) {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={cn(
-                                    "px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full",
-                                    product.quantity > 0
-                                        ? "bg-green-100 text-green-800"
-                                        : "bg-red-100 text-red-800"
+                                    "px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full capitalize",
+                                    
+                                    product.status === "active" && "bg-green-100 text-green-800",
+                                    product.status === "draft" && "bg-gray-100 text-gray-800",
+                                    product.status === "inactive" && "bg-yellow-100 text-yellow-800",
+                                    product.status === "archived" && "bg-red-100 text-red-800",
                                 )}>
-                                    {product.quantity > 0 ? "In Stock" : "Out of Stock"}
+                                    {product.status || "active"}
                                 </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

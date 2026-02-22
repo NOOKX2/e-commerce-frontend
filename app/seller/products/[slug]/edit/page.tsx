@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +27,7 @@ import { useEffect, useState, use } from "react";
 import { Category, SellerProduct } from "@/types/product";
 import { ApiResponse } from "@/types/api";
 import Image from "next/image";
+import { uploadToR2 } from "@/lib/r2-upload";
 
 export default function EditProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
@@ -70,10 +71,14 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
     fetchInitialData();
   }, [slug]);
 
+
+
+
   console.log("product in edit", product);
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formElement = e.currentTarget;
     const sku = product?.sku;
 
     if (!sku) {
@@ -81,18 +86,29 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
+    let finalImageUrl = product?.imageUrl || "";
+    let finalImageHash = product?.imageHash || "";
+
+    if (imageFile) {
+      const { publicUrl, fileHash } = await uploadToR2(imageFile);
+      finalImageUrl = publicUrl;
+      finalImageHash = fileHash;
+    }
+
+    const formData = new FormData(formElement);
 
     const payload = {
       name: formData.get("name"),
       description: formData.get("description"),
       price: Number(formData.get("price")),
-      sale_price: Number(formData.get("salePrice")),
-      cost_price: Number(formData.get("costPrice")),
+      salePrice: Number(formData.get("salePrice")),
+      costPrice: Number(formData.get("costPrice")),
       quantity: Number(formData.get("stock")),
       //vendor: formData.get("vendor"),
       status: status,
       category: category,
+      imageUrl: finalImageUrl,
+      imageHash: finalImageHash,
     };
 
     try {
@@ -216,7 +232,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
                     <Label htmlFor="salePrice">Sale Price ($)</Label>
                     <Input id="salePrice" name="salePrice" type="number" defaultValue={product?.salePrice} />
                   </div>
-                   <div className="space-y-2">
+                  <div className="space-y-2">
                     <Label htmlFor="costPrice">Cost Price ($)</Label>
                     <Input id="costPrice" name="costPrice" type="number" defaultValue={product?.costPrice} />
                   </div>
@@ -249,6 +265,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
                     <SelectItem value="archived">Archived</SelectItem>
                   </SelectContent>
                 </Select>

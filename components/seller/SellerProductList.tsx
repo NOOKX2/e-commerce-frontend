@@ -16,8 +16,6 @@ interface SellerProductListProps {
 
 export default async function SellerProductPage({ products, meta }: SellerProductListProps) {
   
-    console.log("products in seller product list", products);
-
     return (
         <div className="space-y-6">
             <SellerProductHeader />

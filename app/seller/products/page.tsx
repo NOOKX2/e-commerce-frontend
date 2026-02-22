@@ -28,7 +28,6 @@ async function getSellerProducts(searchParams: { page?: string; limit?: string; 
             },
             cache: 'no-store' 
         });
-        console.log(res);
         if (!res.ok) throw new Error('Failed to fetch seller products');
         
         const response = await res.json();

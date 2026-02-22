@@ -19,7 +19,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
         name: '',
         description: '',
         price: '',
-        cost_price: '',
+        costPrice: '',
         quantity: '0',
         category: '',
     });
@@ -64,10 +64,10 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                 name: formData.name,
                 description: formData.description,
                 price: parseFloat(formData.price),
-                cost_price: parseFloat(formData.cost_price),
+                costPrice: parseFloat(formData.costPrice),
                 quantity: parseInt(formData.quantity),
-                image_url: finalImageUrl,
-                image_hash: finalImageHash,
+                imageUrl: finalImageUrl,
+                imageHash: finalImageHash,
                 sku: "",
                 category: formData.category,
             };
@@ -88,7 +88,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
             router.refresh();
             onClose();
 
-            setFormData({ name: '', description: '', price: '', cost_price: '', quantity: '0', category: "" });
+            setFormData({ name: '', description: '', price: '', costPrice: '', quantity: '0', category: "" });
             setImageFile(null);
 
         } catch (error) {
@@ -177,8 +177,8 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                                 required
                                 type="number"
                                 className="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
-                                value={formData.cost_price}
-                                onChange={(e) => setFormData({ ...formData, cost_price: e.target.value })}
+                                value={formData.costPrice}
+                                onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
                             />
                         </div>
 
