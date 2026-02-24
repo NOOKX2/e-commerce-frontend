@@ -1,53 +1,31 @@
-"use client";
-
 import SellerOrderTable from '@/components/seller/SellerOrderTable';
 import { SellerOrder } from '@/types/sellerOrder';
 import { Search, Filter, Download } from 'lucide-react';
+import { cookies } from 'next/headers';
 
-const mockOrders: SellerOrder[] = [
-    {
-        id: "ORD-001",
-        product: "Premium Wireless Headphones",
-        customer: "John Doe",
-        date: "2024-01-20",
-        amount: "$299.99",
-        status: "Completed",
-    },
-    {
-        id: "ORD-002",
-        product: "Ergonomic Office Chair",
-        customer: "Jane Smith",
-        date: "2024-01-19",
-        amount: "$199.50",
-        status: "Processing",
-    },
-    {
-        id: "ORD-003",
-        product: "Mechanical Keyboard",
-        customer: "Bob Johnson",
-        date: "2024-01-18",
-        amount: "$129.00",
-        status: "Pending",
-    },
-    {
-        id: "ORD-004",
-        product: "USB-C Hub",
-        customer: "Alice Brown",
-        date: "2024-01-18",
-        amount: "$49.99",
-        status: "Completed",
-    },
-    {
-        id: "ORD-005",
-        product: "Monitor Stand",
-        customer: "Charlie Wilson",
-        date: "2024-01-17",
-        amount: "$79.99",
-        status: "Completed",
-    },
-];
+export default async function SellerOrdersPage() {
+    const cookiesStore = await cookies();
+    let orders: SellerOrder[] = [];
+    try {
+       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller/orders/`, {
+            headers: {
+                'Cookie': cookiesStore.toString(),
+            },
+            cache: 'no-store',
+       });
 
-export default function SellerOrdersPage() {
+       if (!res.ok) {
+        throw new Error("response is not ok");
+       }
+
+       const response = await res.json();
+       orders = response.data;
+
+    } catch(error: any) {
+        console.error(`Error fetching seller orders ${error.message}`);
+        return null;
+    }
+
     return (
         <div className="p-6 max-w-7xl mx-auto space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -82,7 +60,7 @@ export default function SellerOrdersPage() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-                <SellerOrderTable recentOrders={mockOrders} />
+                <SellerOrderTable recentOrders={orders} />
             </div>
         </div>
     );

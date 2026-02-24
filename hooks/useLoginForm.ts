@@ -7,7 +7,7 @@ import { useAuth } from '@/context/auth-context';
 
 export function useLoginForm() {
     const router = useRouter();
-    const {login} = useAuth();
+    const { login } = useAuth();
     const searchParams = useSearchParams();
     const callBackUrl = searchParams.get("callbackUrl") || "/";
 
@@ -41,7 +41,12 @@ export function useLoginForm() {
 
             login(data.response || data.user);
 
-            router.push(callBackUrl);
+            if (data.user.role == 'seller') {
+                router.push('/seller');
+            }
+            else {
+                router.push(callBackUrl);
+            }
 
         } catch (error: any) {
             setError(error.message);
@@ -49,5 +54,5 @@ export function useLoginForm() {
             setLoading(false);
         }
     }
-    return {handleLogin, loading, error};
+    return { handleLogin, loading, error };
 }

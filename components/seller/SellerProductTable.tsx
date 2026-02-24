@@ -1,9 +1,7 @@
 import { cn } from '@/lib/utils'
 import { SellerProduct } from '@/types/product'
-import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import ProductAction from '../products/ProductAction'
 import ProductTableAction from './ProductTableAction'
 interface SellerProductTableProps {
     products: SellerProduct[]

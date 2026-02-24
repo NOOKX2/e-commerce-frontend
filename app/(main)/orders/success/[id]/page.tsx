@@ -11,8 +11,6 @@ interface OrderSuccessPageProps {
 
 async function getOrderData(orderId: string) {
   const cookiesStore = await cookies();
-  const token = cookiesStore.get('session_token')?.value;
-
 
   try {
    

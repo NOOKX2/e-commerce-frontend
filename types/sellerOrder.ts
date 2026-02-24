@@ -3,6 +3,6 @@ export interface SellerOrder {
     product: string;   
     customer: string;  
     date: string;      
-    amount: string;    
+    amount: number;    
     status: string;
 }
