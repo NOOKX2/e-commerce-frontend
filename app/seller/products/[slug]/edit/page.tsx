@@ -54,7 +54,6 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
 
         const productData: ApiResponse<SellerProduct> = await productRes.json();
         const categoriesData: ApiResponse<Category[]> = await categoriesRes.json();
-        console.log("category data", categoriesData.data);
         setProduct(productData.data);
         setStatus(productData.data.status);
         setCategory(productData.data.category?.slug.toLowerCase());

@@ -1,4 +1,4 @@
-import SellerOrderTable from '@/components/seller/SellerOrderTable';
+import SellerOrderTable from '@/components/seller/order/SellerOrderTable';
 import { SellerOrder } from '@/types/sellerOrder';
 import { Search, Filter, Download } from 'lucide-react';
 import { cookies } from 'next/headers';
@@ -7,21 +7,21 @@ export default async function SellerOrdersPage() {
     const cookiesStore = await cookies();
     let orders: SellerOrder[] = [];
     try {
-       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller/orders/`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller/orders/`, {
             headers: {
                 'Cookie': cookiesStore.toString(),
             },
             cache: 'no-store',
-       });
+        });
 
-       if (!res.ok) {
-        throw new Error("response is not ok");
-       }
+        if (!res.ok) {
+            throw new Error("response is not ok");
+        }
 
-       const response = await res.json();
-       orders = response.data;
+        const response = await res.json();
+        orders = response.data;
 
-    } catch(error: any) {
+    } catch (error: any) {
         console.error(`Error fetching seller orders ${error.message}`);
         return null;
     }

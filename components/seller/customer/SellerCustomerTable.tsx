@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils";
 import { Customer } from "@/types/customer";
 import { Mail, MapPin, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 
 interface SellerCustomerTableProps {
-    customers: Customer[]; 
+    customers: Customer[];
 }
 
-function SellerCustomerTable({customers}: SellerCustomerTableProps) {
+function SellerCustomerTable({ customers }: SellerCustomerTableProps) {
     return (
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
@@ -24,6 +25,7 @@ function SellerCustomerTable({customers}: SellerCustomerTableProps) {
                     <tbody className="bg-white divide-y divide-gray-200">
                         {customers.map((customer) => (
                             <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
+
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
                                         <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
@@ -58,12 +60,16 @@ function SellerCustomerTable({customers}: SellerCustomerTableProps) {
                                     {customer.totalOrders} orders
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    ${customer.totalSpent.toFixed(2)}
+                                    {customer.totalSpent.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button className="text-gray-400 hover:text-gray-600 transition-colors">
-                                        <MoreHorizontal className="w-5 h-5" />
-                                    </button>
+                                    <Link
+                                        href={`/seller/customers/${customer.id}`}
+                                        className="text-blue-600 bg-blue-50 px-3 py-1.5 rounded-md transition-colors hover:bg-blue-100"
+                                        title="View Customer Details"
+                                    >
+                                        View Detail
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

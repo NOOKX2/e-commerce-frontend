@@ -32,7 +32,6 @@ export default async function SellerProductDetailPage({ params }: { params: Prom
         return <div className="p-20 text-center text-gray-500">Product not found.</div>;
     }
 
-    console.log("product detail page", product);
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-20">

@@ -1,4 +1,4 @@
-import SellerOrderTable from "@/components/seller/SellerOrderTable";
+import SellerOrderTable from "@/components/seller/order/SellerOrderTable";
 import SellerStats from "@/components/seller/SellerStat";
 import { DollarSign, ShoppingBag, Users, TrendingUp } from "lucide-react";
 
@@ -49,7 +49,7 @@ export default function SellerDashboard() {
                 <p className="mt-2 text-gray-600">Overview of your store's performance.</p>
             </div>
 
-            <SellerStats stats={stats}/>
+            <SellerStats stats={stats} />
 
             <div className="bg-white shadow-sm rounded-xl border border-gray-100">
                 <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
@@ -57,7 +57,7 @@ export default function SellerDashboard() {
                     <button className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</button>
                 </div>
                 <div className="overflow-x-auto">
-                    <SellerOrderTable recentOrders={recentOrders}/>
+                    <SellerOrderTable recentOrders={recentOrders} />
                 </div>
             </div>
         </div>

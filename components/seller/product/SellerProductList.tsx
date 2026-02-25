@@ -1,6 +1,6 @@
-import SellerProductHeader from '@/components/seller/SellerProductHeader';
-import SellerProductTable from '@/components/seller/SellerProductTable';
-import SellerProductTablePagination from '@/components/seller/SellerProductTablePagination';
+import SellerProductHeader from '@/components/seller/product/SellerProductHeader';
+import SellerProductTable from '@/components/seller/product/SellerProductTable';
+import SellerProductTablePagination from '@/components/seller/product/SellerProductTablePagination';
 import { SellerProduct } from '@/types/product';
 
 interface PaginationMeta {
@@ -15,7 +15,7 @@ interface SellerProductListProps {
 }
 
 export default async function SellerProductPage({ products, meta }: SellerProductListProps) {
-  
+
     return (
         <div className="space-y-6">
             <SellerProductHeader />
