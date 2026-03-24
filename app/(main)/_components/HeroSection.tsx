@@ -1,12 +1,12 @@
 import Link from "next/link"
-import { Button } from "../ui/button"
+import { Button } from "../../../components/ui/button"
 import Image from "next/image";
 import heroBackgroundImage from "@/public/images/hero-background.jpeg";
 
 
 function HeroSection() {
   return (
-    <section className="relative w-full h-[600px]">
+    <section className="relative w-full h-150">
       <Image
         src={heroBackgroundImage}
         alt="A modern workspace with Apple products on a desk"

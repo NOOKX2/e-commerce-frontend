@@ -1,6 +1,6 @@
 import Pagination from "@/components/products/Pagination";
-import { Filter } from "@/components/sections/Filter";
-import { ProductGrid } from "@/components/sections/ProductGrid";
+import { Filter } from "@/app/(main)/products/_components/Filter";
+import { ProductGrid } from "@/app/(main)/products/_components/ProductGrid";
 import { Product } from "@/types/product";
 
 export interface PaginationMeta {
@@ -39,7 +39,7 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
             products: response.data || [],
             meta: {
                 total_pages: response.meta?.total_pages || 0,
-                current_page: Number(params.get('page')) || 1, 
+                current_page: Number(params.get('page')) || 1,
                 total_items: response.meta?.total_items
             }
         };

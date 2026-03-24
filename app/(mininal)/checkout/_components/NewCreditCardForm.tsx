@@ -1,5 +1,5 @@
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from "@stripe/react-stripe-js";
-import { Label } from "../ui/label";
+import { Label } from "../../../../components/ui/label";
 import StripeInput from "./StripeInput";
 
 interface NewCardFormProps {

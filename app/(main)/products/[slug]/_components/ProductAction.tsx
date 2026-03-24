@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/product';
-import QuantitySelector from '../ui/quantity-selector';
+import QuantitySelector from './quantity-selector';
 import toast from 'react-hot-toast'
 import { useCartStore } from '@/lib/cart-store';
 

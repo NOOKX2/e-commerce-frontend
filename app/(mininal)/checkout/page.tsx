@@ -1,5 +1,5 @@
-import ItemCheckout from "@/components/checkout/ItemCheckout";
-import CheckoutForm from "@/components/checkout/CheckoutForm";
+import ItemCheckout from "@/app/(mininal)/checkout/_components/ItemCheckout";
+import CheckoutForm from "@/app/(mininal)/checkout/_components/CheckoutForm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

@@ -1,11 +1,11 @@
-import OrderNotFound from "@/components/orders/OrderNotFount";
-import OrderError from "@/components/orders/OrderNotFount";
-import OrderSuccess from "@/components/orders/OrderSuccess";
+import OrderNotFound from "@/app/(main)/orders/success/[id]/_components/OrderNotFount";
+import OrderError from "@/app/(main)/orders/success/[id]/_components/OrderNotFount";
+import OrderSuccess from "@/app/(main)/orders/success/[id]/_components/OrderSuccess";
 import { cookies } from "next/headers";
 
 interface OrderSuccessPageProps {
   params: {
-    id: string; 
+    id: string;
   };
 }
 
@@ -13,32 +13,32 @@ async function getOrderData(orderId: string) {
   const cookiesStore = await cookies();
 
   try {
-   
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/orders/${orderId}`, {
       method: 'GET',
       headers: {
         'Cookie': cookiesStore.toString(),
       },
-      cache: 'no-store', 
+      cache: 'no-store',
     });
 
     if (res.status === 404) {
       return { status: 404, order: null };
     }
-    
+
     if (!res.ok) {
-       
-        console.error("API error status:", res.status);
-        return { status: res.status, order: null };
+
+      console.error("API error status:", res.status);
+      return { status: res.status, order: null };
     }
 
     const data = await res.json();
-    
+
     if (data?.order?.ID) {
-        return { status: 200, order: data.order };
+      return { status: 200, order: data.order };
     } else {
-        
-        return { status: 404, order: null }; 
+
+      return { status: 404, order: null };
     }
 
   } catch (error) {
@@ -47,20 +47,20 @@ async function getOrderData(orderId: string) {
   }
 }
 
-export default async function OrderSuccessPage({params}: OrderSuccessPageProps) {
+export default async function OrderSuccessPage({ params }: OrderSuccessPageProps) {
 
-   const resolveParams = await params;
-   const orderId = resolveParams.id;
- 
-    const {status, order, error} = await getOrderData(orderId);
+  const resolveParams = await params;
+  const orderId = resolveParams.id;
 
-    if (status === 404 || !order) {
-        return <OrderNotFound message={orderId} />;
-    }
+  const { status, order, error } = await getOrderData(orderId);
 
-    if (status !== 200) {
-        return <OrderError message={error} />;
-    }
-    
-    return <OrderSuccess order={order} />;
+  if (status === 404 || !order) {
+    return <OrderNotFound message={orderId} />;
+  }
+
+  if (status !== 200) {
+    return <OrderError message={error} />;
+  }
+
+  return <OrderSuccess order={order} />;
 }

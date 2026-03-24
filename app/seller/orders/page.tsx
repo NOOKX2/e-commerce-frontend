@@ -1,4 +1,4 @@
-import SellerOrderTable from '@/components/seller/order/SellerOrderTable';
+import SellerOrderTable from '@/app/seller/orders/_components/SellerOrderTable';
 import { SellerOrder } from '@/types/sellerOrder';
 import { Search, Filter, Download } from 'lucide-react';
 import { cookies } from 'next/headers';

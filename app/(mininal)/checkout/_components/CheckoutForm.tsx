@@ -1,6 +1,6 @@
 'use client';
 
-import FormField from "@/components/checkout/FormField"
+import FormField from "@/app/(mininal)/checkout/_components/FormField"
 import StripeWrapper from "./StripeWrapper"
 import { FormData } from "@/types/formData";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -21,7 +21,7 @@ const checkoutFormData: FormData = {
 }
 
 function CheckoutForm() {
-    const [formData, setFormData] = useLocalStorage<FormData> (CACHE_KEY, checkoutFormData);
+    const [formData, setFormData] = useLocalStorage<FormData>(CACHE_KEY, checkoutFormData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;

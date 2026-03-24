@@ -1,4 +1,4 @@
-import SellerCustomerList from "@/components/seller/customer/SellerCustomerList";
+import SellerCustomerList from "@/app/seller/customers/_components/SellerCustomerList";
 import { cookies } from "next/headers";
 
 export const metadata = {

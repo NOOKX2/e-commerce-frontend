@@ -1,7 +1,7 @@
-import CustomerContactCard from '@/components/seller/customer/detail/CustomerContactCard';
-import CustomerOrderHistory, { CustomerOrder } from '@/components/seller/customer/detail/CustomerOrderHistory';
-import CustomerProfileHeader from '@/components/seller/customer/detail/CustomerProfileHeader';
-import CustomerStatsCard from '@/components/seller/customer/detail/CustomerStatsCard';
+import CustomerContactCard from '@/app/seller/customers/[id]/_components/CustomerContactCard';
+import CustomerOrderHistory, { CustomerOrder } from '@/app/seller/customers/[id]/_components/CustomerOrderHistory';
+import CustomerProfileHeader from '@/app/seller/customers/[id]/_components/CustomerProfileHeader';
+import CustomerStatsCard from '@/app/seller/customers/[id]/_components/CustomerStatsCard';
 import { cookies } from 'next/headers';
 
 

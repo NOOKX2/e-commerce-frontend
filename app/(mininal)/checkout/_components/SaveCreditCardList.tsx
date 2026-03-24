@@ -1,5 +1,5 @@
 import { UserCreditCard } from "@/types/userCard";
-import { Label } from "../ui/label";
+import { Label } from "../../../../components/ui/label";
 import CreditCardItem from "./CreditCardItem";
 import AddNewCardOption from "./AddNewCardOption";
 
@@ -25,9 +25,9 @@ function SavedCreditCardList({ cards, selectedCardId, onSelect, onDelete }: Save
                     onDelete={onDelete}
                 />
             ))}
-            <AddNewCardOption 
-            isSelected={selectedCardId === "new"}
-            onClick={() => onSelect("new")}
+            <AddNewCardOption
+                isSelected={selectedCardId === "new"}
+                onClick={() => onSelect("new")}
             />
         </div>
     )

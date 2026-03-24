@@ -1,8 +1,8 @@
+import ProductTableAction from '@/app/seller/products/_components/ProductTableAction'
 import { cn } from '@/lib/utils'
 import { SellerProduct } from '@/types/product'
 import Image from 'next/image'
 import Link from 'next/link'
-import ProductTableAction from './ProductTableAction'
 interface SellerProductTableProps {
     products: SellerProduct[]
 }

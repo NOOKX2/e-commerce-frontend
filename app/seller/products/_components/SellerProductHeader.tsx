@@ -1,9 +1,9 @@
 'use client';
 
+import AddProductModal from '@/app/seller/products/_components/AddProductMotal';
 import { Filter, PlusCircle, Search } from 'lucide-react'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import AddProductModal from './AddProductMotal';
 
 
 function SellerProductHeader() {

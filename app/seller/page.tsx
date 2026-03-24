@@ -1,47 +1,70 @@
-import SellerOrderTable from "@/components/seller/order/SellerOrderTable";
-import SellerStats from "@/components/seller/SellerStat";
+import SellerOrderTable from "@/app/seller/orders/_components/SellerOrderTable";
+import SellerStats from "@/app/seller/_components/SellerStat";
 import { DollarSign, ShoppingBag, Users, TrendingUp } from "lucide-react";
+import { cookies } from "next/headers";
+import Link from "next/link";
 
-const stats = [
-    {
-        label: "Total Revenue",
-        value: "$45,231.89",
-        change: "+20.1% from last month",
-        icon: DollarSign,
-        color: "bg-blue-500"
-    },
-    {
-        label: "Active Orders",
-        value: "126",
-        change: "+12 since last hour",
-        icon: ShoppingBag,
-        color: "bg-indigo-500"
-    },
-    {
-        label: "New Customers",
-        value: "48",
-        change: "+4% from last month",
-        icon: Users,
-        color: "bg-purple-500"
-    },
-    {
-        label: "Sales Growth",
-        value: "+12.5%",
-        change: "+2.1% from last month",
-        icon: TrendingUp,
-        color: "bg-emerald-500"
-    },
-];
 
-const recentOrders = [
-    { id: "#ORD-7352", product: "Wireless Headphones", customer: "Alex Morgan", date: "Oct 24, 2023", amount: "$129.00", status: "Completed" },
-    { id: "#ORD-7351", product: "Smart Watch Series 7", customer: "Sarah Williams", date: "Oct 24, 2023", amount: "$399.00", status: "Processing" },
-    { id: "#ORD-7350", product: "Mechanical Keyboard", customer: "Michael Brown", date: "Oct 23, 2023", amount: "$149.00", status: "Completed" },
-    { id: "#ORD-7349", product: "USB-C Hub Multiport", customer: "Emily Davis", date: "Oct 23, 2023", amount: "$45.00", status: "Pending" },
-    { id: "#ORD-7348", product: "Ergonomic Office Chair", customer: "David Wilson", date: "Oct 22, 2023", amount: "$299.00", status: "Processing" },
-];
+async function getDashboardSummary() {
+    const cookieStore = await cookies();
 
-export default function SellerDashboard() {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller`, {
+            headers: { 'Cookie': cookieStore.toString() },
+            cache: 'no-store', // ข้อมูล Dashboard ต้องสดใหม่เสมอ
+        });
+
+        if (!res.ok) {
+            throw new Error("res is not ok");
+        }
+
+        const json = await res.json();
+        return json.data;
+
+    } catch (error) {
+        console.error("Fetch dashboard error:", error);
+        return null;
+    }
+}
+
+export default async function SellerDashboard() {
+    const data = await getDashboardSummary();
+
+    const stats = [
+        {
+            label: "Total Revenue",
+            // ใช้ Optional Chaining (?.) และให้ค่าเริ่มต้นเป็น 0 หาก data เป็น null
+            value: data ? `$${Number(data.totalRevenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : "$0.00",
+            change: "+20.1% from last month", // ส่วนนี้สามารถปรับให้คำนวณจริงจาก Backend ได้ในอนาคต
+            icon: DollarSign,
+            color: "bg-blue-500"
+        },
+        {
+            label: "Active Orders",
+            value: data?.activeOrders?.toString() || "0",
+            change: "Orders in progress",
+            icon: ShoppingBag,
+            color: "bg-indigo-500"
+        },
+        {
+            label: "Total Customers",
+            value: data?.newCustomers?.toString() || "0",
+            change: "Unique customers",
+            icon: Users,
+            color: "bg-purple-500"
+        },
+        {
+            label: "Avg. Order Value",
+            // คำนวณเพิ่มเองจากหน้าบ้านเบื้องต้น
+            value: data?.totalRevenue > 0
+                ? `$${(data.totalRevenue / (data.activeOrders || 1)).toLocaleString()}`
+                : "$0.00",
+            change: "Average per active order",
+            icon: TrendingUp,
+            color: "bg-emerald-500"
+        },
+    ];
+
     return (
         <div className="space-y-8">
             <div>
@@ -54,10 +77,12 @@ export default function SellerDashboard() {
             <div className="bg-white shadow-sm rounded-xl border border-gray-100">
                 <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
-                    <button className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</button>
+                    <Link href="/seller/orders">
+                        <button className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</button>
+                    </Link>
                 </div>
                 <div className="overflow-x-auto">
-                    <SellerOrderTable recentOrders={recentOrders} />
+                    <SellerOrderTable recentOrders={data?.recentOrders || []} />
                 </div>
             </div>
         </div>

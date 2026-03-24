@@ -1,4 +1,4 @@
-import SellerProductList from "@/components/seller/product/SellerProductList";
+import SellerProductList from "@/app/seller/products/_components/SellerProductList";
 import { cookies } from "next/headers";
 
 export const metadata = {

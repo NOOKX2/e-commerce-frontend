@@ -17,7 +17,7 @@ function SellerStats({ stats }: SellerStatProps) {
     return (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-                <SellerStatCard 
+                <SellerStatCard
                     key={stat.label}
                     label={stat.label}
                     value={stat.value}

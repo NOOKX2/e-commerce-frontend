@@ -1,6 +1,6 @@
 import { CheckCircle } from "lucide-react";
 import { Order } from "@/types/order";
-import OrderItemCard from "./OrderItemCard";
+import OrderItemCard from "../../../_components/OrderItemCard";
 import OrderInformation from "./OrderInformation";
 
 
@@ -26,7 +26,7 @@ export default function OrderSuccess({ order }: OrderSuccessProps) {
             <OrderItemCard key={item.ID} item={item} />
           ))}
         </div>
-         <div className="mb-8 w-full">
+        <div className="mb-8 w-full">
           <OrderInformation order={order} />
         </div>
       </div>

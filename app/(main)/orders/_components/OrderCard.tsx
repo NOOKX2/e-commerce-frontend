@@ -24,13 +24,13 @@ const formatDate = (dateString: string) => {
 export default function OrderCard({ order }: { order: Order }) {
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white hover:shadow-md transition-shadow">
-      
+
       {/* --- Header --- */}
       <div className="bg-gray-50 px-6 py-4 flex flex-col md:flex-row justify-between items-center border-b border-gray-100">
         <div className="mb-2 md:mb-0">
           <span className="font-semibold text-gray-700">Order #{order.ID}</span>
           <span className="text-sm text-gray-500 ml-3 pl-3 border-l border-gray-300">
-             {formatDate(order.createdAt)} 
+            {formatDate(order.createdAt)}
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -38,7 +38,7 @@ export default function OrderCard({ order }: { order: Order }) {
             {order.status}
           </span>
           <span className="font-bold text-lg text-gray-900">
-            ฿{order.totalAmount.toLocaleString()} 
+            ฿{order.totalAmount.toLocaleString()}
           </span>
         </div>
       </div>
@@ -49,11 +49,11 @@ export default function OrderCard({ order }: { order: Order }) {
           <OrderItemCard key={item.ID} item={item} />
         ))}
       </div>
-      
+
       {/* --- Footer --- */}
       <div className="px-6 py-3 bg-gray-50 text-right border-t border-gray-100">
-        <Link 
-          href={`/orders/success/${order.ID}`} 
+        <Link
+          href={`/orders/success/${order.ID}`}
           className="text-blue-600 hover:text-blue-800 text-xs font-bold uppercase tracking-wide inline-flex items-center gap-1"
         >
           View Invoice <span>&rarr;</span>

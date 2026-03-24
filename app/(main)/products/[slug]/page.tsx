@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
-import { ApiResponse } from '@/types/api'; 
+import { ApiResponse } from '@/types/api';
 import { Product } from '@/types/product';
-import ProductImage from '@/components/products/ProductImage';
-import ProductDetail from '@/components/products/ProductDetail';
+import ProductImage from '@/app/(main)/products/[slug]/_components/ProductImage';
+import ProductDetail from '@/app/(main)/products/[slug]/_components/ProductDetail';
 
 
 async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -44,9 +44,9 @@ async function ProductDetailPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-15 py-24'>
-        <ProductImage product={product}/>
-        <ProductDetail product={product} />
-     </div>
+      <ProductImage product={product} />
+      <ProductDetail product={product} />
+    </div>
   )
 }
 

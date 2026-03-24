@@ -1,19 +1,19 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import OrderList from "@/components/orders/OrderList";
+import OrderList from "@/app/(main)/orders/_components/OrderList";
 
 async function getUserOrders() {
   const cookieStore = await cookies();
   const allCookies = cookieStore.toString();
 
-  try{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/orders/`,{
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/orders/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Cookie": allCookies,
       },
-      cache: "no-store", 
+      cache: "no-store",
     });
     const data = await res.json();
     if (res.status === 401) {
@@ -25,10 +25,10 @@ async function getUserOrders() {
       return { error: "Failed to fetch orders", status: res.status };
     }
 
-   
+
     return { orders: data.orders || [], status: 200 };
 
-  }catch(error: any) {
+  } catch (error: any) {
     console.error("Network error:", error);
     return { error: "Network Error", status: 500 };
   }
@@ -49,7 +49,7 @@ async function OrderPage() {
     );
   }
   return (
-    <OrderList orders={orders}/>
+    <OrderList orders={orders} />
   );
 }
 
