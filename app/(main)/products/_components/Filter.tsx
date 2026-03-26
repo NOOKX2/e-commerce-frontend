@@ -130,9 +130,6 @@ export function Filter({ categories }: { categories: Category[] }) {
                       className="flex flex-1 cursor-pointer flex-col gap-0 leading-snug"
                     >
                       <span className="text-sm font-medium">{category.name}</span>
-                      <span className="text-[11px] text-muted-foreground">
-                        {category.slug}
-                      </span>
                     </Label>
                   </div>
                 </li>

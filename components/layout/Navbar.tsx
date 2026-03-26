@@ -12,7 +12,6 @@ function Navbar() {
 
         <div className="hidden items-center justify-center gap-6 md:flex">
           <Link href='/products' className="text-2xl font-medium text-neutral-700 transition-colors hover:text-neutral-900">Products</Link>
-          <Link href='/contact' className="text-2xl font-medium text-neutral-700 transition-colors hover:text-neutral-900">Contact</Link>
         </div>
 
         <ClientHeaderAction />
