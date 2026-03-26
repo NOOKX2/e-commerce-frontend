@@ -84,7 +84,7 @@ export default function SellerSettingsForm() {
                                 <input
                                     type="text"
                                     id="store-name"
-                                    className="mt-2 block w-full rounded-2xl bg-neutral-50 px-4 py-2.5 text-sm text-slate-900 shadow-inner outline-none transition-[box-shadow] focus-visible:ring-2 focus-visible:ring-blue-500/25"
+                                    className="mt-2 block w-full rounded-2xl bg-neutral-50 px-4 py-2.5 text-sm text-slate-900 shadow-inner outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-blue-500/25"
                                     defaultValue="My Awesome Store"
                                 />
                             </div>

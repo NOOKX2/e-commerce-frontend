@@ -1,4 +1,4 @@
-import SellerSettingsForm from "@/components/seller/SellerSettingsForm";
+import SellerSettingsForm from "@/app/seller/settings/_components/SellerSettingsForm";
 
 export const metadata = {
     title: "Settings | Seller Center",
