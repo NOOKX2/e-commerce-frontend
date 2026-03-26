@@ -5,9 +5,9 @@ const featureProducts = MOCK_PRODUCTS.slice(0, 4)
 
 function FeatureProduct() {
     return (
-        <section className="mx-40 py-12">
-            <h2 className="text-3xl font-bold text-center mb-8">Featured Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="rounded-3xl border border-black/5 bg-white p-5 shadow-sm md:p-8">
+            <h2 className="mb-6 text-2xl font-semibold tracking-tight md:text-3xl">Featured Products</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
                 {featureProducts.map((product) => (
                     <ProductCard
                         key={product.ID}

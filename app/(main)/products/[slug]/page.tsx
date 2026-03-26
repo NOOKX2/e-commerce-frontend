@@ -43,7 +43,7 @@ async function ProductDetailPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 gap-15 py-24'>
+    <div className='grid grid-cols-1 items-start gap-8 rounded-3xl border border-black/5 bg-white p-5 shadow-sm md:grid-cols-2 md:p-8 lg:gap-12'>
       <ProductImage product={product} />
       <ProductDetail product={product} />
     </div>

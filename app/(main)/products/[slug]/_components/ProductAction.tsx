@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/product';
-import QuantitySelector from './quantity-selector';
+import QuantitySelector from './QuantitySelector';
 import toast from 'react-hot-toast'
 import { useCartStore } from '@/lib/cart-store';
 
@@ -31,10 +31,10 @@ function ProductAction({ product }: ProductActionProps) {
         toast.success(`${quantity} x ${product.name} added to cart!`);
     }
     return (
-        <div className='mt-8 flex flex-col gap-4'>
-            <label className='font-semibold'> Stock : {disPlayStock > 0 ? disPlayStock : 0}</label>
+        <div className='mt-6 flex flex-col gap-4'>
+            <label className='text-sm font-medium text-neutral-700'>Stock: {disPlayStock > 0 ? disPlayStock : 0}</label>
 
-            <label className='font-semibold'>Quantity:</label>
+            <label className='text-sm font-medium text-neutral-700'>Quantity:</label>
             <QuantitySelector
                 quantity={quantity}
                 setQuantity={setQuantity}
@@ -42,7 +42,7 @@ function ProductAction({ product }: ProductActionProps) {
             />
             <Button
                 onClick={handleAddToCart}
-                className='mt-4 w-full'
+                className='mt-2 w-full rounded-full'
                 size='lg'
                 disabled={remainingStock <= 0}
             >

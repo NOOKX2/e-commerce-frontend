@@ -52,10 +52,14 @@ export default async function SellerProductsPage({searchParams}: {searchParams: 
     const { products, meta } = await getSellerProducts(fetchParams);
     
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-                <p className="text-gray-500">Manage your product inventory and catalog.</p>
+        <div className="mx-auto max-w-7xl space-y-8 py-0">
+            <div>
+                <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+                    Products
+                </h1>
+                <p className="mt-2 text-sm text-neutral-500">
+                    Manage your product inventory and catalog.
+                </p>
             </div>
 
             <SellerProductList products={products} meta={meta}/>

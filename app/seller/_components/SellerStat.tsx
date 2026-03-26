@@ -1,21 +1,21 @@
 import { LucideIcon } from "lucide-react";
-import SellerStatCard from "./SellerStatCard";
+import SellerStatCard, { type StatAccent } from "./SellerStatCard";
 
 interface StatItem {
     label: string;
     value: string;
     change: string;
     icon: LucideIcon;
-    color: string;
+    accent: StatAccent;
 }
 
 interface SellerStatProps {
-    stats: StatItem[]
+    stats: StatItem[];
 }
 
 function SellerStats({ stats }: SellerStatProps) {
     return (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {stats.map((stat) => (
                 <SellerStatCard
                     key={stat.label}
@@ -23,11 +23,11 @@ function SellerStats({ stats }: SellerStatProps) {
                     value={stat.value}
                     change={stat.change}
                     icon={stat.icon}
-                    color={stat.color}
+                    accent={stat.accent}
                 />
             ))}
         </div>
-    )
+    );
 }
 
-export default SellerStats
+export default SellerStats;

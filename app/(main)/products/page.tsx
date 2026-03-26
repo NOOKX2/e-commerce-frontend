@@ -1,7 +1,7 @@
 import Pagination from "@/components/products/Pagination";
 import { Filter } from "@/app/(main)/products/_components/Filter";
 import { ProductGrid } from "@/app/(main)/products/_components/ProductGrid";
-import { Product } from "@/types/product";
+import { Category, Product } from "@/types/product";
 
 export interface PaginationMeta {
     total_pages: number;
@@ -34,7 +34,6 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
             throw new Error('Failed to fetch');
         }
         const response = await res.json();
-        console.log(`product data ${response.data}`);
         return {
             products: response.data || [],
             meta: {
@@ -52,34 +51,52 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
     }
 }
 
+async function getCategories(): Promise<Category[]> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/categories`;
+    try {
+        const res = await fetch(apiUrl, { next: { revalidate: 60 } });
+        if (!res.ok) return [];
+        const json = await res.json();
+        if (!json.success || !Array.isArray(json.data)) return [];
+        return json.data as Category[];
+    } catch {
+        return [];
+    }
+}
+
 export default async function ProductPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const resolvedSearchParams = await searchParams;
 
-    const { products, meta } = await getFilterProducts(resolvedSearchParams);
+    const [{ products, meta }, categories] = await Promise.all([
+        getFilterProducts(resolvedSearchParams),
+        getCategories(),
+    ]);
 
     return (
-        <div className="grid grid-cols-[250px_1fr] items-start gap-8 my-10">
-            <aside className="sticky top-24 w-62.5">
-                <Filter />
+        <div className="-mx-[calc((100vw-100%)/2)] px-4 md:px-6 lg:px-8">
+            <div className="my-2 grid grid-cols-1 items-start gap-6 lg:my-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
+            <aside className="lg:sticky lg:top-24">
+                <Filter categories={categories} />
             </aside>
-            <main className="flex flex-col gap-8">
+            <main className="flex min-w-0 flex-col gap-8">
                 {products.length > 0 ? (
 
                     <>
                         <ProductGrid products={products} />
                         {meta.total_pages > 1 && (
-                            <div className="py-10 border-t">
+                            <div className="border-t border-black/5 py-8">
                                 <Pagination meta={meta} />
                             </div>
                         )}
                     </>
                 ) : (
-
-                    <div className="flex flex-col sm:w-15 md:w-100  lg:w-250">
-                        <p className="text-center mr-50 ">No Product Found</p>
+                    <div className="glass-card flex min-h-56 flex-col items-center justify-center px-6 py-10">
+                        <p className="text-center text-lg font-medium text-neutral-700">No products found</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Try adjusting category filters.</p>
                     </div>
                 )}
             </main>
+            </div>
         </div>
     );
 }

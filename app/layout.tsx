@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import { getCurrentUser } from '@/lib/auth';
 import AuthProvider from "../context/auth-context";
-import { useCartSync } from "@/hooks/useCartSync";
 import CartSyncronizer from "@/components/cart/CartSyncronizer";
 
 type RootLayoutProps = {
@@ -19,10 +16,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className="w-full min-h-screen">
         <AuthProvider initialUser={initialUser}>
         <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-        <main className="min-h-screen">
+        <div className="min-h-screen">
           <CartSyncronizer />
           {children}
-        </main>
+        </div>
       </AuthProvider>
       </body>
     </html>

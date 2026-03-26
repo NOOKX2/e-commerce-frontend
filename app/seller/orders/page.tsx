@@ -1,66 +1,102 @@
 import SellerOrderTable from '@/app/seller/orders/_components/SellerOrderTable';
 import { SellerOrder } from '@/types/sellerOrder';
-import { Search, Filter, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { cookies } from 'next/headers';
+import { Button } from '@/components/ui/button';
+import SellerProductTablePagination from '@/app/seller/products/_components/SellerProductTablePagination';
+import { SellerTableToolbar } from '../_components/SellerToolbar';
 
-export default async function SellerOrdersPage() {
-    const cookiesStore = await cookies();
-    let orders: SellerOrder[] = [];
+interface PaginationMeta {
+    total_pages: number;
+    current_page: number;
+    total_items?: number;
+}
+
+// 1. เพิ่ม parameter 'search' เข้ามา
+async function getSellerOrders({
+    page,
+    limit,
+    search, 
+}: {
+    page: string;
+    limit: string;
+    search: string;
+}): Promise<{ orders: SellerOrder[]; meta: PaginationMeta }> {
+    const params = new URLSearchParams();
+    params.set('page', page);
+    params.set('limit', limit);
+    
+    // 2. ถ้ามีคำค้นหา ให้แปะเข้าไปใน URL ของ API
+    if (search) {
+        params.set('search', search);
+    }
+
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/seller/orders?${params.toString()}`;
+    const cookieStore = await cookies();
+
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller/orders/`, {
-            headers: {
-                'Cookie': cookiesStore.toString(),
-            },
+        const res = await fetch(apiUrl, {
+            headers: { Cookie: cookieStore.toString() },
             cache: 'no-store',
         });
 
-        if (!res.ok) {
-            throw new Error("response is not ok");
+        if (!res.ok) { 
+            const errorText = await res.text(); 
+            console.error("🔥 Error from Go Backend:", errorText);
+            throw new Error('Failed to fetch seller orders');
         }
 
         const response = await res.json();
-        orders = response.data;
-
-    } catch (error: any) {
-        console.error(`Error fetching seller orders ${error.message}`);
-        return null;
+        return {
+            orders: response?.data || [],
+            meta: response?.meta || { total_pages: 0, current_page: 1 },
+        };
+    } catch (error) {
+        console.error('Error fetching seller orders:', error);
+        return { orders: [], meta: { total_pages: 0, current_page: 1 } };
     }
+}
+
+export default async function SellerOrdersPage({
+    searchParams,
+}: {
+    searchParams: Promise<{
+        page?: string;
+        limit?: string;
+        search?: string; // 3. รับค่า search จาก URL
+    }>;
+}) {
+    const resolvedParams = await searchParams;
+    const page = typeof resolvedParams.page === 'string' ? resolvedParams.page : '1';
+    const limit = typeof resolvedParams.limit === 'string' ? resolvedParams.limit : '10';
+    // 4. ดึงค่า search ออกมา (ถ้าไม่มีให้เป็น string ว่าง)
+    const search = typeof resolvedParams.search === 'string' ? resolvedParams.search : '';
+
+    // 5. ส่งค่า search ไปให้ API
+    const { orders, meta } = await getSellerOrders({ page, limit, search });
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-                    <p className="text-gray-500">Manage and track your customer orders.</p>
+        <div className="mx-auto max-w-7xl space-y-8">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                <div>
+                    <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+                        Orders
+                    </h1>
+                    <p className="mt-2 text-sm text-neutral-500">
+                        Manage and track your customer orders.
+                    </p>
                 </div>
-                <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition-colors shadow-sm">
-                    <Download className="h-5 w-5 mr-2" />
-                    Export Orders
-                </button>
+                <Button className="h-10 shrink-0 rounded-2xl bg-blue-600 px-4 text-white shadow-sm hover:bg-blue-700">
+                    <Download className="mr-2 h-4 w-4" /> Export
+                </Button>
             </div>
 
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                <div className="relative w-full sm:w-96">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Search orders..."
-                        className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                    />
-                </div>
-                <div className="flex gap-2 w-full sm:w-auto">
-                    <button className="flex items-center justify-center px-4 py-2 border border-gray-200 text-gray-700 bg-white rounded-lg hover:bg-gray-50 font-medium transition-colors flex-1 sm:flex-none">
-                        <Filter className="h-4 w-4 mr-2" />
-                        Filter
-                    </button>
-                </div>
-            </div>
+            {/* 6. เรียกใช้ Toolbar */}
+            <SellerTableToolbar placeholder="Search orders by ID or customer..." />
 
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
                 <SellerOrderTable recentOrders={orders} />
+                {meta.total_pages > 1 && <SellerProductTablePagination meta={meta} />}
             </div>
         </div>
     );

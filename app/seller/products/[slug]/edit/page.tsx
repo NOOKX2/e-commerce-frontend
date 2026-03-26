@@ -37,7 +37,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
   const [status, setStatus] = useState("active");
   const [category, setCategory] = useState("general");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<SellerProduct | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -72,8 +72,6 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
 
 
 
-
-  console.log("product in edit", product);
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -132,44 +130,41 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
 
   if (loading || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading product data...</p>
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-neutral-200 border-t-blue-600" />
+          <p className="mt-4 text-sm text-neutral-500">Loading product…</p>
         </div>
       </div>
     );
   }
 
-  console.log("category array", categories);
-
   return (
-    <div className="min-h-screen bg-gray-50/50 pb-20">
+    <div className="pb-16">
       <form onSubmit={handleSave}>
-        {/* Header */}
-        <header className="sticky top-0 z-10 bg-white border-b px-6 py-4 mb-8">
-          <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <header className="sticky top-0 z-10 -mx-4 mb-8 bg-white/80 px-4 py-4 backdrop-blur-md shadow-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <div className="mx-auto flex max-w-6xl items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button type="button" variant="ghost" size="icon" onClick={() => router.back()}>
+              <Button type="button" variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <h1 className="text-xl font-bold text-gray-900">Edit Product</h1>
+              <h1 className="text-xl font-semibold tracking-tight text-slate-900">Edit product</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                <Save className="w-4 h-4 mr-2" /> Save Changes
+              <Button type="button" variant="secondary" className="rounded-2xl bg-neutral-100 font-medium shadow-none hover:bg-neutral-200/80" onClick={() => router.back()}>Cancel</Button>
+              <Button type="submit" className="rounded-2xl bg-blue-600 text-white shadow-sm hover:bg-blue-700">
+                <Save className="w-4 h-4 mr-2" /> Save
               </Button>
             </div>
           </div>
         </header>
 
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-0 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             {/* 1. General Information */}
-            <Card>
-              <CardHeader><CardTitle className="flex items-center gap-2"><Info className="w-4 h-4 text-blue-500" /> General Info</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
+            <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+              <CardHeader className="px-8"><CardTitle className="flex items-center gap-2"><Info className="w-4 h-4 text-blue-500" /> General Info</CardTitle></CardHeader>
+              <CardContent className="space-y-4 px-8">
                 <div className="space-y-2">
                   <Label htmlFor="name">Product Name</Label>
                   <Input id="name" name="name" defaultValue={product?.name} placeholder="e.g. iPhone 15 Pro" />
@@ -182,11 +177,11 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
             </Card>
 
             {/* 2. Media Upload */}
-            <Card>
-              <CardHeader><CardTitle>Media Gallery</CardTitle></CardHeader>
-              <CardContent>
+            <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+              <CardHeader className="px-8"><CardTitle>Media Gallery</CardTitle>              </CardHeader>
+              <CardContent className="px-8">
                 <div className="grid grid-cols-4 gap-4 mb-4">
-                  <div className="aspect-square bg-gray-100 rounded-lg border flex items-center justify-center relative group overflow-hidden">
+                  <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-neutral-100">
                     <Image
                       src={imageFile ? URL.createObjectURL(imageFile) : (product?.imageUrl || "/fallback-image.png")}
                       className="w-full h-full object-cover"
@@ -204,7 +199,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
                       </button>
                     )}
                   </div>
-                  <Label className="aspect-square border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors cursor-pointer">
+                  <Label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 text-neutral-400 transition-colors hover:bg-neutral-50">
                     <Upload className="w-6 h-6 mb-1" />
                     <span className="text-[10px]">Change Image</span>
                     <input
@@ -220,9 +215,9 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
 
             {/* 3. Pricing & Inventory */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader><CardTitle className="text-sm flex items-center gap-2"><DollarSign className="w-4 h-4 text-green-500" /> Pricing</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
+              <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+                <CardHeader className="px-8"><CardTitle className="text-sm flex items-center gap-2"><DollarSign className="w-4 h-4 text-green-500" /> Pricing</CardTitle></CardHeader>
+                <CardContent className="space-y-4 px-8">
                   <div className="space-y-2">
                     <Label htmlFor="price">Price ($)</Label>
                     <Input id="price" name="price" type="number" defaultValue={product?.price} />
@@ -238,9 +233,9 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader><CardTitle className="text-sm flex items-center gap-2"><PackageIcon className="w-4 h-4 text-orange-500" /> Inventory</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
+              <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+                <CardHeader className="px-8"><CardTitle className="text-sm flex items-center gap-2"><PackageIcon className="w-4 h-4 text-orange-500" /> Inventory</CardTitle></CardHeader>
+                <CardContent className="space-y-4 px-8">
                   <div className="space-y-2">
                     <Label htmlFor="stock">Stock</Label>
                     <Input id="stock" name="stock" type="number" defaultValue={product?.quantity} />
@@ -255,10 +250,10 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-8">
-            <Card>
-              <CardHeader><CardTitle>Status</CardTitle></CardHeader>
-              <CardContent>
+          <div className="space-y-6">
+            <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+              <CardHeader className="px-8"><CardTitle>Status</CardTitle>              </CardHeader>
+              <CardContent className="px-8">
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -271,9 +266,9 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader><CardTitle>Organization</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
+            <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+              <CardHeader className="px-8"><CardTitle>Organization</CardTitle></CardHeader>
+              <CardContent className="space-y-4 px-8">
                 <div className="space-y-2">
                   <Label>Category</Label>
                   <Select value={category} onValueChange={setCategory}>

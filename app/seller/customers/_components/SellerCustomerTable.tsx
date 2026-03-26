@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Customer } from "@/types/customer";
-import { Mail, MapPin, MoreHorizontal } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 
 interface SellerCustomerTableProps {
@@ -9,66 +9,75 @@ interface SellerCustomerTableProps {
 
 function SellerCustomerTable({ customers }: SellerCustomerTableProps) {
     return (
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+        <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
             <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Orders</th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Spent</th>
-                            <th scope="col" className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                <table className="min-w-full">
+                    <thead>
+                        <tr className="text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                            <th scope="col" className="px-8 py-4">Customer</th>
+                            <th scope="col" className="px-8 py-4">Contact</th>
+                            <th scope="col" className="px-8 py-4">Status</th>
+                            <th scope="col" className="px-8 py-4">Orders</th>
+                            <th scope="col" className="px-8 py-4">Total spent</th>
+                            <th scope="col" className="px-8 py-4 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-neutral-100">
                         {customers.map((customer) => (
-                            <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
-
-                                <td className="px-6 py-4 whitespace-nowrap">
+                            <tr
+                                key={customer.id}
+                                className="transition-colors hover:bg-neutral-50/80"
+                            >
+                                <td className="whitespace-nowrap px-8 py-5">
                                     <div className="flex items-center">
-                                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-sm font-semibold text-neutral-700">
                                             {customer.name.charAt(0)}
                                         </div>
                                         <div className="ml-4">
-                                            <div className="text-sm font-medium text-gray-900">{customer.name}</div>
-                                            <div className="text-sm text-gray-500 flex items-center gap-1">
-                                                <MapPin className="w-3 h-3" />
+                                            <div className="text-sm font-medium text-slate-900">
+                                                {customer.name}
+                                            </div>
+                                            <div className="mt-0.5 flex items-center gap-1 text-sm text-neutral-500">
+                                                <MapPin className="h-3 w-3 shrink-0" />
                                                 {customer.location}
                                             </div>
                                         </div>
+
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="flex flex-col gap-1">
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <Mail className="w-4 h-4 mr-2" />
-                                            {customer.email}
-                                        </div>
+                                <td className="whitespace-nowrap px-8 py-5">
+                                    <div className="flex items-center text-sm text-neutral-500">
+                                        <Mail className="mr-2 h-4 w-4 shrink-0 text-neutral-400" />
+                                        {customer.email}
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className={cn(
-                                        "px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full",
-                                        customer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                                    )}>
+                                <td className="whitespace-nowrap px-8 py-5">
+                                    <span
+                                        className={cn(
+                                            "inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                                            customer.status === 'Active'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-gray-100 text-gray-700'
+                                        )}
+                                    >
                                         {customer.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td className="whitespace-nowrap px-8 py-5 text-sm text-neutral-500">
                                     {customer.totalOrders} orders
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {customer.totalSpent.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                                <td className="whitespace-nowrap px-8 py-5 text-sm font-medium tabular-nums text-slate-900">
+                                    {customer.totalSpent.toLocaleString('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                    })}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <td className="whitespace-nowrap px-8 py-5 text-right text-sm">
                                     <Link
                                         href={`/seller/customers/${customer.id}`}
-                                        className="text-blue-600 bg-blue-50 px-3 py-1.5 rounded-md transition-colors hover:bg-blue-100"
-                                        title="View Customer Details"
+                                        className="font-medium text-blue-600 underline-offset-4 hover:text-blue-700 hover:underline"
                                     >
-                                        View Detail
+                                        View
                                     </Link>
                                 </td>
                             </tr>

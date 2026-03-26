@@ -1,4 +1,5 @@
 export interface ShippingAddressData {
+    email: string;
     receiverName: string;
     phoneNumber: string;
     streetAddress: string;

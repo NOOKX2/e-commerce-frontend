@@ -8,15 +8,13 @@ type ProductImageProps = {
 
 function ProductImage({ product }: ProductImageProps) {
     return (
-        <div className='w-full md:2/5'>
-            <div className='relative aspect-square rounded-lg overflow-hidden bg-mutted'>
+        <div className='w-full'>
+            <div className='relative aspect-square overflow-hidden rounded-2xl bg-[#f5f5f7]'>
                 {product.imageUrl ? (
                     <Image
                         src={product.imageUrl}
                         alt={product.name}
-            
-                        width={400}
-                        height={400}
+                        fill
                         className='object-cover'
                     />
                 ) : (

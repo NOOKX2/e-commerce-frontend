@@ -1,12 +1,20 @@
-import { Product } from "@/types/product";
+import { type Category, type Product } from "@/types/product";
+
+const CATEGORY_MAP: Record<string, Category> = {
+  mobile_phone: { id: 1, name: "Mobile Phone", slug: "mobile-phone" },
+  notebook: { id: 2, name: "Notebook", slug: "notebook" },
+  wearable: { id: 3, name: "Wearable", slug: "wearable" },
+};
 
 export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1001,
     name: "iPhone 17 Pro Max",
-    category: "mobile_phone",
+    category: CATEGORY_MAP["mobile_phone"],
     price: 41900,
     imageUrl: "/images/iphone-17-pro-max.webp", 
+    imageHash: "",
+    salePrice: 0,
     slug: "iphone-17-pro-max-256",
     description: "The ultimate iPhone, with the powerful A17 Pro chip.",
     sellerId: 1,
@@ -19,9 +27,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1002,
     name: "MacBook Pro 16",
-    category: "notebook",
+    category: CATEGORY_MAP["notebook"],
     price: 47900,
     imageUrl: "/images/macbook-pro-16.jpeg",
+    imageHash: "",
+    salePrice: 0,
     slug: "macbook-air-15-m2",
     description: "Impressively big, impossibly thin. Supercharged by the M2 chip.",
     sellerId: 1,
@@ -34,9 +44,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1003,
     name: "Samsung Galaxy S24 Ultra",
-    category: "mobile_phone",
+    category: CATEGORY_MAP["mobile_phone"],
     price: 46900,
     imageUrl: "/images/samsung-galaxy-s24-ultra.webp",
+    imageHash: "",
+    salePrice: 0,
     slug: "galaxy-s24-ultra",
     description: "Welcome to the era of mobile AI.",
     sellerId: 1,
@@ -49,9 +61,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1004,
     name: "Dell XPS 15 Laptop",
-    category: "notebook",
+    category: CATEGORY_MAP["notebook"],
     price: 89990,
     imageUrl: "/images/dell-xps-15.jpeg",
+    imageHash: "",
+    salePrice: 0,
     slug: "dell-xps-15",
     description: "Stunning display, immersive sound and powerful performance.",
     sellerId: 1,
@@ -64,9 +78,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1005,
     name: "iPhone 15",
-    category: "mobile_phone",
+    category: CATEGORY_MAP["mobile_phone"],
     price: 32900,
     imageUrl: "/images/products/iphone-15-pink.jpg",
+    imageHash: "",
+    salePrice: 0,
     slug: "iphone-15",
     description: "Newphoria. A total powerhouse.",
     sellerId: 1,
@@ -79,9 +95,11 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     ID: 1006,
     name: "Apple Watch Series 9",
-    category: "wearable",
+    category: CATEGORY_MAP["wearable"],
     price: 15900,
     imageUrl: "/images/products/apple-watch-9.jpg",
+    imageHash: "",
+    salePrice: 0,
     slug: "apple-watch-series-9",
     description: "Smarter. Brighter. Mightier.",
     sellerId: 1,

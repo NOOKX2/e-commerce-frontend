@@ -46,9 +46,9 @@ function CheckoutForm() {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="glass-card space-y-8 p-5 md:p-7">
             <section>
-                <h2 className="text-2xl font-bold mb-4">Contact</h2>
+                <h2 className="mb-4 text-2xl font-semibold tracking-tight">Contact</h2>
                 <FormField
                     name="email"
                     label="Email"
@@ -59,7 +59,7 @@ function CheckoutForm() {
                 />
             </section>
             <section>
-                <h2 className="text-2xl font-bold mb-4">Delivery</h2>
+                <h2 className="mb-4 text-2xl font-semibold tracking-tight">Delivery</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                         name="firstName"
@@ -129,7 +129,7 @@ function CheckoutForm() {
                 </div>
             </section>
             <section>
-                <h2 className="text-2xl font-bold mb-4">Payment</h2>
+                <h2 className="mb-4 text-2xl font-semibold tracking-tight">Payment</h2>
                 <StripeWrapper shippingAddress={shippingDataObject} />
             </section>
         </div>

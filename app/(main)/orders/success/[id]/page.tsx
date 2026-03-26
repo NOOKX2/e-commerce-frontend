@@ -62,5 +62,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
     return <OrderError message={error} />;
   }
 
+  console.log(order);
+
   return <OrderSuccess order={order} />;
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import SellerCustomerToolbar from './SellerCustomerToolbar';
 import { Customer } from '@/types/customer';
 import SellerCustomerTable from './SellerCustomerTable';
+import { SellerTableToolbar } from '../../_components/SellerToolbar';
 
 interface customersProps {
     customers: Customer[];
@@ -22,7 +23,7 @@ export default function SellerCustomerList({ customers }: customersProps) {
         <div className="space-y-6">
             {/* Toolbar */}
 
-            <SellerCustomerToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <SellerTableToolbar placeholder='Search for customer name'/>
 
             {/* Table */}
             <SellerCustomerTable customers={filteredCustomers} />

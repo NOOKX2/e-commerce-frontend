@@ -18,9 +18,9 @@ interface SellerProductListProps {
 export default async function SellerProductPage({ products, meta }: SellerProductListProps) {
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             <SellerProductHeader />
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
                 <SellerProductTable products={products} />
                 {meta.total_pages > 1 && (
                     <SellerProductTablePagination meta={meta} />

@@ -10,7 +10,7 @@ function OrderSummaryCheckout({ items }: OrderSummaryProps) {
     }, 0);
 
     return (
-        <div className="sticky top-24 rounded-lg border p-6">
+        <div className="rounded-xl border border-black/5 bg-[#fafafa] p-5">
             <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
             <div className="flex justify-between mb-2">
                 <span>Subtotal</span>
@@ -20,7 +20,7 @@ function OrderSummaryCheckout({ items }: OrderSummaryProps) {
                 <span>Shipping</span>
                 <span>Calculated at next step</span>
             </div>
-            <div className="border-t pt-4 flex justify-between font-bold text-lg">
+            <div className="flex justify-between border-t border-black/5 pt-4 text-lg font-semibold">
                 <span>Total</span>
                 <span>{`฿${subtotal.toLocaleString()}`}</span>
             </div>

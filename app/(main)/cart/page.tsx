@@ -9,21 +9,21 @@ import OrderSummary from "@/app/(main)/cart/_components/OrderSummary";
 function CartPage() {
     const { items } = useCartStore()
     return (
-        <div className="mx-auto py-12">
+        <div className="mx-auto w-full py-2 md:py-4">
             {items.length === 0 ? (
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold">Your Cart is Empty</h1>
-                    <p className="mt-4 text-muted-foreground">
-                        Looks like you haven't added anything to your cart yet.
+                <div className="glass-card mx-auto max-w-xl px-6 py-14 text-center">
+                    <h1 className="text-3xl font-semibold tracking-tight">Your Cart is Empty</h1>
+                    <p className="mt-3 text-sm text-muted-foreground md:text-base">
+                        Looks like you haven&apos;t added anything to your cart yet.
                     </p>
-                    <Button asChild className="mt-6">
+                    <Button asChild className="mt-6 rounded-full px-7">
                         <Link href="/products">Start Shopping</Link>
                     </Button>
                 </div>
             ) : (
-                <div className="container mx-auto px-4 md:px-6 py-10">
-                    <h1 className="text-3xl font-bold mb-8 ">Your Cart</h1>
-                    <div className="flex flex-col lg:flex-row gap-45">
+                <div className="w-full py-4 md:py-8">
+                    <h1 className="mb-6 text-3xl font-semibold tracking-tight md:mb-8">Your Cart</h1>
+                    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
                         <div className="w-full">
                             <CartItemList items={items} />
                         </div>

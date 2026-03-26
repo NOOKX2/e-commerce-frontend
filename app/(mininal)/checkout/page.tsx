@@ -12,14 +12,10 @@ async function CheckoutPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
-
-      <div className="grid grid-cols-1 md:grid-cols-2 px-4 py-8 md:px-8 lg:px-16 place-items-start gap-20">
-
+    <div className="w-full">
+      <div className="grid grid-cols-1 items-start gap-6 py-2 lg:grid-cols-[1fr_380px] lg:gap-8">
         <CheckoutForm />
-
         <ItemCheckout />
-
       </div>
     </div>
   )

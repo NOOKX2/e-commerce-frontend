@@ -3,15 +3,15 @@ import SellerStats from "@/app/seller/_components/SellerStat";
 import { DollarSign, ShoppingBag, Users, TrendingUp } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
-
+import { Button } from "@/components/ui/button";
 
 async function getDashboardSummary() {
     const cookieStore = await cookies();
 
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/seller`, {
-            headers: { 'Cookie': cookieStore.toString() },
-            cache: 'no-store', // ข้อมูล Dashboard ต้องสดใหม่เสมอ
+            headers: { Cookie: cookieStore.toString() },
+            cache: "no-store",
         });
 
         if (!res.ok) {
@@ -20,7 +20,6 @@ async function getDashboardSummary() {
 
         const json = await res.json();
         return json.data;
-
     } catch (error) {
         console.error("Fetch dashboard error:", error);
         return null;
@@ -33,53 +32,60 @@ export default async function SellerDashboard() {
     const stats = [
         {
             label: "Total Revenue",
-            // ใช้ Optional Chaining (?.) และให้ค่าเริ่มต้นเป็น 0 หาก data เป็น null
-            value: data ? `$${Number(data.totalRevenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : "$0.00",
-            change: "+20.1% from last month", // ส่วนนี้สามารถปรับให้คำนวณจริงจาก Backend ได้ในอนาคต
+            value: data
+                ? `$${Number(data.totalRevenue).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                : "$0.00",
+            change: "+20.1% from last month",
             icon: DollarSign,
-            color: "bg-blue-500"
+            accent: "blue" as const,
         },
         {
             label: "Active Orders",
             value: data?.activeOrders?.toString() || "0",
             change: "Orders in progress",
             icon: ShoppingBag,
-            color: "bg-indigo-500"
+            accent: "indigo" as const,
         },
         {
             label: "Total Customers",
             value: data?.newCustomers?.toString() || "0",
             change: "Unique customers",
             icon: Users,
-            color: "bg-purple-500"
+            accent: "purple" as const,
         },
         {
             label: "Avg. Order Value",
-            // คำนวณเพิ่มเองจากหน้าบ้านเบื้องต้น
-            value: data?.totalRevenue > 0
-                ? `$${(data.totalRevenue / (data.activeOrders || 1)).toLocaleString()}`
-                : "$0.00",
+            value:
+                data?.totalRevenue > 0
+                    ? `$${(data.totalRevenue / (data.activeOrders || 1)).toLocaleString()}`
+                    : "$0.00",
             change: "Average per active order",
             icon: TrendingUp,
-            color: "bg-emerald-500"
+            accent: "emerald" as const,
         },
     ];
 
     return (
-        <div className="space-y-8">
+        <div className="mx-auto max-w-7xl space-y-8">
             <div>
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h2>
-                <p className="mt-2 text-gray-600">Overview of your store's performance.</p>
+                <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+                    Dashboard
+                </h1>
+                <p className="mt-2 text-sm text-neutral-500">
+                    Overview of your store&apos;s performance.
+                </p>
             </div>
 
             <SellerStats stats={stats} />
 
-            <div className="bg-white shadow-sm rounded-xl border border-gray-100">
-                <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
-                    <Link href="/seller/orders">
-                        <button className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</button>
-                    </Link>
+            <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+                <div className="flex flex-col gap-3 px-8 py-6 sm:flex-row sm:items-center sm:justify-between sm:py-7">
+                    <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+                        Recent Orders
+                    </h2>
+                    <Button variant="ghost" className="h-9 w-fit rounded-full px-0 font-medium text-blue-600 hover:bg-transparent hover:text-blue-700" asChild>
+                        <Link href="/seller/orders">View all</Link>
+                    </Button>
                 </div>
                 <div className="overflow-x-auto">
                     <SellerOrderTable recentOrders={data?.recentOrders || []} />

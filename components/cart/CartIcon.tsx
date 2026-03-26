@@ -8,15 +8,17 @@ function CartIcon() {
     const totalItems = items.reduce((total, item) => total + item.quantity, 0)
 
     return (
-        <Link href="/cart" className='relative flex items-center'>
-            <ShoppingCart className='size-10'/>
+        <Link
+            href="/cart"
+            className="relative flex h-11 w-11 items-center justify-center rounded-full text-neutral-800 transition-colors hover:bg-neutral-100 hover:text-neutral-900 md:h-12 md:w-12"
+            aria-label="Shopping cart"
+        >
+            <ShoppingCart className="size-6 shrink-0 md:size-7" strokeWidth={2.25} aria-hidden />
 
             {totalItems > 0 && (
-                <span className='absolute -top-2 -right-3 flex h-5 w-5 
-          items-center justify-center rounded-full 
-          bg-primary text-xs text-primary-foreground'>
-            {totalItems}
-          </span>
+                <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-medium tabular-nums text-primary-foreground">
+                    {totalItems > 99 ? '99+' : totalItems}
+                </span>
             )}
         </Link>
     )

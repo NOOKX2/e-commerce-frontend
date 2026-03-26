@@ -29,62 +29,66 @@ export default async function SellerProductDetailPage({ params }: { params: Prom
     }
 
     if (!product) {
-        return <div className="p-20 text-center text-gray-500">Product not found.</div>;
+        return (
+            <div className="py-20 text-center text-neutral-500">
+                Product not found.
+            </div>
+        );
     }
 
 
     return (
-        <div className="min-h-screen bg-gray-50/50 pb-20">
-            {/* Header */}
-            <header className="bg-white border-b px-6 py-4 mb-8 shadow-sm">
-                <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="pb-16">
+            <header className="sticky top-0 z-10 -mx-4 mb-8 bg-white/80 px-4 py-4 backdrop-blur-md shadow-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                <div className="mx-auto flex max-w-6xl items-center justify-between">
                     <div className="flex items-center gap-4">
                         <Link href="/seller/products">
-                            <Button variant="ghost" size="icon" className="h-9 w-9">
+                            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
                                 <ArrowLeft className="h-4 w-4" />
                             </Button>
                         </Link>
                         <div className="flex flex-col">
-                            <h1 className="text-xl font-bold text-gray-900 capitalize">
-                                {product.name} {/* นำชื่อสินค้ามาใช้ */}
+                            <h1 className="text-xl font-semibold tracking-tight text-slate-900 capitalize">
+                                {product.name}
                             </h1>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-3">
                         <Link href={`/seller/products/${slug}/edit`}>
-                            <Button className="bg-blue-600 hover:bg-blue-700 shadow-md">
+                            <Button className="rounded-2xl bg-blue-600 text-white shadow-sm hover:bg-blue-700">
                                 <Edit3 className="w-4 h-4 mr-2" />
-                                Edit Product
+                                Edit product
                             </Button>
                         </Link>
                     </div>
                 </div>
             </header>
 
-            <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
-                    {/* Media Card */}
-                    <Card className="overflow-hidden border-none shadow-sm">
-                        <div className="aspect-video bg-gray-100 relative group">
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-0 sm:px-0 lg:grid-cols-3">
+                <div className="space-y-6 lg:col-span-2">
+                    <Card className="gap-0 overflow-hidden rounded-3xl border-0 bg-white p-0 py-0 shadow-sm">
+                        <div className="relative aspect-video bg-neutral-100">
                             {product.imageUrl ? (
-                                <Image 
-                                    src={product.imageUrl} 
-                                    alt={product.name} 
-                                    width={400}
-                                    height={400}
+                                <Image
+                                    src={product.imageUrl}
+                                    alt={product.name}
+                                    fill
                                     className="object-cover"
+                                    sizes="(min-width: 1024px) 66vw, 100vw"
                                 />
                             ) : (
-                                <div className="absolute inset-0 flex items-center justify-center text-gray-400 italic">
+                                <div className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400">
                                     No image available
                                 </div>
                             )}
                         </div>
-                        <CardContent className="p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-                            <p className="text-gray-600 leading-relaxed">
-                                {product.description || "No description provided."} {/* นำคำบรรยายมาใช้ */}
+                        <CardContent className="p-8 sm:p-10">
+                            <h2 className="mb-3 text-lg font-semibold tracking-tight text-slate-900">
+                                Description
+                            </h2>
+                            <p className="text-sm leading-relaxed text-neutral-600">
+                                {product.description || "No description provided."}
                             </p>
                         </CardContent>
                     </Card>
@@ -94,48 +98,57 @@ export default async function SellerProductDetailPage({ params }: { params: Prom
                 </div>
 
                 {/* Sidebar */}
-                <div className="lg:col-span-1 space-y-6">
-                    <Card className="border-none shadow-sm">
-                        <CardHeader>
-                            <CardTitle className="text-base font-semibold">Organization</CardTitle>
+                <div className="space-y-6 lg:col-span-1">
+                    <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+                        <CardHeader className="px-8">
+                            <CardTitle className="text-base font-semibold tracking-tight text-slate-900">
+                                Organization
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex items-center justify-between py-2 border-b border-gray-50">
-                                <span className="text-sm text-gray-500 flex items-center gap-2"><Layers className="w-4 h-4" /> Category</span>
-                                <span className="text-sm font-medium text-gray-900">{product.category?.name || "General"}</span>
+                        <CardContent className="px-8">
+                            <div className="flex items-center justify-between gap-4 text-sm">
+                                <span className="flex items-center gap-2 text-neutral-500">
+                                    <Layers className="h-4 w-4 shrink-0 text-neutral-400" />
+                                    Category
+                                </span>
+                                <span className="font-medium text-slate-900">
+                                    {product.category?.name || "General"}
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
-                    
-                        <Card className="border-none shadow-sm">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                                    <Tag className="w-4 h-4" /> Pricing Details
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-bold text-gray-900">
-                                        ${product.price.toLocaleString()} {/* นำราคามาใช้ */}
-                                    </span>
-                                </div>
-                            </CardContent>
-                        </Card>
 
-                        <Card className="border-none shadow-sm">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                                    <Package className="w-4 h-4" /> Inventory Status
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-3xl font-bold text-gray-900">
-                                    {product.quantity} <span className="text-sm font-normal text-gray-500">Units</span>
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1 uppercase">SKU: {product.sku}</p>
-                            </CardContent>
-                        </Card>
-                   
+                    <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+                        <CardHeader className="px-8 pb-2">
+                            <CardTitle className="flex items-center gap-2 text-sm font-medium text-neutral-500">
+                                <Tag className="h-4 w-4" />
+                                Pricing
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="px-8">
+                            <span className="text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
+                                ${product.price.toLocaleString()}
+                            </span>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="rounded-3xl border-0 bg-white py-8 shadow-sm">
+                        <CardHeader className="px-8 pb-2">
+                            <CardTitle className="flex items-center gap-2 text-sm font-medium text-neutral-500">
+                                <Package className="h-4 w-4" />
+                                Inventory
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="px-8">
+                            <div className="text-3xl font-semibold tracking-tight text-slate-900">
+                                {product.quantity}{' '}
+                                <span className="text-sm font-normal text-neutral-500">units</span>
+                            </div>
+                            <p className="mt-2 text-xs font-medium uppercase tracking-wide text-neutral-500">
+                                SKU: {product.sku}
+                            </p>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useSearchParams, useRouter} from "next/navigation";
-
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 interface PaginationMeta {
     total_pages: number;
@@ -13,76 +13,54 @@ interface SellerProductTablePaginationProps {
     meta: PaginationMeta;
 }
 
-function SellerProductTablePagination({meta}: SellerProductTablePaginationProps) {
+function SellerProductTablePagination({ meta }: SellerProductTablePaginationProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const handlePageChange = (newPage: number) => {
         const params = new URLSearchParams(searchParams);
-        params.set('page', newPage.toString());
+        params.set("page", newPage.toString());
         router.push(`${pathname}?${params.toString()}`);
     };
 
     const { current_page, total_pages } = meta;
 
     return (
-        <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div className="flex items-center justify-between">
-                {/* Mobile View */}
-                <div className="flex-1 flex justify-between sm:hidden">
-                    <button
+        <div className="bg-neutral-50/80 px-6 py-5 sm:px-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-neutral-600">
+                    Page{" "}
+                    <span className="font-medium text-slate-900">{current_page}</span>
+                    {" "}of{" "}
+                    <span className="font-medium text-slate-900">{total_pages}</span>
+                </p>
+                <div className="flex items-center justify-center gap-2 sm:justify-end">
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        className="h-9 rounded-full bg-white px-4 text-sm font-medium text-slate-900 shadow-sm hover:bg-neutral-100"
                         onClick={() => handlePageChange(current_page - 1)}
                         disabled={current_page <= 1}
-                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                     >
                         Previous
-                    </button>
-                    <button
+                    </Button>
+                    <span className="rounded-full bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm">
+                        {current_page}
+                    </span>
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        className="h-9 rounded-full bg-white px-4 text-sm font-medium text-slate-900 shadow-sm hover:bg-neutral-100"
                         onClick={() => handlePageChange(current_page + 1)}
                         disabled={current_page >= total_pages}
-                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                     >
                         Next
-                    </button>
-                </div>
-
-                {/* Desktop View */}
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p className="text-sm text-gray-700">
-                            Page <span className="font-medium">{current_page}</span> of{" "}
-                            <span className="font-medium">{total_pages}</span>
-                        </p>
-                    </div>
-                    <div>
-                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <button
-                                onClick={() => handlePageChange(current_page - 1)}
-                                disabled={current_page <= 1}
-                                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                            >
-                                Previous
-                            </button>
-
-                            {/* แสดงเลขหน้าแบบง่าย (คุณสามารถทำลูปเพื่อแสดงเลข 1, 2, 3... ได้ที่นี่) */}
-                            <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600 z-10">
-                                {current_page}
-                            </span>
-
-                            <button
-                                onClick={() => handlePageChange(current_page + 1)}
-                                disabled={current_page >= total_pages}
-                                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                            >
-                                Next
-                            </button>
-                        </nav>
-                    </div>
+                    </Button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default SellerProductTablePagination
+export default SellerProductTablePagination;

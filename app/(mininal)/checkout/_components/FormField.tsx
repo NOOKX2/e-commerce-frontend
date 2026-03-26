@@ -14,13 +14,13 @@ type FormFieldProps = {
 function FormField({ name, label, type, placeholder, value, onChange }: FormFieldProps) {
   return (
     <div className='w-full'>
-      <Label htmlFor={name} className='font-semibold'>{label}</Label>
+      <Label htmlFor={name} className='text-sm font-medium text-neutral-700'>{label}</Label>
       <Input
         type={type}
         id={name}
         name={name}
         placeholder={placeholder}
-        className="mt-2"
+        className="mt-2 rounded-xl border-black/10 bg-white"
         value={value}
         onChange={onChange}
       />

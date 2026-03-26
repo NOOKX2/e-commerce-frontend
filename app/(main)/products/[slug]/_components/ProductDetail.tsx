@@ -7,19 +7,19 @@ type ProductDetailProps = {
 
 function ProductDetail({ product }: ProductDetailProps) {
   return (
-    <div className='flex flex-col h-full gap-8'>
-      <h1 className='text-5xl font-bold tracking-tight'>{product.name}</h1>
+    <div className='flex h-full flex-col gap-6'>
+      <h1 className='text-3xl font-semibold tracking-tight md:text-4xl'>{product.name}</h1>
 
-      <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+      <span className="inline-flex w-fit items-center rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">
         {product.category?.name || "General"}
       </span>
 
-      <div className='mt-4 text-base text-muted-foreground prose'>
+      <div className='text-sm text-muted-foreground md:text-base'>
         <p>{product.description}</p>
       </div>
 
-      <div className='mt-4'>
-        <p className='text-4xl font-bold text-primary'>
+      <div className='mt-auto border-t border-black/5 pt-6'>
+        <p className='text-3xl font-semibold text-neutral-900 md:text-4xl'>
           {`฿${product.price.toLocaleString()}`}
         </p>
         <ProductAction product={product} />

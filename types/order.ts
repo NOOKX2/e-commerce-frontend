@@ -1,15 +1,21 @@
 import { Product } from "./product";
-import { ShippingAddressData } from "./shippingAdressData";
 
 export interface Order {
   ID: number; 
   userId: number;
   status: string;
   totalAmount: number;
-  shippingAddress: ShippingAddressData;
   stripePaymentIntentId: string;
   createdAt: string;     
   updatedAt: string;
+  shippingEmail: string;         
+	shippingReceiverName: string; 
+	shippingPhoneNumber: string;   
+	shippingStreetAddress :string;
+	shippingSubDistrict: string;   
+	shippingDistrict: string      
+	shippingProvince: string;      
+	shippingPostalCode: string;    
   items: OrderItem[];
 }
 
