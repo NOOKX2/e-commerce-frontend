@@ -32,7 +32,7 @@ function RegisterPage() {
                     <Input id='password' name='password' type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
                     {/* {password && <p className="text-red-500 text-sm mt-1">{password[0]}</p>} */}
                 </div>
-               
+                {error && <p className="text-red-500">{error}</p>}
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? 'Creating Account...' : 'Create Account'}
                 </Button>

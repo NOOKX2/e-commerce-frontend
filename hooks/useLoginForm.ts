@@ -27,6 +27,7 @@ export function useLoginForm() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
+                credentials: "include",
             });
 
             const data = await response.json();
@@ -35,15 +36,17 @@ export function useLoginForm() {
                 throw new Error(data.message || "Email or password incorrect");
             }
 
-            if (data.token) {
-                document.cookie = `session_token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
-            }
 
             login(data.response || data.user);
 
             if (data.user.role == 'seller') {
                 router.push('/seller');
             }
+
+            else if (data.user.role == 'admin') {
+                router.push('/admin');
+            }
+
             else {
                 router.push(callBackUrl);
             }

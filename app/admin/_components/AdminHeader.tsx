@@ -1,5 +1,6 @@
 "use client";
 
+import ProfileIcon from "@/components/shared/ProfileIcon";
 import { Bell, Search } from "lucide-react";
 
 export default function AdminHeader() {
@@ -25,9 +26,7 @@ export default function AdminHeader() {
                     <span className="absolute top-2 right-2 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
                 </button>
 
-                <div className="h-8 w-8 rounded-full bg-linear-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-medium shadow-md ring-2 ring-gray-100 cursor-pointer">
-                    A
-                </div>
+                <ProfileIcon />
             </div>
         </header>
     );

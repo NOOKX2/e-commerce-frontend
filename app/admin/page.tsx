@@ -1,79 +1,174 @@
-"use client";
+import { cookies } from "next/headers";
+import { DollarSign, Package, ShoppingBag, Users, TrendingUp, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import StatCard from "@/components/dashboard/StatCard";
+import StatGroup from "@/components/dashboard/StatGroup";
 
-import { DollarSign, ShoppingBag, Users, TrendingUp } from "lucide-react";
+// 1. Types Definition
+type AdminDashboardResponse = {
+  success: boolean;
+  data?: {
+    platformGMV: number;
+    totalOrders: number;
+    totalUsers: number;
+    totalSellers: number;
+    totalProducts: number;
+    recentOrders: Array<{
+      id: number;
+      user: string;
+      amount: number;
+      status: string;
+      date: string;
+    }>;
+  };
+  error?: string;
+};
 
-const stats = [
-    { label: "Total Revenue", value: "$45,231.89", icon: DollarSign, trend: "+20.1%", color: "text-green-600" },
-    { label: "Active Orders", value: "34", icon: ShoppingBag, trend: "+12.5%", color: "text-blue-600" },
-    { label: "Total Users", value: "2,331", icon: Users, trend: "+8.2%", color: "text-purple-600" },
-    { label: "Growth", value: "14.2%", icon: TrendingUp, trend: "+4.3%", color: "text-pink-600" },
-];
+// 2. Helper Functions
+function formatMoney(amount: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(amount ?? 0);
+}
 
-export default function AdminPage() {
-    return (
-        <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-                <p className="mt-1 text-sm text-gray-500">Welcome back, Admin. Here's what's happening today.</p>
-            </div>
+// 3. Main Page Component
+export default async function AdminPage() {
+  const cookieStore = await cookies();
+  
+  // Fetch data from Go Backend
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/admin/dashboard`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat) => {
-                    const Icon = stat.icon;
-                    return (
-                        <div key={stat.label} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition-shadow">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">{stat.label}</p>
-                                    <p className="mt-2 text-3xl font-bold text-gray-900">{stat.value}</p>
-                                </div>
-                                <div className={`p-3 rounded-full bg-gray-50 ${stat.color}`}>
-                                    <Icon className="h-6 w-6" />
-                                </div>
-                            </div>
-                            <div className="mt-4 flex items-center text-sm">
-                                <span className="text-green-600 font-medium">{stat.trend}</span>
-                                <span className="ml-2 text-gray-500">from last month</span>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
+  const payload = (await res.json().catch(() => null)) as AdminDashboardResponse | null;
+  const data = payload?.data;
 
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
-                <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-gray-900">Recent Transactions</h2>
-                    <button className="text-sm font-medium text-purple-600 hover:text-purple-700">View all</button>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                        <thead className="bg-gray-50 text-gray-500 font-medium">
-                            <tr>
-                                <th className="px-6 py-3">Order ID</th>
-                                <th className="px-6 py-3">User</th>
-                                <th className="px-6 py-3">Product</th>
-                                <th className="px-6 py-3">Amount</th>
-                                <th className="px-6 py-3">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <tr key={i} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-gray-900">#ORD-{1000 + i}</td>
-                                    <td className="px-6 py-4 text-gray-600">User {i}</td>
-                                    <td className="px-6 py-4 text-gray-600">Product {i}</td>
-                                    <td className="px-6 py-4 font-medium text-gray-900">${(i * 120.50).toFixed(2)}</td>
-                                    <td className="px-6 py-4">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Completed
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  return (
+    <div className="mx-auto max-w-7xl space-y-8 pb-12">
+      {/* Header Section */}
+      <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Admin Dashboard</h1>
+          <p className="text-sm font-medium text-slate-500">
+            Platform-wide overview and master control.
+          </p>
         </div>
-    );
+        <div className="flex items-center gap-3">
+            <Button variant="outline" className="rounded-2xl" asChild>
+                <Link href="/admin/reports">Generate Report</Link>
+            </Button>
+        </div>
+      </header>
+
+      {/* Error Alert (If API Fails) */}
+      {!res.ok && (
+        <div className="rounded-3xl border border-red-100 bg-red-50 p-5 text-sm text-red-700 shadow-sm flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+          {payload?.error ?? "Unable to connect to the backend server. Please check your Go API."}
+        </div>
+      )}
+
+      {/* Stats Grid Section */}
+      <StatGroup columns={5}>
+        <StatCard 
+          label="Platform GMV" 
+          value={formatMoney(data?.platformGMV ?? 0)} 
+          icon={DollarSign} 
+          accent="green" 
+        />
+        <StatCard 
+          label="Total Orders" 
+          value={data?.totalOrders ?? 0} 
+          icon={ShoppingBag} 
+          accent="blue" 
+        />
+        <StatCard 
+          label="Total Users" 
+          value={data?.totalUsers ?? 0} 
+          icon={Users} 
+          accent="purple" 
+        />
+        <StatCard 
+          label="Total Sellers" 
+          value={data?.totalSellers ?? 0} 
+          icon={TrendingUp} 
+          accent="indigo" 
+        />
+        <StatCard 
+          label="Total Products" 
+          value={data?.totalProducts ?? 0} 
+          icon={Package} 
+          accent="pink" 
+        />
+      </StatGroup>
+
+      {/* Recent Orders Table Section */}
+      <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-50 px-8 py-6">
+          <h2 className="text-lg font-bold text-slate-900">Recent Platform Orders</h2>
+          <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl" asChild>
+            <Link href="/admin/orders" className="flex items-center gap-2">
+              View all orders <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-50/50 text-xs font-bold uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-8 py-4">Order ID</th>
+                <th className="px-8 py-4">Customer</th>
+                <th className="px-8 py-4">Amount</th>
+                <th className="px-8 py-4 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {(data?.recentOrders ?? []).map((order) => (
+                <tr key={order.id} className="group hover:bg-slate-50/50 transition-colors">
+                  <td className="px-8 py-5 font-mono font-bold text-slate-900">#{order.id}</td>
+                  <td className="px-8 py-5">
+                    <div className="font-semibold text-slate-700">{order.user}</div>
+                    <div className="text-[10px] text-slate-400 uppercase tracking-tighter">Verified Buyer</div>
+                  </td>
+                  <td className="px-8 py-5 font-bold text-slate-900">
+                    {formatMoney(order.amount)}
+                  </td>
+                  <td className="px-8 py-5">
+                    <div className="flex justify-center">
+                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider
+                            ${order.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 
+                              order.status === 'pending' ? 'bg-amber-100 text-amber-700' : 
+                              'bg-slate-100 text-slate-600'}`}>
+                            {order.status}
+                        </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+
+              {res.ok && (data?.recentOrders?.length ?? 0) === 0 && (
+                <tr>
+                  <td className="px-8 py-12 text-center text-slate-400" colSpan={4}>
+                    <div className="flex flex-col items-center gap-2">
+                        <ShoppingBag className="h-8 w-8 text-slate-200" />
+                        <p>No transactions recorded in the last 24 hours.</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
 }

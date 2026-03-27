@@ -2,16 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ShoppingBag, Package, Users, Settings, LogOut, FileText, PieChart } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Package, Users, Settings, LogOut, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/categories", label: "Categories", icon: FileText },
     { href: "/admin/products", label: "Products", icon: ShoppingBag },
     { href: "/admin/orders", label: "Orders", icon: Package },
     { href: "/admin/users", label: "Users", icon: Users },
-    { href: "/admin/analytics", label: "Analytics", icon: PieChart },
-    { href: "/admin/content", label: "Content", icon: FileText },
     { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

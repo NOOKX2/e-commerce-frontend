@@ -15,6 +15,7 @@ async function getDashboardSummary() {
         });
 
         if (!res.ok) {
+            console.log(res);
             throw new Error("res is not ok");
         }
 
