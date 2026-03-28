@@ -81,7 +81,7 @@ export default async function OrderDetailPage({
     const badgeColor = statusColors[order.status] || 'bg-neutral-100 text-neutral-800';
 
     return (
-        <div className="mx-auto max-w-7xl space-y-8">
+        <div className="mx-auto max-w-7xl space-y-8 pb-12">
             <div className="flex flex-col gap-4">
                 <Button variant="ghost" className="h-9 w-fit rounded-full px-0 font-medium text-neutral-600 hover:text-slate-900" asChild>
                     <Link href="/seller/orders" className="inline-flex items-center gap-1.5">
@@ -95,9 +95,7 @@ export default async function OrderDetailPage({
                             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
                                 Order #{order.orderId}
                             </h1>
-                            <span
-                                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold ${badgeColor}`}
-                            >
+                            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold ${badgeColor}`}>
                                 {order.status === 'Completed' && (
                                     <CheckCircle2 className="h-4 w-4" />
                                 )}
@@ -113,27 +111,22 @@ export default async function OrderDetailPage({
             </div>
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+                {/* ⬇️ ฝั่งซ้าย (กินพื้นที่ 2 ส่วน): Items + Earnings ⬇️ */}
                 <div className="flex flex-col gap-6 lg:col-span-2">
-                    <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
-                        <div className="px-8 py-6">
+
+                    {/* Card 1: Order Items */}
+                    <div className="overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-100">
+                        <div className="px-8 py-6 border-b border-slate-50">
                             <h2 className="text-lg font-semibold tracking-tight text-slate-900">
                                 Items purchased from you
                             </h2>
                         </div>
                         <ul className="divide-y divide-neutral-100">
                             {order.items.map((item) => (
-                                <li
-                                    key={item.productId}
-                                    className="flex flex-col gap-4 px-8 py-6 sm:flex-row sm:items-start"
-                                >
+                                <li key={item.productId} className="flex flex-col gap-4 px-8 py-6 sm:flex-row sm:items-start">
                                     <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-neutral-100">
                                         {item.imageUrl ? (
-                                            <Image
-                                                src={item.imageUrl}
-                                                alt={item.name}
-                                                fill
-                                                className="object-cover"
-                                            />
+                                            <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                                         ) : (
                                             <Package className="mx-auto mt-7 h-10 w-10 text-neutral-400" />
                                         )}
@@ -156,10 +149,35 @@ export default async function OrderDetailPage({
                             ))}
                         </ul>
                     </div>
+
+                    {/* Card 2: ย้าย Your Earnings มาไว้ฝั่งซ้าย */}
+                    <div className="rounded-3xl bg-white p-8 shadow-sm sm:p-9 border border-slate-100">
+                        <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+                            Your earnings
+                        </h2>
+                        <div className="mt-6 space-y-3">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-neutral-500">Subtotal (your items)</span>
+                                <span className="font-medium tabular-nums text-slate-900">
+                                    {formatMoney(order.sellerSubtotal)}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="mt-6 flex items-center justify-between border-t border-neutral-100 pt-6">
+                            <span className="text-base font-bold text-slate-900">Your total</span>
+                            <span className="text-2xl font-black tabular-nums text-slate-900">
+                                {formatMoney(order.sellerSubtotal)}
+                            </span>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div className="flex flex-col gap-6">
-                    <div className="rounded-3xl bg-white p-8 shadow-sm sm:p-9">
+                {/* ⬇️ ฝั่งขวา (กินพื้นที่ 1 ส่วน): Customer & Shipping + Action Buttons ⬇️ */}
+                <div className="flex flex-col gap-6 lg:col-span-1">
+
+                    {/* Card 3: Customer & Shipping */}
+                    <div className="rounded-3xl bg-white p-8 shadow-sm sm:p-9 border border-slate-100">
                         <h2 className="text-lg font-semibold tracking-tight text-slate-900">
                             Customer &amp; shipping
                         </h2>
@@ -198,42 +216,25 @@ export default async function OrderDetailPage({
                         </div>
                     </div>
 
-                    <div className="rounded-3xl bg-white p-8 shadow-sm sm:p-9">
-                        <h2 className="text-lg font-semibold tracking-tight text-slate-900">
-                            Your earnings
-                        </h2>
-                        <div className="mt-6 space-y-3">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-neutral-500">Subtotal (your items)</span>
-                                <span className="font-medium tabular-nums text-slate-900">
-                                    {formatMoney(order.sellerSubtotal)}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="mt-6 flex items-center justify-between border-t border-neutral-100 pt-6">
-                            <span className="text-base font-bold text-slate-900">Your total</span>
-                            <span className="text-xl font-bold tabular-nums text-slate-900">
-                                {formatMoney(order.sellerSubtotal)}
-                            </span>
-                        </div>
-                        <div className="mt-6 flex flex-col gap-3">
-                            <Button
-                                type="button"
-                                className="h-11 w-full rounded-2xl bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-                            >
-                                <Truck className="mr-2 h-4 w-4" />
-                                Track package
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                className="h-11 w-full rounded-2xl bg-neutral-100 font-medium text-slate-900 shadow-none hover:bg-neutral-200/80"
-                            >
-                                <Download className="mr-2 h-4 w-4" />
-                                Download invoice
-                            </Button>
-                        </div>
+                    {/* Card 4: Action Buttons (แยกมาเป็นกล่องใหม่ฝั่งขวาล่าง) */}
+                    <div className="rounded-3xl bg-slate-50 p-6 border border-slate-100 flex flex-col gap-3">
+                        <Button
+                            type="button"
+                            className="h-11 w-full rounded-2xl bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                        >
+                            <Truck className="mr-2 h-4 w-4" />
+                            Track package
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="h-11 w-full rounded-2xl bg-white font-medium text-slate-900 shadow-sm border-slate-200 hover:bg-slate-50"
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Download invoice
+                        </Button>
                     </div>
+
                 </div>
             </div>
         </div>

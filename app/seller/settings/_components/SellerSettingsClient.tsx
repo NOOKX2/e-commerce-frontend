@@ -3,14 +3,14 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { Building2, MapPin, Landmark, Save, Upload } from "lucide-react";
+import { Building2, MapPin, Landmark, Upload } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { FormFieldLabel } from "@/components/dashboard/FormFieldLabel";
+import SettingsSectionCard from "@/components/dashboard/SettingsSectionCard";
+import SettingsStickyActionBar from "@/components/dashboard/SettingsStickyActionBar";
 import { SellerShopSettings } from "@/types/settings";
-import { cn } from "@/lib/utils";
 import { uploadToR2 } from "@/lib/r2-upload";
 
 export default function SellerSettingsClient({
@@ -77,46 +77,22 @@ export default function SellerSettingsClient({
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 pb-12">
-      <div
-        className={cn(
-          "sticky top-0 z-30 flex flex-col gap-4 rounded-[2rem] border bg-white/90 p-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between",
-          hasChanges ? "border-blue-200 shadow-md ring-4 ring-blue-500/5" : "border-slate-200/80 shadow-sm"
-        )}
+      <SettingsStickyActionBar
+        title="Store settings"
+        description="Profile, pickup, and payout details for your shop."
+        saveLabel="Save changes"
+        hasChanges={hasChanges}
+        isSaving={isSaving}
+        onSave={handleSave}
+      />
+
+      <SettingsSectionCard
+        title="Shop profile"
+        subtitle="Name, description, and logo"
+        icon={Building2}
+        iconWrapperClassName="bg-slate-50"
+        iconClassName="text-slate-700"
       >
-        <div>
-          <h1 className="text-lg font-black tracking-tight text-slate-900">Store settings</h1>
-          <p className="text-xs font-medium text-slate-500">
-            Profile, pickup, and payout details for your shop.
-          </p>
-        </div>
-        <Button
-          type="button"
-          disabled={!hasChanges || isSaving}
-          onClick={handleSave}
-          className={cn(
-            "h-11 rounded-2xl px-8 text-[11px] font-black uppercase tracking-widest",
-            hasChanges
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "cursor-not-allowed bg-slate-100 text-slate-400"
-          )}
-        >
-          <Save className={cn("mr-2 h-4 w-4", isSaving && "animate-pulse")} />
-          {isSaving ? "Saving…" : "Save changes"}
-        </Button>
-      </div>
-
-      {/* Shop profile */}
-      <section className="space-y-6 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
-        <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50">
-            <Building2 className="h-5 w-5 text-slate-700" />
-          </div>
-          <div>
-            <h2 className="text-base font-black text-slate-900">Shop profile</h2>
-            <p className="text-xs text-slate-500">Name, description, and logo</p>
-          </div>
-        </div>
-
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="flex flex-col items-center gap-3 sm:w-40">
             <div className="relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border border-slate-100 bg-slate-50">
@@ -143,9 +119,7 @@ export default function SellerSettingsClient({
 
           <div className="min-w-0 flex-1 space-y-4">
             <div className="space-y-2">
-              <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-                Shop name
-              </Label>
+              <FormFieldLabel>Shop name</FormFieldLabel>
               <Input
                 value={shop.shopName}
                 onChange={(e) => update("shopName", e.target.value)}
@@ -154,9 +128,7 @@ export default function SellerSettingsClient({
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-                Description
-              </Label>
+              <FormFieldLabel>Description</FormFieldLabel>
               <Textarea
                 value={shop.description}
                 onChange={(e) => update("description", e.target.value)}
@@ -167,23 +139,17 @@ export default function SellerSettingsClient({
             </div>
           </div>
         </div>
-      </section>
+      </SettingsSectionCard>
 
-      {/* Shipping & pickup */}
-      <section className="space-y-6 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
-        <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50">
-            <MapPin className="h-5 w-5 text-sky-700" />
-          </div>
-          <div>
-            <h2 className="text-base font-black text-slate-900">Shipping &amp; pickup</h2>
-            <p className="text-xs text-slate-500">Where buyers can collect orders</p>
-          </div>
-        </div>
+      <SettingsSectionCard
+        title="Shipping & pickup"
+        subtitle="Where buyers can collect orders"
+        icon={MapPin}
+        iconWrapperClassName="bg-sky-50"
+        iconClassName="text-sky-700"
+      >
         <div className="space-y-2">
-          <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            Pickup address
-          </Label>
+          <FormFieldLabel>Pickup address</FormFieldLabel>
           <Textarea
             value={shop.pickupAddress}
             onChange={(e) => update("pickupAddress", e.target.value)}
@@ -192,24 +158,18 @@ export default function SellerSettingsClient({
             className="rounded-2xl border-slate-100 bg-slate-50/50 font-medium text-slate-900"
           />
         </div>
-      </section>
+      </SettingsSectionCard>
 
-      {/* Bank */}
-      <section className="space-y-6 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
-        <div className="flex items-center gap-3 border-b border-slate-50 pb-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50">
-            <Landmark className="h-5 w-5 text-amber-800" />
-          </div>
-          <div>
-            <h2 className="text-base font-black text-slate-900">Bank account</h2>
-            <p className="text-xs text-slate-500">Payout details for your sales</p>
-          </div>
-        </div>
+      <SettingsSectionCard
+        title="Bank account"
+        subtitle="Payout details for your sales"
+        icon={Landmark}
+        iconWrapperClassName="bg-amber-50"
+        iconClassName="text-amber-800"
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2 sm:col-span-2">
-            <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Bank name
-            </Label>
+            <FormFieldLabel>Bank name</FormFieldLabel>
             <Input
               value={shop.bankName}
               onChange={(e) => update("bankName", e.target.value)}
@@ -218,9 +178,7 @@ export default function SellerSettingsClient({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Account number
-            </Label>
+            <FormFieldLabel>Account number</FormFieldLabel>
             <Input
               value={shop.accountNumber}
               onChange={(e) => update("accountNumber", e.target.value)}
@@ -228,9 +186,7 @@ export default function SellerSettingsClient({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Account holder
-            </Label>
+            <FormFieldLabel>Account holder</FormFieldLabel>
             <Input
               value={shop.accountHolder}
               onChange={(e) => update("accountHolder", e.target.value)}
@@ -238,7 +194,7 @@ export default function SellerSettingsClient({
             />
           </div>
         </div>
-      </section>
+      </SettingsSectionCard>
     </div>
   );
 }

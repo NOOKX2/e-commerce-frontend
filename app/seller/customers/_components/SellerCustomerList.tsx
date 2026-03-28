@@ -1,32 +1,20 @@
 "use client";
 
-import { useState } from 'react';
-import SellerCustomerToolbar from './SellerCustomerToolbar';
-import { Customer } from '@/types/customer';
-import SellerCustomerTable from './SellerCustomerTable';
-import { SellerTableToolbar } from '../../_components/SellerToolbar';
+import { SellerTableToolbar } from "@/app/seller/_components/SellerToolbar";
+import { Customer } from "@/types/customer";
+import SellerCustomerTable from "./SellerCustomerTable";
 
-interface customersProps {
-    customers: Customer[];
+interface CustomersProps {
+  customers: Customer[];
 }
 
-
-export default function SellerCustomerList({ customers }: customersProps) {
-    const [searchTerm, setSearchTerm] = useState("");
-
-    const filteredCustomers = customers.filter(customer =>
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return (
-        <div className="space-y-6">
-            {/* Toolbar */}
-
-            <SellerTableToolbar placeholder='Search for customer name'/>
-
-            {/* Table */}
-            <SellerCustomerTable customers={filteredCustomers} />
-        </div>
-    );
+export default function SellerCustomerList({ customers }: CustomersProps) {
+  return (
+    <div className="space-y-6">
+      <SellerTableToolbar placeholder="Search customers by name or email..." />
+      <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+        <SellerCustomerTable customers={customers} />
+      </div>
+    </div>
+  );
 }

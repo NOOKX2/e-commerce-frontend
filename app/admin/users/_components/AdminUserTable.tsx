@@ -9,18 +9,22 @@ import {
 } from "@/components/ui/select";
 import { AdminUser } from "@/types/user";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 // เอา onSave และ isUpdating ออก เพราะเราใช้ Batch Action แทนแล้ว
 interface AdminUserTableProps {
   users: AdminUser[];
+  /** Per user ID: when true, status Select uses dirty (blue) styling */
+  dirty?: Record<number, boolean>;
   onStatusChange: (id: number, status: string) => void;
 }
 
 const statuses = ["active", "suspended", "banned"];
 
-export default function AdminUserTable({ 
-  users, 
-  onStatusChange, 
+export default function AdminUserTable({
+  users,
+  dirty,
+  onStatusChange,
 }: AdminUserTableProps) {
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
@@ -38,7 +42,10 @@ export default function AdminUserTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {users.map((u) => (
+            {users.map((u) => {
+              const statusDirty = dirty?.[u.ID] ?? false;
+
+              return (
               <tr key={u.ID} className="transition-colors hover:bg-slate-50/50 group">
                 <td className="px-8 py-5 font-mono text-[10px] text-slate-400 uppercase tracking-tighter">
                   #{u.ID}
@@ -67,7 +74,15 @@ export default function AdminUserTable({
                       value={u.status}
                       onValueChange={(val) => onStatusChange(u.ID, val)}
                     >
-                      <SelectTrigger className="w-32 h-8 rounded-xl text-[11px] font-bold uppercase border-slate-200 focus:ring-blue-500/20">
+                      <SelectTrigger
+                        className={cn(
+                          "w-32 h-8 rounded-xl text-[11px] font-bold uppercase border-slate-200 bg-white text-slate-800",
+                          "focus:ring-2 focus:ring-slate-200/80 focus:border-slate-300",
+                          "[&_svg]:opacity-50",
+                          statusDirty &&
+                            "border-blue-500 bg-blue-50/90 text-blue-800 shadow-sm ring-2 ring-blue-500/20 focus:border-blue-500 focus:ring-blue-500/25 [&_svg]:text-blue-600 [&_svg]:opacity-100"
+                        )}
+                      >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -90,7 +105,8 @@ export default function AdminUserTable({
                   </Link>
                 </td>
               </tr>
-            ))}
+            );
+            })}
           </tbody>
         </table>
       </div>

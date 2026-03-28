@@ -1,4 +1,3 @@
-// @/components/dashboard/ProductTable.tsx
 import { AdminProduct } from "@/types/product";
 import Image from "next/image";
 import {
@@ -9,30 +8,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface ProductTableProps {
-    products: AdminProduct[];
-    role: 'admin' | 'seller';
-    // เพิ่ม onStatusChange เพื่อให้ Table จัดการการเปลี่ยนค่าได้เองถ้าไม่ได้ส่ง renderStatus มา
-    onStatusChange?: (id: number, status: string) => void; 
-    renderStatus?: (product: AdminProduct) => React.ReactNode;
-    renderActions?: (product: AdminProduct) => React.ReactNode;
+  products: AdminProduct[];
+  role: "admin" | "seller";
+  /** Per product ID: when true, status Select uses dirty (blue) styling */
+  dirty?: Record<number, boolean>;
+  onStatusChange?: (id: number, status: string) => void;
+  renderStatus?: (product: AdminProduct) => React.ReactNode;
+  renderActions?: (product: AdminProduct) => React.ReactNode;
 }
 
 const statusOptions = ["active", "pending", "inactive", "draft", "archived"];
 
-export default function ProductTable({ 
-    products, 
-    role, 
-    onStatusChange,
-    renderStatus, 
-    renderActions 
+export default function ProductTable({
+  products,
+  role,
+  dirty,
+  onStatusChange,
+  renderStatus,
+  renderActions,
 }: ProductTableProps) {
-    const isAdmin = role === 'admin';
+  const isAdmin = role === "admin";
 
-    console.log('product in product table',products);
-
-    return (
+  return (
         <div className="overflow-x-auto rounded-3xl border border-slate-100 bg-white shadow-sm">
             <table className="min-w-full">
                 <thead>
@@ -47,7 +47,11 @@ export default function ProductTable({
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                    {products.map((product) => (
+                    {products.map((product) => {
+                            const statusDirty =
+                              isAdmin && (dirty?.[product.ID] ?? false);
+
+                            return (
                         <tr key={product.ID} className="transition-colors hover:bg-slate-50/50 group">
                             {/* Product Info */}
                             <td className="whitespace-nowrap px-8 py-5">
@@ -80,7 +84,7 @@ export default function ProductTable({
                                 {product.category?.name || "-"}
                             </td>
                             
-                            <td className="px-8 py-5 text-sm font-black text-slate-900 tabular-nums">
+                            <td className="px-8 py-5 text-sm font-semibold text-slate-900 tabular-nums">
                                 ฿{product.price?.toLocaleString()}
                             </td>
                             
@@ -96,7 +100,15 @@ export default function ProductTable({
                                             value={product.status} 
                                             onValueChange={(val) => onStatusChange?.(product.ID, val)}
                                         >
-                                            <SelectTrigger className="w-32 h-8 rounded-xl text-[11px] font-bold uppercase border-slate-200">
+                                            <SelectTrigger
+                                              className={cn(
+                                                "w-32 h-8 rounded-xl text-[11px] font-bold uppercase border-slate-200 bg-white text-slate-800",
+                                                "focus:ring-2 focus:ring-slate-200/80 focus:border-slate-300",
+                                                "[&_svg]:opacity-50",
+                                                statusDirty &&
+                                                  "border-blue-500 bg-blue-50/90 text-blue-800 shadow-sm ring-2 ring-blue-500/20 focus:border-blue-500 focus:ring-blue-500/25 [&_svg]:text-blue-600 [&_svg]:opacity-100"
+                                              )}
+                                            >
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -122,7 +134,8 @@ export default function ProductTable({
                                 )}
                             </td>
                         </tr>
-                    ))}
+                            );
+                    })}
                 </tbody>
             </table>
         </div>

@@ -1,17 +1,40 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
+import AdminUnifiedToolbar from "@/components/dashboard/AdminUnifiedToolbar";
+import { useAdminBatchPendingSafe } from "@/app/admin/_components/AdminBatchPendingContext";
 import ProductTable from "@/app/admin/products/_components/ProductTable";
+import AdminProductsFilters from "@/app/admin/products/_components/AdminProductsFilters";
 import { AdminProduct } from "@/types/product";
-import BatchActionBar from "@/components/dashboard/BatchActionBar";
 
 export default function ProductsClient({ initialProducts }: { initialProducts: AdminProduct[] }) {
   const [products, setProducts] = useState(initialProducts);
   const [isSaving, setIsSaving] = useState(false);
+  const searchParams = useSearchParams();
+  const batch = useAdminBatchPendingSafe();
 
-  // 1. ตรวจสอบว่ามีรายการไหนถูกแก้ไขบ้าง
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
+
+  const q = (searchParams.get("search") ?? "").trim().toLowerCase();
+  const status = (searchParams.get("status") ?? "").trim().toLowerCase();
+
+  const visibleProducts = useMemo(() => {
+    return products.filter((p) => {
+      const matchStatus = !status || status === "all" || p.status?.toLowerCase() === status;
+      const matchSearch =
+        !q ||
+        p.name?.toLowerCase().includes(q) ||
+        p.sku?.toLowerCase().includes(q) ||
+        String(p.ID).includes(q);
+      return matchStatus && matchSearch;
+    });
+  }, [products, q, status]);
+
   const changedProducts = useMemo(() => {
     return products.filter((p) => {
       const original = initialProducts.find((item) => item.ID === p.ID);
@@ -21,11 +44,26 @@ export default function ProductsClient({ initialProducts }: { initialProducts: A
 
   const hasChanges = changedProducts.length > 0;
 
-  // 2. ฟังก์ชัน Batch Update ยิงไปที่ Go Backend
+  const dirty = useMemo(() => {
+    const map: Record<number, boolean> = {};
+    for (const p of products) {
+      const original = initialProducts.find((item) => item.ID === p.ID);
+      map[p.ID] = !!(original && p.status !== original.status);
+    }
+    return map;
+  }, [products, initialProducts]);
+
+  useEffect(() => {
+    batch?.setPendingCount(changedProducts.length);
+  }, [batch, changedProducts.length]);
+
+  useEffect(() => {
+    return () => batch?.setPendingCount(0);
+  }, [batch]);
+
   async function handleSaveAll() {
     setIsSaving(true);
     try {
-      // ตัวอย่างการส่งแบบ Batch (คุณอาจต้องปรับ Endpoint ใน Go ให้รับ Array)
       const promises = changedProducts.map((p) =>
         fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/admin/products/${p.ID}/status`, {
           method: "PATCH",
@@ -38,7 +76,6 @@ export default function ProductsClient({ initialProducts }: { initialProducts: A
       await Promise.all(promises);
       toast.success(`Updated ${changedProducts.length} products successfully`);
 
-      // หลังจากเซฟเสร็จ ให้ถือว่าข้อมูลปัจจุบันคือค่าเริ่มต้นใหม่ (ในที่นี้อาจใช้วิธี Refresh หน้า)
       window.location.reload();
     } catch (e) {
       toast.error("Failed to update some products");
@@ -49,26 +86,32 @@ export default function ProductsClient({ initialProducts }: { initialProducts: A
 
   return (
     <div className="space-y-6">
-      <BatchActionBar
-        hasChanges={hasChanges}
-        changedCount={changedProducts.length}
-        isSaving={isSaving}
-        onSave={handleSaveAll}
-        onReset={() => setProducts(initialProducts)}
-        title="Product Management"
-        subTitle="Moderate products across the platform"
-      />
+      <AdminUnifiedToolbar
+        hasDirtyHighlight
+        batchActions={{
+          hasChanges,
+          isSaving,
+          onSave: handleSaveAll,
+          onReset: () => setProducts(initialProducts),
+        }}
+      >
+        <AdminProductsFilters />
+      </AdminUnifiedToolbar>
 
-      {/* Product Table ของคุณ */}
-      <ProductTable products={products}
+      <ProductTable
+        products={visibleProducts}
+        dirty={dirty}
         role="admin"
         onStatusChange={(id, newStatus) => {
           setProducts((prev) =>
             prev.map((product) =>
-              product.ID === id ? { ...product, status: newStatus as AdminProduct['status'] } : product
+              product.ID === id
+                ? { ...product, status: newStatus as AdminProduct["status"] }
+                : product
             )
           );
-        }} />
+        }}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import WorkspacePageHeader from "@/components/dashboard/WorkspacePageHeader";
 import SellerSettingsClient from "@/app/seller/settings/_components/SellerSettingsClient";
 import { SellerShopSettings } from "@/types/settings";
 
@@ -27,7 +28,7 @@ export default async function SellerSettingsPage() {
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-4xl rounded-[2rem] border border-red-100 bg-red-50/50 p-8 text-sm text-red-800">
+      <div className="mx-auto max-w-4xl rounded-4xl border border-red-100 bg-red-50/50 p-8 text-sm text-red-800">
         Could not load shop settings. Sign in as a seller and try again.
       </div>
     );
@@ -35,13 +36,10 @@ export default async function SellerSettingsPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Settings</h1>
-        <p className="mt-2 text-sm font-medium text-neutral-500">
-          Manage your shop profile, pickup location, and payout account.
-        </p>
-      </div>
-
+      <WorkspacePageHeader
+        title="Settings"
+        description="Manage your shop profile, pickup location, and payout account."
+      />
       <SellerSettingsClient initialShop={data} />
     </div>
   );

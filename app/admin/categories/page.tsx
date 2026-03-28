@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { cookies } from "next/headers";
+import WorkspacePageHeader from "@/components/dashboard/WorkspacePageHeader";
 import CategoriesClient from "./_components/CategoriesClient";
 
 export type AdminCategory = {
@@ -29,11 +31,11 @@ export default async function AdminCategoriesPage() {
   const categories = payload?.data ?? [];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Categories</h1>
-        <p className="mt-1 text-sm text-gray-500">Create, edit, or delete product categories.</p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-8">
+      <WorkspacePageHeader
+        title="Categories"
+        description="Create, edit, or delete product categories."
+      />
 
       {!res.ok && (
         <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
@@ -41,7 +43,15 @@ export default async function AdminCategoriesPage() {
         </div>
       )}
 
-      <CategoriesClient initialCategories={categories} />
+      <Suspense
+        fallback={
+          <div className="rounded-2xl border border-slate-100 bg-white p-8 text-sm text-neutral-500 shadow-sm">
+            Loading…
+          </div>
+        }
+      >
+        <CategoriesClient initialCategories={categories} />
+      </Suspense>
     </div>
   );
 }

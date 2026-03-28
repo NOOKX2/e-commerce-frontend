@@ -1,16 +1,23 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+
+import AdminUnifiedToolbar from "@/components/dashboard/AdminUnifiedToolbar";
+import { useAdminBatchPendingSafe } from "@/app/admin/_components/AdminBatchPendingContext";
 import { AdminUser } from "@/types/user";
 import AdminUserTable from "@/app/admin/users/_components/AdminUserTable";
-import BatchActionBar from "@/components/dashboard/BatchActionBar";
+import AdminUsersFilters from "@/app/admin/users/_components/AdminUsersFilters";
 
 export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[] }) {
   const [users, setUsers] = useState(initialUsers);
   const [isSaving, setIsSaving] = useState(false);
+  const batch = useAdminBatchPendingSafe();
 
-  // 1. คำนวณหาว่า User คนไหนถูกเปลี่ยน Status บ้าง
+  useEffect(() => {
+    setUsers(initialUsers);
+  }, [initialUsers]);
+
   const changedUsers = useMemo(() => {
     return users.filter((u) => {
       const original = initialUsers.find((item) => item.ID === u.ID);
@@ -20,14 +27,29 @@ export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[
 
   const hasChanges = changedUsers.length > 0;
 
-  // 2. ฟังก์ชันอัปเดต State เมื่อเลือก Dropdown ในตาราง
+  const dirty = useMemo(() => {
+    const map: Record<number, boolean> = {};
+    for (const u of users) {
+      const original = initialUsers.find((item) => item.ID === u.ID);
+      map[u.ID] = !!(original && u.status !== original.status);
+    }
+    return map;
+  }, [users, initialUsers]);
+
+  useEffect(() => {
+    batch?.setPendingCount(changedUsers.length);
+  }, [batch, changedUsers.length]);
+
+  useEffect(() => {
+    return () => batch?.setPendingCount(0);
+  }, [batch]);
+
   const handleStatusChange = (id: number, newStatus: string) => {
     setUsers((prev) =>
       prev.map((u) => (u.ID === id ? { ...u, status: newStatus } : u))
     );
   };
 
-  // 3. ฟังก์ชัน Save All (ยิง API แบบ Batch)
   const handleSaveAll = async () => {
     setIsSaving(true);
     try {
@@ -42,9 +64,8 @@ export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[
 
       await Promise.all(promises);
       toast.success(`Updated ${changedUsers.length} users successfully!`);
-      
-      // Refresh หน้าเพื่อรีเซ็ต initial state
-      window.location.reload(); 
+
+      window.location.reload();
     } catch (e) {
       toast.error("Failed to update some users");
     } finally {
@@ -54,19 +75,27 @@ export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[
 
   return (
     <div className="space-y-6">
-      {/* เรียกใช้ BatchActionBar ที่เพิ่งสร้างมา */}
-      <BatchActionBar 
-        hasChanges={hasChanges}
-        changedCount={changedUsers.length}
-        isSaving={isSaving}
-        onSave={handleSaveAll}
-        onReset={() => setUsers(initialUsers)}
-        title="User Management"
-        subTitle="Moderate user access and status across the platform"
-      />
+      <Suspense
+        fallback={
+          <div className="mb-6 h-10 w-full max-w-lg animate-pulse rounded-2xl bg-neutral-100" />
+        }
+      >
+        <AdminUnifiedToolbar
+          hasDirtyHighlight
+          batchActions={{
+            hasChanges,
+            isSaving,
+            onSave: handleSaveAll,
+            onReset: () => setUsers(initialUsers),
+          }}
+        >
+          <AdminUsersFilters />
+        </AdminUnifiedToolbar>
+      </Suspense>
 
       <AdminUserTable
         users={users}
+        dirty={dirty}
         onStatusChange={handleStatusChange}
       />
     </div>

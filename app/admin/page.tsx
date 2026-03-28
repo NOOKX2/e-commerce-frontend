@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import StatCard from "@/components/dashboard/StatCard";
 import StatGroup from "@/components/dashboard/StatGroup";
+import WorkspacePageHeader from "@/components/dashboard/WorkspacePageHeader";
 
 // 1. Types Definition
 type AdminDashboardResponse = {
@@ -53,20 +54,15 @@ export default async function AdminPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 pb-12">
-      {/* Header Section */}
-      <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Admin Dashboard</h1>
-          <p className="text-sm font-medium text-slate-500">
-            Platform-wide overview and master control.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-2xl" asChild>
-                <Link href="/admin/reports">Generate Report</Link>
-            </Button>
-        </div>
-      </header>
+      <WorkspacePageHeader
+        title="Admin Dashboard"
+        description="Platform-wide overview and master control."
+        actions={
+          <Button variant="outline" className="rounded-2xl" asChild>
+            <Link href="/admin/reports">Generate Report</Link>
+          </Button>
+        }
+      />
 
       {/* Error Alert (If API Fails) */}
       {!res.ok && (

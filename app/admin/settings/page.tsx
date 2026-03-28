@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import WorkspacePageHeader from "@/components/dashboard/WorkspacePageHeader";
 import AdminSettingsClient from "./_components/AdminSettingsClient";
 import { PlatformSettings } from "@/types/settings";
 
@@ -28,5 +29,13 @@ export default async function AdminSettingsPage() {
     );
   }
 
-  return <AdminSettingsClient initialSettings={data} />;
+  return (
+    <div className="mx-auto max-w-7xl space-y-8">
+      <WorkspacePageHeader
+        title="Settings"
+        description="Platform configuration, finance, and moderation."
+      />
+      <AdminSettingsClient initialSettings={data} />
+    </div>
+  );
 }

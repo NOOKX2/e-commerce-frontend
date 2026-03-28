@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,8 +26,33 @@ export default function CategoriesClient({
 }: {
   initialCategories: AdminCategory[];
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
   const [categories, setCategories] = useState<AdminCategory[]>(initialCategories);
-  const [query, setQuery] = useState("");
+  const [input, setInput] = useState(() => searchParams.get("q") ?? "");
+
+  useEffect(() => {
+    setInput(searchParams.get("q") ?? "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      startTransition(() => {
+        const params = new URLSearchParams(
+          typeof window !== "undefined" ? window.location.search : ""
+        );
+        const trimmed = input.trim();
+        if (trimmed) params.set("q", trimmed);
+        else params.delete("q");
+        const qs = params.toString();
+        router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+      });
+    }, 400);
+    return () => clearTimeout(t);
+  }, [input, pathname, router]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Pick<AdminCategory, "id" | "name" | "slug"> | null>(
@@ -35,10 +61,12 @@ export default function CategoriesClient({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = input.trim().toLowerCase();
     if (!q) return categories;
-    return categories.filter((c) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q));
-  }, [categories, query]);
+    return categories.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q)
+    );
+  }, [categories, input]);
 
   async function createCategory(values: CategoryFormValues) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/admin/categories`, {
@@ -90,10 +118,10 @@ export default function CategoriesClient({
       <div className="flex flex-col gap-3 border-b border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Search categories..."
-            className="w-full sm:w-72"
+            className={isPending ? "w-full border-blue-200 sm:w-72" : "w-full sm:w-72"}
           />
         </div>
 
