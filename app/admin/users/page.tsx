@@ -1,23 +1,42 @@
 import UsersClient from "@/app/admin/users/_components/UsersClient";
+import { firstQueryValue, parseAdminPage } from "@/app/admin/_lib/query-params";
 import WorkspacePageHeader from "@/components/dashboard/WorkspacePageHeader";
+import type { AdminListMeta } from "@/components/dashboard/AdminTablePagination";
 import { AdminUser } from "@/types/user";
 import { cookies } from "next/headers";
 
-type Response = { success: boolean; data?: AdminUser[]; error?: string };
+type Response = {
+  success: boolean;
+  data?: AdminUser[];
+  meta?: AdminListMeta & Record<string, unknown>;
+  error?: string;
+};
 
-function firstQueryValue(v: string | string[] | undefined): string | undefined {
-  if (v === undefined) return undefined;
-  if (Array.isArray(v)) return v[0];
-  return v;
+const defaultMeta: AdminListMeta = { current_page: 1, total_pages: 1, total: 0, limit: 10 };
+
+function normalizeMeta(m: Response["meta"]): AdminListMeta {
+  if (!m) return defaultMeta;
+  return {
+    current_page: Number(m.current_page) || 1,
+    total_pages: Math.max(1, Number(m.total_pages) || 1),
+    total: m.total != null ? Number(m.total) : undefined,
+    limit: m.limit != null ? Number(m.limit) : 10,
+  };
 }
 
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ role?: string | string[]; search?: string | string[] }>;
+  searchParams: Promise<{
+    role?: string | string[];
+    search?: string | string[];
+    page?: string | string[];
+  }>;
 }) {
   const params = await searchParams;
   const q = new URLSearchParams();
+  q.set("limit", "10");
+  q.set("page", String(parseAdminPage(firstQueryValue(params.page))));
   const roleRaw = firstQueryValue(params.role)?.trim();
   const searchRaw = firstQueryValue(params.search)?.trim();
   if (roleRaw) {
@@ -48,7 +67,7 @@ export default async function AdminUsersPage({
           {payload?.error ?? "Failed to load users."}
         </div>
       )}
-      <UsersClient initialUsers={payload?.data ?? []} />
+      <UsersClient initialUsers={payload?.data ?? []} meta={normalizeMeta(payload?.meta)} />
     </div>
   );
 }

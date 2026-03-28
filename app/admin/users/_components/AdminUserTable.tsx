@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,7 @@ interface AdminUserTableProps {
   /** Per user ID: when true, status Select uses dirty (blue) styling */
   dirty?: Record<number, boolean>;
   onStatusChange: (id: number, status: string) => void;
+  footer?: ReactNode;
 }
 
 const statuses = ["active", "suspended", "banned"];
@@ -25,6 +27,7 @@ export default function AdminUserTable({
   users,
   dirty,
   onStatusChange,
+  footer,
 }: AdminUserTableProps) {
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
@@ -110,6 +113,7 @@ export default function AdminUserTable({
           </tbody>
         </table>
       </div>
+      {footer}
     </div>
   );
 }

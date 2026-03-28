@@ -1,21 +1,23 @@
 "use client";
 
-import { cn } from '@/lib/utils';
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface OrderColumn {
     header: string;
     key: string;
-    align?: 'left' | 'right' | 'center';
-    render?: (order: any) => React.ReactNode;
+    align?: "left" | "right" | "center";
+    render?: (order: any) => ReactNode;
 }
 
 interface BaseOrderTableProps {
     orders: any[];
     columns: OrderColumn[];
-    role: 'admin' | 'seller';
+    role: "admin" | "seller";
+    footer?: ReactNode;
 }
 
-export default function BaseOrderTable({ orders, columns, role }: BaseOrderTableProps) {
+export default function BaseOrderTable({ orders, columns, role: _role, footer }: BaseOrderTableProps) {
     return (
         <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
             <div className="overflow-x-auto">
@@ -52,6 +54,7 @@ export default function BaseOrderTable({ orders, columns, role }: BaseOrderTable
                     </tbody>
                 </table>
             </div>
+            {footer}
         </div>
     );
 }

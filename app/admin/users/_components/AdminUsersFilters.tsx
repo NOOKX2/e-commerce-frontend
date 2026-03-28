@@ -55,6 +55,7 @@ export default function AdminUsersFilters() {
         if (trimmed === currentSearch) return;
         if (trimmed) params.set("search", trimmed);
         else params.delete("search");
+        params.delete("page");
         const qs = params.toString();
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
       });
@@ -69,6 +70,7 @@ export default function AdminUsersFilters() {
       );
       if (role && role !== "all") params.set("role", role.toLowerCase());
       else params.delete("role");
+      params.delete("page");
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     });

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { AdminProduct } from "@/types/product";
 import Image from "next/image";
 import {
@@ -16,8 +17,9 @@ interface ProductTableProps {
   /** Per product ID: when true, status Select uses dirty (blue) styling */
   dirty?: Record<number, boolean>;
   onStatusChange?: (id: number, status: string) => void;
-  renderStatus?: (product: AdminProduct) => React.ReactNode;
-  renderActions?: (product: AdminProduct) => React.ReactNode;
+  renderStatus?: (product: AdminProduct) => ReactNode;
+  renderActions?: (product: AdminProduct) => ReactNode;
+  footer?: ReactNode;
 }
 
 const statusOptions = ["active", "pending", "inactive", "draft", "archived"];
@@ -29,11 +31,13 @@ export default function ProductTable({
   onStatusChange,
   renderStatus,
   renderActions,
+  footer,
 }: ProductTableProps) {
   const isAdmin = role === "admin";
 
   return (
-        <div className="overflow-x-auto rounded-3xl border border-slate-100 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
+        <div className="overflow-x-auto">
             <table className="min-w-full">
                 <thead>
                     <tr className="text-left text-[10px] font-bold uppercase tracking-widest text-slate-400 border-b border-slate-50 bg-slate-50/30">
@@ -138,6 +142,8 @@ export default function ProductTable({
                     })}
                 </tbody>
             </table>
+        </div>
+        {footer}
         </div>
     );
 }

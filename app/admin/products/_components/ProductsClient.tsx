@@ -1,39 +1,29 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import AdminUnifiedToolbar from "@/components/dashboard/AdminUnifiedToolbar";
 import { useAdminBatchPendingSafe } from "@/app/admin/_components/AdminBatchPendingContext";
 import ProductTable from "@/app/admin/products/_components/ProductTable";
 import AdminProductsFilters from "@/app/admin/products/_components/AdminProductsFilters";
+import AdminTablePagination, { type AdminListMeta } from "@/components/dashboard/AdminTablePagination";
 import { AdminProduct } from "@/types/product";
 
-export default function ProductsClient({ initialProducts }: { initialProducts: AdminProduct[] }) {
+export default function ProductsClient({
+  initialProducts,
+  meta,
+}: {
+  initialProducts: AdminProduct[];
+  meta: AdminListMeta;
+}) {
   const [products, setProducts] = useState(initialProducts);
   const [isSaving, setIsSaving] = useState(false);
-  const searchParams = useSearchParams();
   const batch = useAdminBatchPendingSafe();
 
   useEffect(() => {
     setProducts(initialProducts);
   }, [initialProducts]);
-
-  const q = (searchParams.get("search") ?? "").trim().toLowerCase();
-  const status = (searchParams.get("status") ?? "").trim().toLowerCase();
-
-  const visibleProducts = useMemo(() => {
-    return products.filter((p) => {
-      const matchStatus = !status || status === "all" || p.status?.toLowerCase() === status;
-      const matchSearch =
-        !q ||
-        p.name?.toLowerCase().includes(q) ||
-        p.sku?.toLowerCase().includes(q) ||
-        String(p.ID).includes(q);
-      return matchStatus && matchSearch;
-    });
-  }, [products, q, status]);
 
   const changedProducts = useMemo(() => {
     return products.filter((p) => {
@@ -99,9 +89,10 @@ export default function ProductsClient({ initialProducts }: { initialProducts: A
       </AdminUnifiedToolbar>
 
       <ProductTable
-        products={visibleProducts}
+        products={products}
         dirty={dirty}
         role="admin"
+        footer={<AdminTablePagination meta={meta} />}
         onStatusChange={(id, newStatus) => {
           setProducts((prev) =>
             prev.map((product) =>

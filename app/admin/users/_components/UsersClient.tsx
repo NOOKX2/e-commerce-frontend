@@ -8,8 +8,15 @@ import { useAdminBatchPendingSafe } from "@/app/admin/_components/AdminBatchPend
 import { AdminUser } from "@/types/user";
 import AdminUserTable from "@/app/admin/users/_components/AdminUserTable";
 import AdminUsersFilters from "@/app/admin/users/_components/AdminUsersFilters";
+import AdminTablePagination, { type AdminListMeta } from "@/components/dashboard/AdminTablePagination";
 
-export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[] }) {
+export default function UsersClient({
+  initialUsers,
+  meta,
+}: {
+  initialUsers: AdminUser[];
+  meta: AdminListMeta;
+}) {
   const [users, setUsers] = useState(initialUsers);
   const [isSaving, setIsSaving] = useState(false);
   const batch = useAdminBatchPendingSafe();
@@ -97,6 +104,7 @@ export default function UsersClient({ initialUsers }: { initialUsers: AdminUser[
         users={users}
         dirty={dirty}
         onStatusChange={handleStatusChange}
+        footer={<AdminTablePagination meta={meta} />}
       />
     </div>
   );

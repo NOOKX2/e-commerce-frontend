@@ -50,6 +50,7 @@ export default function AdminProductsFilters() {
       );
       if (next && next !== "all") params.set("status", next.toLowerCase());
       else params.delete("status");
+      params.delete("page");
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     });

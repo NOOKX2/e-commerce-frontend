@@ -39,6 +39,7 @@ export default function AdminSearchParamInput({
         if (trimmed === current) return;
         if (trimmed) params.set("search", trimmed);
         else params.delete("search");
+        params.delete("page");
         const qs = params.toString();
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
       });

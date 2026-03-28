@@ -1,34 +1,21 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import BaseOrderTable from "@/components/dashboard/BaseOrderTable";
 import AdminUnifiedToolbar from "@/components/dashboard/AdminUnifiedToolbar";
 import AdminOrdersFilters from "@/app/admin/orders/_components/AdminOrdersFilters";
+import AdminTablePagination, { type AdminListMeta } from "@/components/dashboard/AdminTablePagination";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export default function AdminOrdersClient({ initialOrders }: { initialOrders: any[] }) {
-  const searchParams = useSearchParams();
-  const q = (searchParams.get("search") ?? "").trim().toLowerCase();
-
-  const visibleOrders = useMemo(() => {
-    if (!q) return initialOrders;
-    return initialOrders.filter((o: any) => {
-      const idStr = String(o.ID ?? "");
-      const buyer = (o.shippingReceiverName ?? "").toLowerCase();
-      const seller = (o.items?.[0]?.product?.seller?.name ?? "").toLowerCase();
-      const status = (o.status ?? "").toLowerCase();
-      return (
-        idStr.includes(q) ||
-        buyer.includes(q) ||
-        seller.includes(q) ||
-        status.includes(q)
-      );
-    });
-  }, [initialOrders, q]);
-
+export default function AdminOrdersClient({
+  initialOrders,
+  meta,
+}: {
+  initialOrders: any[];
+  meta: AdminListMeta;
+}) {
   const adminColumns = [
     {
       header: "Order ID",
@@ -111,7 +98,12 @@ export default function AdminOrdersClient({ initialOrders }: { initialOrders: an
       <div className="group relative">
         <div className="absolute -inset-1 rounded-4xl bg-linear-to-r from-blue-100 to-indigo-100 opacity-25 blur transition duration-1000 group-hover:opacity-50" />
         <div className="relative">
-          <BaseOrderTable orders={visibleOrders} columns={adminColumns} role="admin" />
+          <BaseOrderTable
+            orders={initialOrders}
+            columns={adminColumns}
+            role="admin"
+            footer={<AdminTablePagination meta={meta} />}
+          />
         </div>
       </div>
     </div>
