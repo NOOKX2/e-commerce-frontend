@@ -14,11 +14,16 @@ export interface Product  {
   sku: string;
   quantity: number;
   salePrice: number;
+
+  seller: { 
+    id: number;
+    name: string; 
+  };
 }
 
 export interface SellerProduct extends Product {
   costPrice?: number;      
-  status: "active" | "draft" | "inactive" | "archived";
+  status: "active" | "draft" | "inactive" | "archived" | "pending";
   totalSales: number; 
   rating: number;    
 }
@@ -28,4 +33,8 @@ export interface Category {
   name: string;
   slug: string;
   createdAt?: string;
+}
+
+export interface AdminProduct extends Product {
+  status: "active" | "draft" | "inactive" | "archived" | "pending";
 }

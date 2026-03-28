@@ -2,49 +2,93 @@ import { LucideIcon } from "lucide-react";
 
 export type StatAccent = "blue" | "indigo" | "purple" | "emerald" | "pink" | "green" | "orange";
 
-const ACCENTS: Record<StatAccent, { bg: string; icon: string }> = {
-  blue: { bg: "bg-blue-50", icon: "text-blue-600" },
-  indigo: { bg: "bg-indigo-50", icon: "text-indigo-600" },
-  purple: { bg: "bg-purple-50", icon: "text-purple-600" },
-  emerald: { bg: "bg-emerald-50", icon: "text-emerald-600" },
-  pink: { bg: "bg-pink-50", icon: "text-pink-600" },
-  green: { bg: "bg-green-50", icon: "text-green-600" },
-  orange: { bg: "bg-orange-50", icon: "text-orange-600" },
+const ACCENTS: Record<
+    StatAccent,
+    { soft: string; icon: string; hint: string }
+> = {
+    blue: {
+        soft: "bg-blue-500/10",
+        icon: "text-blue-600",
+        hint: "text-blue-700/90",
+    },
+    indigo: {
+        soft: "bg-indigo-500/10",
+        icon: "text-indigo-600",
+        hint: "text-indigo-700/90",
+    },
+    purple: {
+        soft: "bg-purple-500/10",
+        icon: "text-purple-600",
+        hint: "text-purple-700/90",
+    },
+    emerald: {
+        soft: "bg-emerald-500/10",
+        icon: "text-emerald-600",
+        hint: "text-emerald-700/90",
+    },
+    pink: {
+        soft: "bg-pink-500/10",
+        icon: "text-pink-600",
+        hint: "text-pink-700/90",
+    },
+    green: {
+        soft: "bg-emerald-500/10", // ใช้ emerald แทนถ้าไม่มีเขียวแยก
+        icon: "text-emerald-600",
+        hint: "text-emerald-700/90",
+    },
+    orange: {
+        soft: "bg-orange-500/10",
+        icon: "text-orange-600",
+        hint: "text-orange-700/90",
+    },
 };
 
 interface StatCardProps {
-  label: string;
-  value: string | number;
-  subtext?: string;
-  icon: LucideIcon;
-  accent: StatAccent;
+    label: string;
+    value: string | number;
+    subtext?: string; // เปลี่ยนชื่อจาก change เป็น subtext เพื่อให้สื่อความหมายกว้างขึ้น
+    icon: LucideIcon;
+    accent: StatAccent;
 }
 
-export default function StatCard({ label, value, subtext, icon: Icon, accent }: StatCardProps) {
-  const style = ACCENTS[accent];
-  
-  return (
-    <div className="overflow-hidden rounded-3xl bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md flex flex-col justify-between">
-      <div className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{label}</p>
-            <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {typeof value === "number" ? value.toLocaleString() : value}
-            </p>
-          </div>
-          <div className={`p-3.5 rounded-2xl ${style.bg} ${style.icon} shrink-0`}>
-            <Icon className="h-6 w-6" />
-          </div>
+export default function StatCard({
+    label,
+    value,
+    subtext,
+    icon: Icon,
+    accent,
+}: StatCardProps) {
+    const a = ACCENTS[accent];
+
+    return (
+        <div className="overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-50">
+            <div className="p-5 sm:p-6">
+                <div className="flex items-start gap-4">
+                    <div
+                        className={`shrink-0 rounded-2xl p-3 ${a.soft}`}
+                        aria-hidden
+                    >
+                        <Icon className={`h-6 w-6 ${a.icon}`} />
+                    </div>
+
+                    <p className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                        {label}
+                    </p>
+
+                </div>
+                <p className="mt-1 text-2xl text-center font-bold tracking-tight text-slate-900">
+                    {typeof value === "number" ? value.toLocaleString() : value}
+                </p>
+            </div>
+
+            {/* ส่วนแถบด้านล่าง จะโชว์ก็ต่อเมื่อมี subtext ส่งมาเท่านั้น */}
+            {subtext && (
+                <div className="bg-neutral-50/90 px-5 py-3 sm:px-6 border-t border-slate-50">
+                    <p className={`truncate text-xs font-bold ${a.hint}`}>
+                        {subtext}
+                    </p>
+                </div>
+            )}
         </div>
-      </div>
-      {subtext && (
-        <div className="bg-slate-50/80 px-6 py-3 border-t border-gray-50">
-          <p className="text-xs font-semibold text-emerald-600 truncate">
-            {subtext}
-          </p>
-        </div>
-      )}
-    </div>
-  );
+    );
 }

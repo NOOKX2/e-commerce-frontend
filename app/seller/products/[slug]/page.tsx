@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { Edit3, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,9 +18,15 @@ export default async function SellerProductDetailPage({ params }: { params: Prom
 
     let product: Product | null = null;
     try {
-        // แนะนำให้ใส่ cache: 'no-store' ถ้าต้องการให้หน้านี้อัปเดตข้อมูลล่าสุดเสมอ
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/products/${slug}`, { cache: 'no-store' });
-        
+        const cookieStore = await cookies();
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/v1/seller/products/slug/${slug}`,
+            {
+                cache: "no-store",
+                headers: { Cookie: cookieStore.toString() },
+            }
+        );
+
         if (res.ok) {
             const response: ApiResponse<Product> = await res.json();
             product = response.data;

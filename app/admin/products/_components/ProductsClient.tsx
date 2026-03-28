@@ -1,107 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import toast from "react-hot-toast";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-export type AdminProduct = {
-  ID: number;
-  name: string;
-  price: number;
-  quantity: number;
-  status: string;
-  sellerId: number;
-  seller?: { name?: string };
-  category?: { name?: string };
-};
-
-const statuses = ["active", "inactive", "draft", "archived"];
+import ProductTable from "@/app/admin/products/_components/ProductTable";
+import { AdminProduct } from "@/types/product";
+import BatchActionBar from "@/components/dashboard/BatchActionBar";
 
 export default function ProductsClient({ initialProducts }: { initialProducts: AdminProduct[] }) {
   const [products, setProducts] = useState(initialProducts);
+  const [isSaving, setIsSaving] = useState(false);
 
-
-  async function updateStatus(productID: number, status: string) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/admin/products/${productID}/status`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ status }),
+  // 1. ตรวจสอบว่ามีรายการไหนถูกแก้ไขบ้าง
+  const changedProducts = useMemo(() => {
+    return products.filter((p) => {
+      const original = initialProducts.find((item) => item.ID === p.ID);
+      return original && p.status !== original.status;
     });
-    const payload = await res.json().catch(() => ({}));
-    if (!res.ok || !payload?.success) throw new Error(payload?.error ?? "Failed to update status");
+  }, [products, initialProducts]);
+
+  const hasChanges = changedProducts.length > 0;
+
+  // 2. ฟังก์ชัน Batch Update ยิงไปที่ Go Backend
+  async function handleSaveAll() {
+    setIsSaving(true);
+    try {
+      // ตัวอย่างการส่งแบบ Batch (คุณอาจต้องปรับ Endpoint ใน Go ให้รับ Array)
+      const promises = changedProducts.map((p) =>
+        fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/admin/products/${p.ID}/status`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ status: p.status }),
+        })
+      );
+
+      await Promise.all(promises);
+      toast.success(`Updated ${changedProducts.length} products successfully`);
+
+      // หลังจากเซฟเสร็จ ให้ถือว่าข้อมูลปัจจุบันคือค่าเริ่มต้นใหม่ (ในที่นี้อาจใช้วิธี Refresh หน้า)
+      window.location.reload();
+    } catch (e) {
+      toast.error("Failed to update some products");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  console.log(initialProducts);
-
   return (
-    <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-xs">
-      <table className="w-full text-sm text-left">
-        <thead className="bg-gray-50 text-gray-600 font-medium">
-          <tr>
-            <th className="px-6 py-3">Name</th>
-            <th className="px-6 py-3">Seller</th>
-            <th className="px-6 py-3">Category</th>
-            <th className="px-6 py-3">Price</th>
-            <th className="px-6 py-3">Stock</th>
-            <th className="px-6 py-3">Status</th>
-            <th className="px-6 py-3 text-right">Action</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100">
-          {products.map((p) => (
-            <tr key={p.ID}>
-              <td className="px-6 py-4">{p.name}</td>
-              <td className="px-6 py-4">{p.seller?.name ?? `Seller #${p.sellerId}`}</td>
-              <td className="px-6 py-4">{p.category?.name ?? "-"}</td>
-              <td className="px-6 py-4">${p.price?.toFixed(2)}</td>
-              <td className="px-6 py-4">{p.quantity}</td>
-              <td className="px-6 py-4">
-                <Select
-                  value={p.status}
-                  onValueChange={(value) =>
-                    setProducts((prev) => prev.map((x) => (x.ID === p.ID ? { ...x, status: value } : x)))
-                  }
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {statuses.map((s) => (
-                      <SelectItem key={s} value={s}>
-                        {s}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </td>
-              <td className="px-6 py-4 text-right">
-                <Button
-                  variant="outline"
-                  onClick={async () => {
-                    try {
-                      await updateStatus(p.ID, p.status);
-                      toast.success("Product status updated");
-                    } catch (e) {
-                      toast.error(e instanceof Error ? e.message : "Update failed");
-                    }
-                  }}
-                >
-                  Save
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-6">
+      <BatchActionBar
+        hasChanges={hasChanges}
+        changedCount={changedProducts.length}
+        isSaving={isSaving}
+        onSave={handleSaveAll}
+        onReset={() => setProducts(initialProducts)}
+        title="Product Management"
+        subTitle="Moderate products across the platform"
+      />
+
+      {/* Product Table ของคุณ */}
+      <ProductTable products={products}
+        role="admin"
+        onStatusChange={(id, newStatus) => {
+          setProducts((prev) =>
+            prev.map((product) =>
+              product.ID === id ? { ...product, status: newStatus as AdminProduct['status'] } : product
+            )
+          );
+        }} />
     </div>
   );
 }
-

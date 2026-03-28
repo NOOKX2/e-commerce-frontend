@@ -1,5 +1,6 @@
+import { AdminProduct } from "@/types/product";
 import { cookies } from "next/headers";
-import ProductsClient, { type AdminProduct } from "@/app/admin/products/_components/ProductsClient";
+import ProductsClient from "./_components/ProductsClient";
 
 type Response = { success: boolean; data?: AdminProduct[]; error?: string };
 
@@ -12,6 +13,7 @@ export default async function AdminProductsPage() {
   const payload = (await res.json().catch(() => null)) as Response | null;
 
   console.log(payload?.data);
+
 
   return (
     <div className="space-y-6">

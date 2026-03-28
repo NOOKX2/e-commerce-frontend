@@ -1,5 +1,6 @@
+import UsersClient from "@/app/admin/users/_components/UsersClient";
+import { AdminUser } from "@/types/user";
 import { cookies } from "next/headers";
-import UsersClient, { type AdminUser } from "@/components/admin/users/UsersClient";
 
 type Response = { success: boolean; data?: AdminUser[]; error?: string };
 
@@ -18,7 +19,7 @@ export default async function AdminUsersPage({
   const payload = (await res.json().catch(() => null)) as Response | null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-2">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Users</h1>
         <p className="mt-1 text-sm text-gray-500">Manage buyer and seller accounts.</p>

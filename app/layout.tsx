@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import { getCurrentUser } from '@/lib/auth';
 import AuthProvider from "../context/auth-context";
 import CartSyncronizer from "@/components/cart/CartSyncronizer";
+import Footer from "@/components/layout/Footer";
 
 type RootLayoutProps = {
   children: React.ReactNode;
