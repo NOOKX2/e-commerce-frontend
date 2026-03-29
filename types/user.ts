@@ -4,6 +4,8 @@ export interface User {
     email: string; 
     name: string;
     role: string;
+    /** Present when loaded from API (login / profile / register). */
+    status?: "active" | "suspended" | "banned" | string;
 }
 
 export interface AdminUser extends User {

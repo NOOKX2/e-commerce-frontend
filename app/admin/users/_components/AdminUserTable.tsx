@@ -18,6 +18,8 @@ interface AdminUserTableProps {
   /** Per user ID: when true, status Select uses dirty (blue) styling */
   dirty?: Record<number, boolean>;
   onStatusChange: (id: number, status: string) => void;
+  /** Logged-in admin user id — that row's status control is disabled */
+  currentUserId?: number | null;
   footer?: ReactNode;
 }
 
@@ -27,6 +29,7 @@ export default function AdminUserTable({
   users,
   dirty,
   onStatusChange,
+  currentUserId,
   footer,
 }: AdminUserTableProps) {
   return (
@@ -47,6 +50,7 @@ export default function AdminUserTable({
           <tbody className="divide-y divide-slate-50">
             {users.map((u) => {
               const statusDirty = dirty?.[u.ID] ?? false;
+              const statusLocked = currentUserId != null && u.ID === currentUserId;
 
               return (
               <tr key={u.ID} className="transition-colors hover:bg-slate-50/50 group">
@@ -76,6 +80,7 @@ export default function AdminUserTable({
                     <Select
                       value={u.status}
                       onValueChange={(val) => onStatusChange(u.ID, val)}
+                      disabled={statusLocked}
                     >
                       <SelectTrigger
                         className={cn(

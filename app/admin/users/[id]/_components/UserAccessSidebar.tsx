@@ -10,9 +10,18 @@ interface Props {
   createdAt?: string;
   onRoleChange: (val: string) => void;
   onStatusChange: (val: string) => void;
+  /** When true, status cannot be changed (e.g. viewing your own admin account). */
+  statusSelectDisabled?: boolean;
 }
 
-export function UserAccessSidebar({ role, status, createdAt, onRoleChange, onStatusChange }: Props) {
+export function UserAccessSidebar({
+  role,
+  status,
+  createdAt,
+  onRoleChange,
+  onStatusChange,
+  statusSelectDisabled = false,
+}: Props) {
   return (
     <div className="space-y-6">
       {/* Role Card */}
@@ -38,7 +47,11 @@ export function UserAccessSidebar({ role, status, createdAt, onRoleChange, onSta
         <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 border-b border-slate-50 pb-4">Account Status</h2>
         <div className="space-y-2">
           <Label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Current Status</Label>
-          <Select value={status} onValueChange={onStatusChange}>
+          <Select
+            value={status}
+            onValueChange={onStatusChange}
+            disabled={statusSelectDisabled}
+          >
             <SelectTrigger className={cn(
               "h-12 rounded-2xl border-slate-100 font-black uppercase text-xs",
               status === 'banned' ? "bg-red-50 text-red-600" : "bg-slate-50/50"

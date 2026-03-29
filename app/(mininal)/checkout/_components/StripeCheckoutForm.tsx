@@ -5,6 +5,8 @@ import { useStripe, useElements, CardNumberElement} from '@stripe/react-stripe-j
 import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/lib/cart-store';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
+import { isAccountSuspended, suspendedAccountMessage } from '@/lib/account-status';
 import { ShippingAddressData } from '@/types/shippingAdressData';
 import { UserCreditCard } from '@/types/userCard';
 import SavedCreditCardList from './SaveCreditCardList';
@@ -15,6 +17,7 @@ interface StripeCheckoutFormProps {
 }
 
 export default function StripeCheckoutForm({ shippingAddress }: StripeCheckoutFormProps) {
+    const { user } = useAuth();
     const { items, clearCart } = useCartStore();
     const stripe = useStripe();
     const elements = useElements();
@@ -48,6 +51,11 @@ export default function StripeCheckoutForm({ shippingAddress }: StripeCheckoutFo
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!stripe || !elements) return;
+
+        if (isAccountSuspended(user)) {
+            setError(suspendedAccountMessage());
+            return;
+        }
 
         if (!shippingAddress) {
             setError("Please provide a shipping address.");
@@ -101,7 +109,11 @@ export default function StripeCheckoutForm({ shippingAddress }: StripeCheckoutFo
             const orderData = await res.json();
             if (!res.ok) {
                 console.error(orderData.error);
-                throw new Error(orderData.error || "Failed to create your order.")
+                const msg =
+                    orderData.errorType === "account_suspended"
+                        ? suspendedAccountMessage()
+                        : orderData.error || "Failed to create your order.";
+                throw new Error(msg);
             }
 
 

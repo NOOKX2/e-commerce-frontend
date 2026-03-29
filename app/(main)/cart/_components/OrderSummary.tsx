@@ -1,15 +1,31 @@
+"use client";
+
 import { CartItem } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useAuth } from "@/context/auth-context";
+import { isAccountSuspended, suspendedAccountMessage } from "@/lib/account-status";
 
 interface OrderSummaryProps {
     items: CartItem[];
 }
 
 function OrderSummary({ items }: OrderSummaryProps) {
+    const router = useRouter();
+    const { user } = useAuth();
+
     const subtotal = items.reduce((total, item) => {
         return total + item.product.price * item.quantity;
     }, 0);
+
+    const handleProceedToCheckout = () => {
+        if (isAccountSuspended(user)) {
+            toast.error(suspendedAccountMessage());
+            return;
+        }
+        router.push("/checkout");
+    };
 
     return (
         <div className="glass-card sticky top-24 p-6">
@@ -26,8 +42,12 @@ function OrderSummary({ items }: OrderSummaryProps) {
                 <span>Total</span>
                 <span>{`฿${subtotal.toLocaleString()}`}</span>
             </div>
-            <Button asChild className="mt-6 w-full rounded-full">
-                <Link href="/checkout">Proceed to Checkout</Link>
+            <Button
+                type="button"
+                className="mt-6 w-full rounded-full"
+                onClick={handleProceedToCheckout}
+            >
+                Proceed to Checkout
             </Button>
         </div>
 

@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+import { useAuth } from "@/context/auth-context";
 import { AdminUser } from "@/types/user";
 import { UserHeader } from "./UserHeader";
 import { UserPersonalInfoCard } from "./UserPersonalInfoCard";
@@ -11,8 +12,11 @@ import { UserAccessSidebar } from "./UserAccessSidebar";
 
 export default function UserDetailClient({ initialUser }: { initialUser: AdminUser }) {
     const router = useRouter();
+    const { user: authUser } = useAuth();
     const [user, setUser] = useState<AdminUser>(initialUser);
     const [isSaving, setIsSaving] = useState(false);
+
+    const isOwnAccount = authUser != null && authUser.ID === user.ID;
 
     const hasChanges = useMemo(() => {
         return JSON.stringify(user) !== JSON.stringify(initialUser);
@@ -73,6 +77,7 @@ export default function UserDetailClient({ initialUser }: { initialUser: AdminUs
                         createdAt={user.createdAt}
                         onRoleChange={(val) => handleChange("role", val)}
                         onStatusChange={(val) => handleChange("status", val)}
+                        statusSelectDisabled={isOwnAccount}
                     />
                 </div>
             </div>

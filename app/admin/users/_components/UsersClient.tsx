@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 import AdminUnifiedToolbar from "@/components/dashboard/AdminUnifiedToolbar";
 import { useAdminBatchPendingSafe } from "@/app/admin/_components/AdminBatchPendingContext";
+import { useAuth } from "@/context/auth-context";
 import { AdminUser } from "@/types/user";
 import AdminUserTable from "@/app/admin/users/_components/AdminUserTable";
 import AdminUsersFilters from "@/app/admin/users/_components/AdminUsersFilters";
@@ -19,6 +20,7 @@ export default function UsersClient({
 }) {
   const [users, setUsers] = useState(initialUsers);
   const [isSaving, setIsSaving] = useState(false);
+  const { user: authUser } = useAuth();
   const batch = useAdminBatchPendingSafe();
 
   useEffect(() => {
@@ -104,6 +106,7 @@ export default function UsersClient({
         users={users}
         dirty={dirty}
         onStatusChange={handleStatusChange}
+        currentUserId={authUser?.ID ?? null}
         footer={<AdminTablePagination meta={meta} />}
       />
     </div>

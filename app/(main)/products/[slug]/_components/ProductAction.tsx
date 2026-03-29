@@ -6,6 +6,8 @@ import { Product } from '@/types/product';
 import QuantitySelector from './QuantitySelector';
 import toast from 'react-hot-toast'
 import { useCartStore } from '@/lib/cart-store';
+import { useAuth } from '@/context/auth-context';
+import { isAccountSuspended, suspendedAccountMessage } from '@/lib/account-status';
 
 interface ProductActionProps {
     product: Product;
@@ -13,6 +15,7 @@ interface ProductActionProps {
 
 function ProductAction({ product }: ProductActionProps) {
     const [quantity, setQuantity] = useState(1);
+    const { user } = useAuth();
 
     const { addToCart, items } = useCartStore();
 
@@ -27,6 +30,10 @@ function ProductAction({ product }: ProductActionProps) {
     const disPlayStock = remainingStock - quantity;
 
     const handleAddToCart = () => {
+        if (isAccountSuspended(user)) {
+            toast.error(suspendedAccountMessage());
+            return;
+        }
         addToCart(product, quantity)
         toast.success(`${quantity} x ${product.name} added to cart!`);
     }

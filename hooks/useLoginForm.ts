@@ -36,14 +36,14 @@ export function useLoginForm() {
                 throw new Error(data.message || "Email or password incorrect");
             }
 
+            const u = data.user ?? data.response;
+            login(u);
 
-            login(data.response || data.user);
-
-            if (data.user.role == 'seller') {
+            if (u.role == 'seller') {
                 router.push('/seller');
             }
 
-            else if (data.user.role == 'admin') {
+            else if (u.role == 'admin') {
                 router.push('/admin');
             }
 
