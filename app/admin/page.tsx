@@ -57,11 +57,6 @@ export default async function AdminPage() {
       <WorkspacePageHeader
         title="Admin Dashboard"
         description="Platform-wide overview and master control."
-        actions={
-          <Button variant="outline" className="rounded-2xl" asChild>
-            <Link href="/admin/reports">Generate Report</Link>
-          </Button>
-        }
       />
 
       {/* Error Alert (If API Fails) */}

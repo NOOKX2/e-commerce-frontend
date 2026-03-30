@@ -5,7 +5,6 @@ import {
     CheckCircle2,
     Clock,
     Package,
-    Download,
     Truck,
     User,
     Mail,
@@ -214,25 +213,6 @@ export default async function OrderDetailPage({
                                 </p>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Card 4: Action Buttons (แยกมาเป็นกล่องใหม่ฝั่งขวาล่าง) */}
-                    <div className="rounded-3xl bg-slate-50 p-6 border border-slate-100 flex flex-col gap-3">
-                        <Button
-                            type="button"
-                            className="h-11 w-full rounded-2xl bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-                        >
-                            <Truck className="mr-2 h-4 w-4" />
-                            Track package
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="h-11 w-full rounded-2xl bg-white font-medium text-slate-900 shadow-sm border-slate-200 hover:bg-slate-50"
-                        >
-                            <Download className="mr-2 h-4 w-4" />
-                            Download invoice
-                        </Button>
                     </div>
 
                 </div>

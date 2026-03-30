@@ -1,8 +1,6 @@
 import SellerOrderTable from '@/app/seller/orders/_components/SellerOrderTable';
 import { SellerOrder } from '@/types/sellerOrder';
-import { Download } from 'lucide-react';
 import { cookies } from 'next/headers';
-import { Button } from '@/components/ui/button';
 import SellerProductTablePagination from '@/app/seller/products/_components/SellerProductTablePagination';
 import { SellerTableToolbar } from '../_components/SellerToolbar';
 
@@ -86,9 +84,6 @@ export default async function SellerOrdersPage({
                         Manage and track your customer orders.
                     </p>
                 </div>
-                <Button className="h-10 shrink-0 rounded-2xl bg-blue-600 px-4 text-white shadow-sm hover:bg-blue-700">
-                    <Download className="mr-2 h-4 w-4" /> Export
-                </Button>
             </div>
 
             {/* 6. เรียกใช้ Toolbar */}
