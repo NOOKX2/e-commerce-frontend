@@ -19,7 +19,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
 
   const [isLoadingSpec, setIsLoadingSpec] = useState(true); // สำหรับตอนดึงข้อมูลเดิมครั้งแรก
   const [isSaving, setIsSaving] = useState(false);          // สำหรับตอนกด Save
-
+  console.log('slug', slug);
   // 1. Fetch Product Data & Categories
   useEffect(() => {
     const fetchInitialData = async () => {
