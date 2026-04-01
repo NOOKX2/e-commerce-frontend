@@ -20,12 +20,14 @@ export default async function SellerProductDetailPage({ params }: { params: Prom
     try {
         const cookieStore = await cookies();
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/v1/seller/products/slug/${slug}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/v1/seller/products/${slug}`,
             {
                 cache: "no-store",
                 headers: { Cookie: cookieStore.toString() },
             }
         );
+
+        console.log(res);
 
         if (res.ok) {
             const response: ApiResponse<Product> = await res.json();

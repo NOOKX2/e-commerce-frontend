@@ -22,8 +22,8 @@ export default function SellerOrderTable({ recentOrders }: sellerOrderProps) {
                 </tr>
             </thead>
             <tbody className="divide-y divide-neutral-100">
-                {recentOrders.map((order) => (
-                    <tr key={order.id} className="transition-colors hover:bg-neutral-50/80">
+                {recentOrders.map((order, index) => (
+                    <tr key={`${order.id}-${order.date}-${index}`} className="transition-colors hover:bg-neutral-50/80">
                         <td className="whitespace-nowrap px-8 py-5 text-sm font-medium tabular-nums text-neutral-600">
                             {order.id}
                         </td>

@@ -25,7 +25,9 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
     const fetchInitialData = async () => {
       try {
         const [productRes, categoriesRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/products/${slug}`),
+          fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/seller/products/${slug}`, {
+            credentials: "include",
+          }),
           fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/categories`, { cache: 'no-store' })
         ]);
 

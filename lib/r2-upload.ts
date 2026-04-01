@@ -19,13 +19,11 @@ export async function uploadToR2(file: File): Promise<{ publicUrl: string, fileH
     try {
         const fileHash = await computeFileHash(file);
         const filename = encodeURIComponent(file.name);
-        console.log("fileHash", fileHash);
         const signedUrlRes = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/v1/upload/sign-url?filename=${filename}&contentType=${file.type}&hash=${fileHash}`, {
             method: 'GET',
             credentials: 'include',
         });
 
-        console.log("signed url res",signedUrlRes);
 
         if (!signedUrlRes.ok) {
             const errorData = await signedUrlRes.json();
@@ -34,13 +32,11 @@ export async function uploadToR2(file: File): Promise<{ publicUrl: string, fileH
 
         const response = await signedUrlRes.json();
         const {uploadUrl, publicUrl, exists}: SignedURLResponse = response.result;
-        console.log(exists);
 
         if (exists) {
             console.log("File already exists in system, skipping upload.");
             return {publicUrl, fileHash};
         }
-        console.log("upload url",uploadUrl);
         const uploadRes = await fetch(uploadUrl, {
             method: 'PUT',
             headers: {
@@ -51,13 +47,10 @@ export async function uploadToR2(file: File): Promise<{ publicUrl: string, fileH
 
 
         if (!uploadRes.ok) {
-            console.log("Debug URL:", uploadRes);
-            console.log("Status Code:", uploadRes.status);
             throw new Error(`Failed to upload file to R2: ${uploadRes.statusText}`);
         }
 
-        console.log("signed url:", uploadUrl);
-        console.log("File uploaded successfully to R2:", publicUrl);
+ 
         return {publicUrl, fileHash};
 
     } catch (error: any) {

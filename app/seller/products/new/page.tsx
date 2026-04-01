@@ -37,11 +37,11 @@ export default function AddProductPage() {
     fetchCategories();
   }, []);
 
-  // 2. Handle Logic POST API
+ 
   const handleSubmit = async (formData: ProductFormPayload, imageFile: File | null) => {
     setIsLoading(true);
     try {
-      // จัดการอัปโหลดรูป
+     
       let finalImageUrl = "";
       let finalImageHash = "";
 
@@ -51,8 +51,7 @@ export default function AddProductPage() {
         finalImageHash = fileHash;
       }
 
-      // 💡 สำคัญ: ในโค้ดเดิมของคุณ Backend รับ category เป็น "ชื่อ" (string)
-      // เราจึงต้องหาชื่อหมวดหมู่จาก ID ที่ ProductForm ส่งมา
+  
       const selectedCategory = categories.find(c => c.id === formData.categoryID);
       const categoryName = selectedCategory ? selectedCategory.name : "";
 
@@ -65,7 +64,7 @@ export default function AddProductPage() {
         imageUrl: finalImageUrl,
         imageHash: finalImageHash,
         sku: "",
-        category: categoryName, // ส่งชื่อกลับไปให้ตรงกับ Backend โค้ดเดิม
+        category: categoryName, 
       };
 
       const res = await fetch(
