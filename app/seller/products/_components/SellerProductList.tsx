@@ -5,9 +5,12 @@ import SellerProductTable from './SellerProductTable';
 import SellerProductTablePagination from './SellerProductTablePagination';
 
 interface PaginationMeta {
-    total_pages: number;
-    current_page: number;
     total_items?: number;
+    limit?: number;
+    next_cursor?: string | null;
+    prev_cursor?: string | null;
+    has_next?: boolean;
+    has_prev?: boolean;
 }
 
 interface SellerProductListProps {
@@ -22,7 +25,7 @@ export default async function SellerProductPage({ products, meta }: SellerProduc
             <SellerProductHeader />
             <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
                 <SellerProductTable products={products} />
-                {meta.total_pages > 1 && (
+                {(meta.has_next || meta.has_prev) && (
                     <SellerProductTablePagination meta={meta} />
                 )}
             </div>

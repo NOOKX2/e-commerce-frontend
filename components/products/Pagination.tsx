@@ -2,48 +2,47 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Pagination({ meta }: { meta: any }) {
+type CursorMeta = {
+    has_next?: boolean;
+    has_prev?: boolean;
+    next_cursor?: string | null;
+    prev_cursor?: string | null;
+};
+
+export default function Pagination({ meta }: { meta: CursorMeta }) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const currentPage = Number(searchParams.get('page')) || 1;
-    const totalPage = meta.total_pages;
 
-    const handlePageChange = (newPage: number) => {
+    const pushWithCursors = (next: { cursor?: string; before?: string }) => {
         const params = new URLSearchParams(searchParams.toString());
-        params.set('page', newPage.toString());
+        params.delete('cursor');
+        params.delete('before');
+        if (next.cursor) params.set('cursor', next.cursor);
+        if (next.before) params.set('before', next.before);
         router.push(`?${params.toString()}`);
-    }
+    };
 
-    const renderPageNumbers = () => {
-        const pages = [];
-        const startPage = Math.max(1, currentPage - 2);
-        const endPage = Math.min(totalPage, currentPage + 2);
-
-        for(let i=startPage ; i <= endPage ; i++) {
-            pages.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                   className={`px-4 py-2 border rounded-md transition-colors ${
-                        currentPage === i ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'
-                    }`}
-                >
-                    {i}
-
-                </button>
-            );
-        }
-        return pages;
-    }
+    const hasPrev = Boolean(meta.has_prev && meta.prev_cursor);
+    const hasNext = Boolean(meta.has_next && meta.next_cursor);
 
     return (
         <div className="flex items-center justify-center space-x-2 mt-8">
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1} className='px-4 py-2 border rounded-md disabled:opacity-30 '>
+            <button
+                type="button"
+                onClick={() => hasPrev && meta.prev_cursor && pushWithCursors({ before: meta.prev_cursor })}
+                disabled={!hasPrev}
+                className="px-4 py-2 border rounded-md disabled:opacity-30"
+            >
                 Prev
-          </button>
-          {renderPageNumbers()}
-
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPage} className='px-4 py-2 border rounded-md disabled:opacity-30 '>Next</button>
+            </button>
+            <button
+                type="button"
+                onClick={() => hasNext && meta.next_cursor && pushWithCursors({ cursor: meta.next_cursor })}
+                disabled={!hasNext}
+                className="px-4 py-2 border rounded-md disabled:opacity-30"
+            >
+                Next
+            </button>
         </div>
     );
 }

@@ -31,7 +31,8 @@ export function Filter({ categories }: { categories: Category[] }) {
 
   const handleCategoryChange = (categoryId: number, checked: boolean) => {
     const currentParams = new URLSearchParams(searchParams.toString());
-    currentParams.delete("page");
+    currentParams.delete("cursor");
+    currentParams.delete("before");
 
     const idStr = String(categoryId);
     const next = new Set(selected);
@@ -52,7 +53,8 @@ export function Filter({ categories }: { categories: Category[] }) {
   const clearCategories = () => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.delete("category");
-    currentParams.delete("page");
+    currentParams.delete("cursor");
+    currentParams.delete("before");
     const qs = currentParams.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };

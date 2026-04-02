@@ -6,13 +6,18 @@ export const metadata = {
     description: "Manage your products inventory.",
 };
 
-async function getSellerProducts(searchParams: { page?: string; limit?: string; search?: string }) {
+async function getSellerProducts(searchParams: { limit?: string; search?: string; cursor?: string; before?: string }) {
     const params = new URLSearchParams();
-    params.set('page', searchParams.page || '1');
     params.set('limit', searchParams.limit || '10');
 
     if (searchParams.search) {
         params.set('search', searchParams.search);
+    }
+    if (searchParams.cursor) {
+        params.set('cursor', searchParams.cursor);
+    }
+    if (searchParams.before) {
+        params.set('before', searchParams.before);
     }
 
     const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/v1/seller/products?${params.toString()}`;
@@ -34,20 +39,21 @@ async function getSellerProducts(searchParams: { page?: string; limit?: string; 
 
         return {
             products: response.products || [],
-            meta: response.meta || { total_pages: 0, current_page: 1 }
+            meta: response.meta || {}
         };
     } catch (error) {
         console.error(error);
-        return { products: [], meta: { total_pages: 0, current_page: 1 } };
+        return { products: [], meta: {} };
     }
 }
 
 export default async function SellerProductsPage({searchParams}: {searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) {
     const resolvedParams = await searchParams
     const fetchParams = {
-        page: typeof resolvedParams.page === 'string' ? resolvedParams.page : '1',
         limit: typeof resolvedParams.limit === 'string' ? resolvedParams.limit : '10',
-        search: typeof resolvedParams.search === 'string' ? resolvedParams.search : '', 
+        search: typeof resolvedParams.search === 'string' ? resolvedParams.search : '',
+        cursor: typeof resolvedParams.cursor === 'string' ? resolvedParams.cursor : '',
+        before: typeof resolvedParams.before === 'string' ? resolvedParams.before : '',
     };
     const { products, meta } = await getSellerProducts(fetchParams);
     

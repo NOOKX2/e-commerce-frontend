@@ -4,9 +4,12 @@ import { ProductGrid } from "@/app/(main)/products/_components/ProductGrid";
 import { Category, Product } from "@/types/product";
 
 export interface PaginationMeta {
-    total_pages: number;
-    current_page: number;
     total_items?: number;
+    limit?: number;
+    next_cursor?: string | null;
+    prev_cursor?: string | null;
+    has_next?: boolean;
+    has_prev?: boolean;
 }
 
 export interface ProductResponse {
@@ -37,16 +40,19 @@ async function getFilterProducts(searchParams: { [key: string]: string | string[
         return {
             products: response.data || [],
             meta: {
-                total_pages: response.meta?.total_pages || 0,
-                current_page: Number(params.get('page')) || 1,
-                total_items: response.meta?.total_items
+                total_items: response.meta?.total_items,
+                limit: response.meta?.limit,
+                next_cursor: response.meta?.next_cursor ?? null,
+                prev_cursor: response.meta?.prev_cursor ?? null,
+                has_next: Boolean(response.meta?.has_next),
+                has_prev: Boolean(response.meta?.has_prev),
             }
         };
     } catch (error) {
         console.error("Error fetching products", error);
         return {
             products: [],
-            meta: { total_pages: 0, current_page: 1 }
+            meta: {}
         };
     }
 }
@@ -83,7 +89,7 @@ export default async function ProductPage({ searchParams }: { searchParams: Prom
 
                     <>
                         <ProductGrid products={products} />
-                        {meta.total_pages > 1 && (
+                        {(meta.has_next || meta.has_prev) && (
                             <div className="border-t border-black/5 py-8">
                                 <Pagination meta={meta} />
                             </div>
